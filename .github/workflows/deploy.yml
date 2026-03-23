@@ -1,0 +1,50 @@
+name: Deploy to Scaleway
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy via SSH
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Scaleway VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SCALEWAY_HOST }}
+          username: ${{ secrets.SCALEWAY_USER }}
+          key: ${{ secrets.SCALEWAY_SSH_KEY }}
+          script: |
+            set -e
+
+            echo "==> Déploiement CNL Sourcing — $(date)"
+
+            # Aller dans le répertoire du projet
+            cd /opt/cnl-sourcing
+
+            # Récupérer les dernières modifications
+            git pull origin main
+
+            # Rebuild et redémarrage des services
+            docker compose pull
+            docker compose up -d --build
+
+            # Nettoyage images/conteneurs inutilisés
+            docker system prune -f
+
+            # Vérification santé des services
+            echo "==> Services actifs :"
+            docker compose ps
+
+            echo "==> Déploiement terminé avec succès — $(date)"

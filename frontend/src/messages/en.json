@@ -1,0 +1,14 @@
+{
+  "nav": {
+    "home": "Home",
+    "services": "Our services",
+    "about": "About",
+    "contact": "Contact",
+    "devis": "Get a quote"
+  },
+  "hero": {
+    "title": "Your Vietnam – France sourcing partner",
+    "subtitle": "CNL Sourcing connects French companies with the best Vietnamese suppliers. Textiles, food, handicrafts: we secure your supply chain.",
+    "cta": "Get a free quote"
+  }
+}

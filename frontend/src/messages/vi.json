@@ -1,0 +1,14 @@
+{
+  "nav": {
+    "home": "Trang chủ",
+    "services": "Dịch vụ",
+    "about": "Giới thiệu",
+    "contact": "Liên hệ",
+    "devis": "Yêu cầu báo giá"
+  },
+  "hero": {
+    "title": "Đối tác tìm nguồn cung ứng Việt Nam – Pháp",
+    "subtitle": "CNL Sourcing kết nối các doanh nghiệp Pháp với các nhà cung cấp Việt Nam tốt nhất. Dệt may, thực phẩm, thủ công mỹ nghệ: chúng tôi bảo đảm chuỗi cung ứng của bạn.",
+    "cta": "Nhận báo giá miễn phí"
+  }
+}
