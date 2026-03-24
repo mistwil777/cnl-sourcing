@@ -9,6 +9,147 @@
   "hero": {
     "title": "Votre partenaire sourcing Vietnam – France",
     "subtitle": "CNL Sourcing connecte les entreprises françaises aux meilleurs fournisseurs vietnamiens. Textile, alimentaire, artisanat : nous sécurisons vos approvisionnements.",
-    "cta": "Obtenir un devis gratuit"
+    "cta": "Obtenir un devis gratuit",
+    "services": "Nos services"
+  },
+  "stats": {
+    "suppliers": "Fournisseurs vérifiés",
+    "satisfaction": "Clients satisfaits",
+    "delay": "Délai moyen devis",
+    "languages": "Langues parlées"
+  },
+  "home": {
+    "expertiseTitle": "Nos domaines d'expertise",
+    "expertiseSubtitle": "De la recherche fournisseur au contrôle qualité, nous gérons chaque étape de votre sourcing.",
+    "whyTitle": "Pourquoi choisir CNL Sourcing ?",
+    "whySubtitle": "Anna, notre fondatrice franco-vietnamienne, s'appuie sur un réseau de fournisseurs sélectionnés et vérifiés pour vous offrir un sourcing sécurisé et transparent.",
+    "whyAudited": "Fournisseurs audités et certifiés",
+    "whyReply": "Réponse sous 24h, devis sous 15 jours",
+    "whyLanguage": "Maîtrise du français, anglais et vietnamien",
+    "whyTracking": "Suivi en temps réel de vos commandes",
+    "ctaTitle": "Prêt à lancer votre sourcing ?",
+    "ctaSubtitle": "Décrivez votre projet et recevez une analyse de faisabilité sous 24h — gratuitement.",
+    "ctaButton": "Démarrer maintenant"
+  },
+  "services_section": {
+    "textile": {
+      "title": "Textile & Mode",
+      "desc": "Vêtements, accessoires, tissus techniques. Fournisseurs certifiés BSCI et WRAP."
+    },
+    "food": {
+      "title": "Alimentaire & Epicerie",
+      "desc": "Café, épices, sauces, produits biologiques. Conformité aux normes européennes."
+    },
+    "craft": {
+      "title": "Artisanat & Décoration",
+      "desc": "Mobilier, céramique, laque, bambou. Savoir-faire artisanal authentique."
+    }
+  },
+  "services_page": {
+    "heroTitle": "Nos services de sourcing",
+    "heroSubtitle": "De la recherche fournisseur au contrôle qualité, CNL Sourcing prend en charge chaque étape de votre approvisionnement au Vietnam.",
+    "processTitle": "Notre processus",
+    "ctaTitle": "Démarrez votre projet",
+    "ctaSubtitle": "Devis gratuit · Réponse sous 24h",
+    "ctaButton": "Demander un devis",
+    "services": {
+      "textile": {
+        "title": "Textile & Mode",
+        "desc": "Vêtements, accessoires, maroquinerie, tissus techniques. Nous travaillons avec des usines certifiées BSCI, WRAP et SA8000.",
+        "f1": "Sélection et audit fournisseurs",
+        "f2": "Contrôle qualité sur site",
+        "f3": "Gestion des certifications",
+        "f4": "Suivi production en temps réel"
+      },
+      "food": {
+        "title": "Alimentaire & Épicerie",
+        "desc": "Café, thé, épices, sauces, produits bio. Conformité aux normes HACCP et réglementations douanières européennes.",
+        "f1": "Vérification certifications sanitaires",
+        "f2": "Analyse réglementaire import UE",
+        "f3": "Coordination laboratoires d'analyse",
+        "f4": "Gestion étiquetage multilingue"
+      },
+      "craft": {
+        "title": "Artisanat & Décoration",
+        "desc": "Mobilier laqué, céramique, bambou, rotin. Accès direct aux villages artisanaux du Vietnam.",
+        "f1": "Sourcing artisans locaux",
+        "f2": "Personnalisation & OEM",
+        "f3": "Photos et vidéos de production",
+        "f4": "Conditionnement export sécurisé"
+      },
+      "cosmetics": {
+        "title": "Cosmétiques & Beauté",
+        "desc": "Produits naturels à base de plantes locales. Conformité réglementation cosmétique UE (CPNP).",
+        "f1": "Vérification dossiers techniques",
+        "f2": "Tests dermatologiques",
+        "f3": "Conformité REACH et CPNP",
+        "f4": "Private label disponible"
+      }
+    },
+    "steps": {
+      "s1": { "n": "01", "title": "Analyse", "desc": "Étude de votre besoin et analyse de faisabilité IA" },
+      "s2": { "n": "02", "title": "Sourcing", "desc": "Identification et sélection des meilleurs fournisseurs" },
+      "s3": { "n": "03", "title": "Négociation", "desc": "Négociation des prix, délais et conditions" },
+      "s4": { "n": "04", "title": "Suivi", "desc": "Contrôle qualité, logistique et livraison" }
+    }
+  },
+  "about_page": {
+    "heroTitle": "À propos de CNL Sourcing",
+    "heroSubtitle": "Une entreprise fondée sur la confiance, l'expertise culturelle et la passion du commerce franco-vietnamien.",
+    "founderTitle": "Nguyen Cao Phuong Anh",
+    "founderRole": "Fondatrice & Directrice",
+    "founderBio": "Franco-vietnamienne, Anna a grandi entre les deux cultures. Après des études de commerce international, elle a fondé CNL Sourcing pour aider les entreprises françaises à accéder au marché vietnamien en toute confiance.",
+    "storyTitle": "Notre histoire",
+    "storyP1": "CNL Sourcing est née d'un constat simple : trop d'entreprises françaises renoncent à sourcer au Vietnam faute de contacts locaux fiables, de maîtrise linguistique ou de connaissance réglementaire.",
+    "storyP2": "Grâce à son réseau familial et professionnel au Vietnam, Anna propose un service clé en main, de la recherche fournisseur à la livraison en France — avec une transparence totale à chaque étape.",
+    "valuesTitle": "Nos valeurs",
+    "values": {
+      "trust": { "title": "Confiance", "desc": "Relation directe et transparente avec chaque client" },
+      "rigor": { "title": "Rigueur", "desc": "Audit systématique des fournisseurs avant toute recommandation" },
+      "bridge": { "title": "Pont culturel", "desc": "Compréhension profonde des deux cultures pour éviter les malentendus" },
+      "speed": { "title": "Réactivité", "desc": "Réponse sous 24h, suivi proactif de chaque dossier" }
+    },
+    "ctaButton": "Travailler avec Anna"
+  },
+  "contact_page": {
+    "heroTitle": "Nous contacter",
+    "heroSubtitle": "Une question, un projet ? Anna répond personnellement sous 24h.",
+    "sectionTitle": "Parlons de votre projet",
+    "sectionText": "Que vous ayez une idée précise ou que vous souhaitiez explorer les possibilités, n'hésitez pas à nous écrire. Nous vous répondons avec une première analyse gratuite.",
+    "emailLabel": "Email",
+    "locationLabel": "Localisation",
+    "location": "Hô Chi Minh-Ville, Vietnam · France",
+    "delayLabel": "Délai de réponse",
+    "delay": "Sous 24h (jours ouvrés)",
+    "formTitle": "Message rapide",
+    "formName": "Votre nom",
+    "formNamePlaceholder": "Marie Dupont",
+    "formEmail": "Votre email",
+    "formEmailPlaceholder": "marie@entreprise.fr",
+    "formSubject": "Sujet",
+    "formSubjectPlaceholder": "Demande de renseignement",
+    "formMessage": "Message",
+    "formMessagePlaceholder": "Décrivez votre demande...",
+    "formSubmit": "Envoyer",
+    "formSubmitting": "Envoi...",
+    "formSuccess": "Message envoyé !",
+    "formSuccessText": "Anna vous répondra sous 24h.",
+    "formError": "Erreur lors de l'envoi. Réessayez ou écrivez directement à cnlsourcingvn@gmail.com",
+    "chatHint": "Ou utilisez le chatbot IA en bas à droite pour une réponse immédiate."
+  },
+  "devis_page": {
+    "title": "Demander un devis gratuit",
+    "subtitle": "Décrivez votre besoin en quelques minutes. Anna analyse votre demande et revient vers vous avec une sélection de fournisseurs qualifiés.",
+    "step1": "Vous remplissez le formulaire",
+    "step2": "Analyse IA sous 24h",
+    "step3": "Devis détaillé & fournisseurs sélectionnés",
+    "willReceive": "Ce que vous recevrez",
+    "r1": "Analyse de faisabilité complète",
+    "r2": "3 à 5 fournisseurs présélectionnés",
+    "r3": "Estimation des coûts et délais",
+    "r4": "Points d'attention réglementaires",
+    "r5": "Recommandation personnalisée",
+    "questions": "Questions ?",
+    "questionsText": "Anna répond directement à vos questions par WhatsApp ou email."
   }
 }

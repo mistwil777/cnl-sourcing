@@ -9,6 +9,147 @@
   "hero": {
     "title": "Đối tác tìm nguồn cung ứng Việt Nam – Pháp",
     "subtitle": "CNL Sourcing kết nối các doanh nghiệp Pháp với các nhà cung cấp Việt Nam tốt nhất. Dệt may, thực phẩm, thủ công mỹ nghệ: chúng tôi bảo đảm chuỗi cung ứng của bạn.",
-    "cta": "Nhận báo giá miễn phí"
+    "cta": "Nhận báo giá miễn phí",
+    "services": "Dịch vụ của chúng tôi"
+  },
+  "stats": {
+    "suppliers": "Nhà cung cấp được xác minh",
+    "satisfaction": "Khách hàng hài lòng",
+    "delay": "Thời gian báo giá trung bình",
+    "languages": "Ngôn ngữ"
+  },
+  "home": {
+    "expertiseTitle": "Lĩnh vực chuyên môn của chúng tôi",
+    "expertiseSubtitle": "Từ tìm kiếm nhà cung cấp đến kiểm soát chất lượng, chúng tôi quản lý từng bước trong quy trình tìm nguồn cung ứng của bạn.",
+    "whyTitle": "Tại sao chọn CNL Sourcing?",
+    "whySubtitle": "Anna, người sáng lập Pháp-Việt của chúng tôi, dựa vào mạng lưới các nhà cung cấp được chọn lọc và xác minh để cung cấp cho bạn dịch vụ tìm nguồn cung ứng an toàn và minh bạch.",
+    "whyAudited": "Nhà cung cấp được kiểm toán và chứng nhận",
+    "whyReply": "Phản hồi trong 24h, báo giá trong 15 ngày",
+    "whyLanguage": "Thành thạo tiếng Pháp, Anh và Việt",
+    "whyTracking": "Theo dõi đơn hàng theo thời gian thực",
+    "ctaTitle": "Sẵn sàng khởi động việc tìm nguồn cung ứng?",
+    "ctaSubtitle": "Mô tả dự án của bạn và nhận phân tích khả thi trong 24h — hoàn toàn miễn phí.",
+    "ctaButton": "Bắt đầu ngay"
+  },
+  "services_section": {
+    "textile": {
+      "title": "Dệt may & Thời trang",
+      "desc": "Quần áo, phụ kiện, vải kỹ thuật. Nhà cung cấp được chứng nhận BSCI và WRAP."
+    },
+    "food": {
+      "title": "Thực phẩm & Tạp hóa",
+      "desc": "Cà phê, gia vị, nước sốt, sản phẩm hữu cơ. Tuân thủ các tiêu chuẩn châu Âu."
+    },
+    "craft": {
+      "title": "Thủ công mỹ nghệ & Trang trí",
+      "desc": "Nội thất, gốm sứ, sơn mài, tre. Nghề thủ công truyền thống đích thực."
+    }
+  },
+  "services_page": {
+    "heroTitle": "Dịch vụ tìm nguồn cung ứng",
+    "heroSubtitle": "Từ nghiên cứu nhà cung cấp đến kiểm soát chất lượng, CNL Sourcing đảm nhận từng bước trong quá trình mua hàng của bạn tại Việt Nam.",
+    "processTitle": "Quy trình của chúng tôi",
+    "ctaTitle": "Bắt đầu dự án của bạn",
+    "ctaSubtitle": "Báo giá miễn phí · Phản hồi trong 24h",
+    "ctaButton": "Yêu cầu báo giá",
+    "services": {
+      "textile": {
+        "title": "Dệt may & Thời trang",
+        "desc": "Quần áo, phụ kiện, hàng da, vải kỹ thuật. Chúng tôi làm việc với các nhà máy được chứng nhận BSCI, WRAP và SA8000.",
+        "f1": "Tuyển chọn và kiểm toán nhà cung cấp",
+        "f2": "Kiểm soát chất lượng tại chỗ",
+        "f3": "Quản lý chứng nhận",
+        "f4": "Theo dõi sản xuất theo thời gian thực"
+      },
+      "food": {
+        "title": "Thực phẩm & Tạp hóa",
+        "desc": "Cà phê, trà, gia vị, nước sốt, sản phẩm hữu cơ. Tuân thủ tiêu chuẩn HACCP và quy định hải quan châu Âu.",
+        "f1": "Xác minh chứng nhận vệ sinh",
+        "f2": "Phân tích quy định nhập khẩu EU",
+        "f3": "Phối hợp với phòng thí nghiệm",
+        "f4": "Quản lý nhãn hiệu đa ngôn ngữ"
+      },
+      "craft": {
+        "title": "Thủ công mỹ nghệ & Trang trí",
+        "desc": "Nội thất sơn mài, gốm sứ, tre, mây. Tiếp cận trực tiếp các làng nghề thủ công Việt Nam.",
+        "f1": "Tìm kiếm nghệ nhân địa phương",
+        "f2": "Tùy chỉnh & OEM",
+        "f3": "Ảnh và video sản xuất",
+        "f4": "Đóng gói xuất khẩu an toàn"
+      },
+      "cosmetics": {
+        "title": "Mỹ phẩm & Làm đẹp",
+        "desc": "Sản phẩm tự nhiên từ thực vật địa phương. Tuân thủ quy định mỹ phẩm EU (CPNP).",
+        "f1": "Xác minh hồ sơ kỹ thuật",
+        "f2": "Kiểm tra da liễu",
+        "f3": "Tuân thủ REACH và CPNP",
+        "f4": "Nhãn hiệu riêng có sẵn"
+      }
+    },
+    "steps": {
+      "s1": { "n": "01", "title": "Phân tích", "desc": "Nghiên cứu nhu cầu và phân tích khả thi bằng AI" },
+      "s2": { "n": "02", "title": "Tìm nguồn", "desc": "Xác định và lựa chọn nhà cung cấp tốt nhất" },
+      "s3": { "n": "03", "title": "Đàm phán", "desc": "Đàm phán giá, thời hạn và điều kiện" },
+      "s4": { "n": "04", "title": "Theo dõi", "desc": "Kiểm soát chất lượng, hậu cần và giao hàng" }
+    }
+  },
+  "about_page": {
+    "heroTitle": "Giới thiệu CNL Sourcing",
+    "heroSubtitle": "Một công ty được xây dựng trên sự tin tưởng, chuyên môn văn hóa và niềm đam mê thương mại Pháp-Việt.",
+    "founderTitle": "Nguyễn Cao Phương Anh",
+    "founderRole": "Người sáng lập & Giám đốc",
+    "founderBio": "Là người Pháp-Việt, Anna lớn lên giữa hai nền văn hóa. Sau khi học thương mại quốc tế, cô thành lập CNL Sourcing để giúp các doanh nghiệp Pháp tiếp cận thị trường Việt Nam một cách tự tin.",
+    "storyTitle": "Câu chuyện của chúng tôi",
+    "storyP1": "CNL Sourcing ra đời từ một nhận định đơn giản: quá nhiều doanh nghiệp Pháp từ bỏ việc tìm nguồn cung ứng tại Việt Nam vì thiếu mối quan hệ địa phương đáng tin cậy, kỹ năng ngôn ngữ hoặc kiến thức pháp lý.",
+    "storyP2": "Nhờ mạng lưới gia đình và chuyên nghiệp tại Việt Nam, Anna cung cấp dịch vụ trọn gói, từ nghiên cứu nhà cung cấp đến giao hàng tại Pháp — với sự minh bạch hoàn toàn ở mọi bước.",
+    "valuesTitle": "Giá trị của chúng tôi",
+    "values": {
+      "trust": { "title": "Tin tưởng", "desc": "Quan hệ trực tiếp và minh bạch với mỗi khách hàng" },
+      "rigor": { "title": "Nghiêm túc", "desc": "Kiểm toán nhà cung cấp có hệ thống trước mọi khuyến nghị" },
+      "bridge": { "title": "Cầu nối văn hóa", "desc": "Hiểu sâu về cả hai nền văn hóa để tránh hiểu lầm" },
+      "speed": { "title": "Phản hồi nhanh", "desc": "Trả lời trong 24h, theo dõi chủ động từng hồ sơ" }
+    },
+    "ctaButton": "Làm việc với Anna"
+  },
+  "contact_page": {
+    "heroTitle": "Liên hệ với chúng tôi",
+    "heroSubtitle": "Một câu hỏi hay dự án? Anna trả lời trực tiếp trong vòng 24h.",
+    "sectionTitle": "Hãy nói về dự án của bạn",
+    "sectionText": "Dù bạn có ý tưởng cụ thể hay muốn khám phá các khả năng, hãy viết cho chúng tôi. Chúng tôi sẽ trả lời với phân tích ban đầu miễn phí.",
+    "emailLabel": "Email",
+    "locationLabel": "Địa điểm",
+    "location": "Thành phố Hồ Chí Minh, Việt Nam · Pháp",
+    "delayLabel": "Thời gian phản hồi",
+    "delay": "Trong vòng 24h (ngày làm việc)",
+    "formTitle": "Tin nhắn nhanh",
+    "formName": "Tên của bạn",
+    "formNamePlaceholder": "Nguyễn Văn A",
+    "formEmail": "Email của bạn",
+    "formEmailPlaceholder": "example@congty.com",
+    "formSubject": "Chủ đề",
+    "formSubjectPlaceholder": "Yêu cầu thông tin",
+    "formMessage": "Tin nhắn",
+    "formMessagePlaceholder": "Mô tả yêu cầu của bạn...",
+    "formSubmit": "Gửi",
+    "formSubmitting": "Đang gửi...",
+    "formSuccess": "Đã gửi tin nhắn!",
+    "formSuccessText": "Anna sẽ trả lời trong vòng 24h.",
+    "formError": "Lỗi khi gửi. Vui lòng thử lại hoặc gửi email trực tiếp tới cnlsourcingvn@gmail.com",
+    "chatHint": "Hoặc sử dụng chatbot AI ở góc dưới bên phải để nhận câu trả lời ngay lập tức."
+  },
+  "devis_page": {
+    "title": "Yêu cầu báo giá miễn phí",
+    "subtitle": "Mô tả nhu cầu của bạn trong vài phút. Anna phân tích yêu cầu và phản hồi với danh sách nhà cung cấp đủ tiêu chuẩn.",
+    "step1": "Bạn điền vào mẫu đơn",
+    "step2": "Phân tích AI trong 24h",
+    "step3": "Báo giá chi tiết & nhà cung cấp được chọn",
+    "willReceive": "Bạn sẽ nhận được",
+    "r1": "Phân tích khả thi đầy đủ",
+    "r2": "3 đến 5 nhà cung cấp được tuyển chọn",
+    "r3": "Ước tính chi phí và thời gian",
+    "r4": "Các điểm chú ý về quy định",
+    "r5": "Khuyến nghị cá nhân hóa",
+    "questions": "Câu hỏi?",
+    "questionsText": "Anna trả lời câu hỏi của bạn trực tiếp qua WhatsApp hoặc email."
   }
 }

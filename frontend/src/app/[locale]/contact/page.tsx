@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { useTranslations } from "next-intl";
 import { Mail, MapPin, Clock } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import ContactForm from "@/components/forms/ContactForm";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -9,16 +11,16 @@ export const metadata: Metadata = {
 };
 
 export default function ContactPage() {
+  const t = useTranslations("contact_page");
+
   return (
     <>
       <Header />
       <main>
         <section className="bg-brand-dark text-white py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="font-serif text-4xl md:text-5xl font-bold mb-4">Nous contacter</h1>
-            <p className="text-gray-400 max-w-xl mx-auto">
-              Une question, un projet ? Anna répond personnellement sous 24h.
-            </p>
+            <h1 className="font-serif text-4xl md:text-5xl font-bold mb-4">{t("heroTitle")}</h1>
+            <p className="text-gray-400 max-w-xl mx-auto">{t("heroSubtitle")}</p>
           </div>
         </section>
 
@@ -26,11 +28,8 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Infos */}
             <div className="space-y-6">
-              <h2 className="section-title">Parlons de votre projet</h2>
-              <p className="text-gray-500 leading-relaxed">
-                Que vous ayez une idée précise ou que vous souhaitiez explorer les possibilités,
-                n'hésitez pas à nous écrire. Nous vous répondons avec une première analyse gratuite.
-              </p>
+              <h2 className="section-title">{t("sectionTitle")}</h2>
+              <p className="text-gray-500 leading-relaxed">{t("sectionText")}</p>
 
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
@@ -38,7 +37,7 @@ export default function ContactPage() {
                     <Mail size={18} className="text-brand-red" />
                   </div>
                   <div>
-                    <p className="text-xs text-gray-400">Email</p>
+                    <p className="text-xs text-gray-400">{t("emailLabel")}</p>
                     <a href="mailto:cnlsourcingvn@gmail.com" className="text-brand-dark font-medium hover:text-brand-red">
                       cnlsourcingvn@gmail.com
                     </a>
@@ -50,8 +49,8 @@ export default function ContactPage() {
                     <MapPin size={18} className="text-brand-red" />
                   </div>
                   <div>
-                    <p className="text-xs text-gray-400">Localisation</p>
-                    <p className="text-brand-dark font-medium">Hô Chi Minh-Ville, Vietnam · France</p>
+                    <p className="text-xs text-gray-400">{t("locationLabel")}</p>
+                    <p className="text-brand-dark font-medium">{t("location")}</p>
                   </div>
                 </div>
 
@@ -60,42 +59,17 @@ export default function ContactPage() {
                     <Clock size={18} className="text-brand-red" />
                   </div>
                   <div>
-                    <p className="text-xs text-gray-400">Délai de réponse</p>
-                    <p className="text-brand-dark font-medium">Sous 24h (jours ouvrés)</p>
+                    <p className="text-xs text-gray-400">{t("delayLabel")}</p>
+                    <p className="text-brand-dark font-medium">{t("delay")}</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Formulaire contact simple */}
+            {/* Formulaire */}
             <div className="card">
-              <h3 className="font-serif text-xl font-bold text-brand-dark mb-4">Message rapide</h3>
-              <form
-                action="mailto:cnlsourcingvn@gmail.com"
-                method="get"
-                encType="text/plain"
-                className="space-y-4"
-              >
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Votre nom</label>
-                  <input name="from" type="text" className="input" placeholder="Marie Dupont" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Sujet</label>
-                  <input name="subject" type="text" className="input" placeholder="Demande de renseignement" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
-                  <textarea name="body" rows={5} className="input resize-none" placeholder="Décrivez votre demande..." />
-                </div>
-                <button type="submit" className="btn-primary w-full justify-center">
-                  Envoyer
-                </button>
-              </form>
-
-              <p className="text-xs text-gray-400 text-center mt-4">
-                Ou utilisez le chatbot IA en bas à droite pour une réponse immédiate.
-              </p>
+              <h3 className="font-serif text-xl font-bold text-brand-dark mb-4">{t("formTitle")}</h3>
+              <ContactForm />
             </div>
           </div>
         </section>

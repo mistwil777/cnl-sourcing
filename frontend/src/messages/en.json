@@ -9,6 +9,147 @@
   "hero": {
     "title": "Your Vietnam – France sourcing partner",
     "subtitle": "CNL Sourcing connects French companies with the best Vietnamese suppliers. Textiles, food, handicrafts: we secure your supply chain.",
-    "cta": "Get a free quote"
+    "cta": "Get a free quote",
+    "services": "Our services"
+  },
+  "stats": {
+    "suppliers": "Verified suppliers",
+    "satisfaction": "Satisfied clients",
+    "delay": "Average quote time",
+    "languages": "Languages spoken"
+  },
+  "home": {
+    "expertiseTitle": "Our areas of expertise",
+    "expertiseSubtitle": "From supplier research to quality control, we handle every step of your sourcing.",
+    "whyTitle": "Why choose CNL Sourcing?",
+    "whySubtitle": "Anna, our Franco-Vietnamese founder, relies on a network of selected and verified suppliers to offer you secure and transparent sourcing.",
+    "whyAudited": "Audited and certified suppliers",
+    "whyReply": "Response within 24h, quote within 15 days",
+    "whyLanguage": "French, English and Vietnamese spoken",
+    "whyTracking": "Real-time order tracking",
+    "ctaTitle": "Ready to launch your sourcing?",
+    "ctaSubtitle": "Describe your project and receive a feasibility analysis within 24h — for free.",
+    "ctaButton": "Start now"
+  },
+  "services_section": {
+    "textile": {
+      "title": "Textile & Fashion",
+      "desc": "Clothing, accessories, technical fabrics. BSCI and WRAP certified suppliers."
+    },
+    "food": {
+      "title": "Food & Grocery",
+      "desc": "Coffee, spices, sauces, organic products. Compliance with European standards."
+    },
+    "craft": {
+      "title": "Handicrafts & Decoration",
+      "desc": "Furniture, ceramics, lacquerware, bamboo. Authentic artisan craftsmanship."
+    }
+  },
+  "services_page": {
+    "heroTitle": "Our sourcing services",
+    "heroSubtitle": "From supplier research to quality control, CNL Sourcing handles every step of your procurement in Vietnam.",
+    "processTitle": "Our process",
+    "ctaTitle": "Start your project",
+    "ctaSubtitle": "Free quote · Response within 24h",
+    "ctaButton": "Request a quote",
+    "services": {
+      "textile": {
+        "title": "Textile & Fashion",
+        "desc": "Clothing, accessories, leather goods, technical fabrics. We work with BSCI, WRAP and SA8000 certified factories.",
+        "f1": "Supplier selection and audit",
+        "f2": "On-site quality control",
+        "f3": "Certification management",
+        "f4": "Real-time production tracking"
+      },
+      "food": {
+        "title": "Food & Grocery",
+        "desc": "Coffee, tea, spices, sauces, organic products. Compliance with HACCP standards and European customs regulations.",
+        "f1": "Sanitary certification verification",
+        "f2": "EU import regulatory analysis",
+        "f3": "Laboratory coordination",
+        "f4": "Multilingual labelling management"
+      },
+      "craft": {
+        "title": "Handicrafts & Decoration",
+        "desc": "Lacquered furniture, ceramics, bamboo, rattan. Direct access to Vietnamese artisan villages.",
+        "f1": "Local artisan sourcing",
+        "f2": "Customisation & OEM",
+        "f3": "Production photos and videos",
+        "f4": "Secure export packaging"
+      },
+      "cosmetics": {
+        "title": "Cosmetics & Beauty",
+        "desc": "Natural products based on local plants. Compliance with EU cosmetics regulation (CPNP).",
+        "f1": "Technical dossier verification",
+        "f2": "Dermatological testing",
+        "f3": "REACH and CPNP compliance",
+        "f4": "Private label available"
+      }
+    },
+    "steps": {
+      "s1": { "n": "01", "title": "Analysis", "desc": "Study of your needs and AI feasibility analysis" },
+      "s2": { "n": "02", "title": "Sourcing", "desc": "Identification and selection of the best suppliers" },
+      "s3": { "n": "03", "title": "Negotiation", "desc": "Price, deadline and condition negotiation" },
+      "s4": { "n": "04", "title": "Follow-up", "desc": "Quality control, logistics and delivery" }
+    }
+  },
+  "about_page": {
+    "heroTitle": "About CNL Sourcing",
+    "heroSubtitle": "A company built on trust, cultural expertise and passion for Franco-Vietnamese trade.",
+    "founderTitle": "Nguyen Cao Phuong Anh",
+    "founderRole": "Founder & Director",
+    "founderBio": "Franco-Vietnamese, Anna grew up between two cultures. After studying international business, she founded CNL Sourcing to help French companies access the Vietnamese market with confidence.",
+    "storyTitle": "Our story",
+    "storyP1": "CNL Sourcing was born from a simple observation: too many French companies give up sourcing in Vietnam due to lack of reliable local contacts, language skills or regulatory knowledge.",
+    "storyP2": "Thanks to her family and professional network in Vietnam, Anna offers a turnkey service, from supplier research to delivery in France — with full transparency at every step.",
+    "valuesTitle": "Our values",
+    "values": {
+      "trust": { "title": "Trust", "desc": "Direct and transparent relationship with every client" },
+      "rigor": { "title": "Rigour", "desc": "Systematic supplier audit before any recommendation" },
+      "bridge": { "title": "Cultural bridge", "desc": "Deep understanding of both cultures to avoid misunderstandings" },
+      "speed": { "title": "Responsiveness", "desc": "Response within 24h, proactive follow-up on every case" }
+    },
+    "ctaButton": "Work with Anna"
+  },
+  "contact_page": {
+    "heroTitle": "Contact us",
+    "heroSubtitle": "A question or a project? Anna replies personally within 24h.",
+    "sectionTitle": "Let's talk about your project",
+    "sectionText": "Whether you have a precise idea or want to explore possibilities, feel free to write to us. We'll reply with a free initial analysis.",
+    "emailLabel": "Email",
+    "locationLabel": "Location",
+    "location": "Ho Chi Minh City, Vietnam · France",
+    "delayLabel": "Response time",
+    "delay": "Within 24h (business days)",
+    "formTitle": "Quick message",
+    "formName": "Your name",
+    "formNamePlaceholder": "John Smith",
+    "formEmail": "Your email",
+    "formEmailPlaceholder": "john@company.com",
+    "formSubject": "Subject",
+    "formSubjectPlaceholder": "Information request",
+    "formMessage": "Message",
+    "formMessagePlaceholder": "Describe your request...",
+    "formSubmit": "Send",
+    "formSubmitting": "Sending...",
+    "formSuccess": "Message sent!",
+    "formSuccessText": "Anna will reply within 24h.",
+    "formError": "Error sending message. Please try again or write directly to cnlsourcingvn@gmail.com",
+    "chatHint": "Or use the AI chatbot at the bottom right for an immediate answer."
+  },
+  "devis_page": {
+    "title": "Request a free quote",
+    "subtitle": "Describe your need in a few minutes. Anna analyses your request and comes back with a selection of qualified suppliers.",
+    "step1": "You fill in the form",
+    "step2": "AI analysis within 24h",
+    "step3": "Detailed quote & selected suppliers",
+    "willReceive": "What you will receive",
+    "r1": "Complete feasibility analysis",
+    "r2": "3 to 5 pre-selected suppliers",
+    "r3": "Cost and deadline estimate",
+    "r4": "Regulatory attention points",
+    "r5": "Personalised recommendation",
+    "questions": "Questions?",
+    "questionsText": "Anna answers your questions directly by WhatsApp or email."
   }
 }

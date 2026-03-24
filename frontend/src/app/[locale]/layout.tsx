@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages, getLocale } from "next-intl/server";
+import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import ChatWidget from "@/components/chatbot/ChatWidget";
 import "../globals.css";
@@ -35,7 +35,7 @@ export default async function LocaleLayout({
 }) {
   if (!locales.includes(locale)) notFound();
 
-  const messages = await getMessages({ locale });
+  const messages = await getMessages();
 
   return (
     <html lang={locale} className={`${inter.variable} ${playfair.variable}`}>

@@ -1,8 +1,10 @@
+const createNextIntlPlugin = require("next-intl/plugin");
+
+const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "standalone",
-
-  // Pas de bloc i18n ici — next-intl App Router gère le routing via middleware
 
   images: {
     domains: ["cnlsourcing.com"],
@@ -13,4 +15,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = withNextIntl(nextConfig);
