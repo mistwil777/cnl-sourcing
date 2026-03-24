@@ -2,10 +2,7 @@
 const nextConfig = {
   output: "standalone",
 
-  i18n: {
-    locales: ["fr", "en", "vi"],
-    defaultLocale: "fr",
-  },
+  // Pas de bloc i18n ici — next-intl App Router gère le routing via middleware
 
   images: {
     domains: ["cnlsourcing.com"],
