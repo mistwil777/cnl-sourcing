@@ -29,15 +29,11 @@ services:
 
   # ─── Next.js (frontend + API routes) ─────────────────────────────────────
   nextjs:
-    image: gcr.io/distroless/nodejs22-debian12
+    build:
+      context: ./frontend
     container_name: cnl_nextjs
     restart: unless-stopped
-    working_dir: /app
-    command: ["server.js"]
     volumes:
-      - ./frontend/.next/standalone:/app
-      - ./frontend/.next/static:/app/.next/static
-      - ./frontend/public:/app/public
       - lancedb_data:/app/lancedb_data
     env_file:
       - .env
