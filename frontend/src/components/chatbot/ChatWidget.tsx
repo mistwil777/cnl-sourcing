@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { MessageCircle, X, Send, Loader2, Bot } from "lucide-react";
-import { v4 as uuidv4 } from "uuid";
 
 interface Message {
   role: "user" | "assistant";
@@ -20,7 +19,7 @@ export default function ChatWidget() {
   const [messages, setMessages] = useState<Message[]>([WELCOME]);
   const [input, setInput]       = useState("");
   const [loading, setLoading]   = useState(false);
-  const [sessionId]             = useState(() => uuidv4());
+  const [sessionId]             = useState(() => crypto.randomUUID());
   const bottomRef               = useRef<HTMLDivElement>(null);
   const inputRef                = useRef<HTMLTextAreaElement>(null);
 
