@@ -37,8 +37,8 @@ services:
       - lancedb_data:/app/lancedb_data
     env_file:
       - .env
-    expose:
-      - "3000"
+    ports:
+      - "3000:3000"
     depends_on:
       postgres:
         condition: service_healthy
@@ -94,8 +94,8 @@ services:
     volumes:
       - n8n_data:/home/node/.n8n
       - ./n8n/workflows:/home/node/.n8n/workflows
-    expose:
-      - "5678"
+    ports:
+      - "5678:5678"
     depends_on:
       postgres:
         condition: service_healthy
