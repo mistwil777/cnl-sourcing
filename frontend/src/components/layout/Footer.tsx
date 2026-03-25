@@ -41,7 +41,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <MapPin size={14} className="text-brand-gold shrink-0" />
-                <span>Hô Chi Minh-Ville, Vietnam · France</span>
+                <span>6 rue Joseph Bosc, 31000 Toulouse · France</span>
               </li>
             </ul>
           </div>

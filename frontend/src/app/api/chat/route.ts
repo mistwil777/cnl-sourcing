@@ -1,108 +1,191 @@
+/**
+ * /api/chat — Pipeline optimisé coûts LLM
+ *
+ * Flux : Redis cache → RAG → compression → routeur → prompt caching Anthropic → log
+ *
+ * Économies cibles :
+ * - Cache Redis : 100% des tokens sur questions répétées
+ * - Prompt caching : -97% sur tokens système (ephemeral 5 min)
+ * - Routeur Haiku/Sonnet : 80% des requêtes sur Haiku (10× moins cher)
+ * - Compression RAG : -30-50% tokens contexte
+ */
+
 import { NextRequest } from "next/server";
 import { z } from "zod";
-import { anthropic, MODEL_FAST, SYSTEM_PROMPT } from "@/lib/rag/claude";
-import { retrieveChunks, buildRagContext } from "@/lib/rag/retriever";
+import { chatWithCache } from "@/lib/rag/claude";
+import { retrieveChunks } from "@/lib/rag/retriever";
+import { compressRAGContext, compressHistory } from "@/lib/rag/compressor";
+import { routeLLM } from "@/lib/rag/router";
+import { getCachedResponse, setCachedResponse } from "@/lib/cache/redis";
+import { logTokenUsage } from "@/lib/cost/logger";
 import { query } from "@/lib/db/client";
 
+// ─── Validation ───────────────────────────────────────────────────────────────
 const messageSchema = z.object({
   role:    z.enum(["user", "assistant"]),
   content: z.string().max(4000),
 });
 
 const chatSchema = z.object({
-  messages:   z.array(messageSchema).min(1).max(50),
-  sessionId:  z.string().min(1).max(255),
+  messages:  z.array(messageSchema).min(1).max(50),
+  sessionId: z.string().min(1).max(255),
 });
 
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+/** Encode une réponse complète en stream SSE (pour cache hits). */
+function textToSSEStream(text: string): ReadableStream {
+  const encoder = new TextEncoder();
+  return new ReadableStream({
+    start(controller) {
+      // Découpe en petits morceaux pour simuler le streaming
+      const CHUNK_SIZE = 20;
+      for (let i = 0; i < text.length; i += CHUNK_SIZE) {
+        const slice = text.slice(i, i + CHUNK_SIZE);
+        controller.enqueue(
+          encoder.encode(`data: ${JSON.stringify({ text: slice, cached: true })}\n\n`)
+        );
+      }
+      controller.enqueue(encoder.encode("data: [DONE]\n\n"));
+      controller.close();
+    },
+  });
+}
+
+/** Persiste les messages en base de façon fire-and-forget. */
+async function persistMessages(params: {
+  sessionId:     string;
+  userMessage:   string;
+  assistantText: string;
+  model:         string;
+  inputTokens:   number;
+  outputTokens:  number;
+  ragSources:    string[];
+  cacheHit:      boolean;
+}): Promise<void> {
+  const { sessionId, userMessage, assistantText, model, inputTokens, outputTokens, ragSources, cacheHit } = params;
+  try {
+    await query(
+      `INSERT INTO conversations_chat (session_id, role, contenu, modele, tokens_utilises, rag_sources)
+       VALUES ($1,'user',$2,$3,$4,$5)`,
+      [sessionId, userMessage, model, inputTokens,
+       ragSources.length ? JSON.stringify(ragSources) : null]
+    );
+    await query(
+      `INSERT INTO conversations_chat (session_id, role, contenu, modele, tokens_utilises, rag_sources)
+       VALUES ($1,'assistant',$2,$3,$4,$5)`,
+      [sessionId, assistantText, model, outputTokens,
+       ragSources.length ? JSON.stringify(ragSources) : null]
+    );
+    if (cacheHit) {
+      await logTokenUsage({
+        model, input_tokens: 0, output_tokens: 0,
+        cache_creation_input_tokens: 0, cache_read_input_tokens: 0,
+        source: "chatbot", cache_hit: true,
+      });
+    }
+  } catch {
+    // Ne pas bloquer si DB indispo
+  }
+}
+
+// ─── Handler principal ────────────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { messages, sessionId } = chatSchema.parse(body);
 
-    const lastUserMessage = [...messages].reverse().find((m) => m.role === "user");
-    if (!lastUserMessage) {
+    const lastUser = [...messages].reverse().find((m) => m.role === "user");
+    if (!lastUser) {
       return new Response(JSON.stringify({ message: "No user message" }), { status: 400 });
     }
+    const userMessage = lastUser.content;
 
-    // RAG — récupère le contexte documentaire
-    const chunks = await retrieveChunks(lastUserMessage.content);
-    const ragContext = buildRagContext(chunks);
+    // ── 1. Cache Redis ─────────────────────────────────────────────────────
+    const cached = await getCachedResponse(userMessage);
+    if (cached) {
+      // Fire-and-forget persistence
+      persistMessages({
+        sessionId, userMessage, assistantText: cached,
+        model: "cached", inputTokens: 0, outputTokens: 0,
+        ragSources: [], cacheHit: true,
+      });
 
-    const systemWithRag = ragContext
-      ? `${SYSTEM_PROMPT}${ragContext}`
-      : SYSTEM_PROMPT;
+      return new Response(textToSSEStream(cached), {
+        headers: {
+          "Content-Type":  "text/event-stream",
+          "Cache-Control": "no-cache",
+          "Connection":    "keep-alive",
+          "X-Cache":       "HIT",
+        },
+      });
+    }
 
-    // Stream Claude
-    const stream = await anthropic.messages.stream({
-      model:      MODEL_FAST,
-      max_tokens: 1024,
-      system:     systemWithRag,
-      messages:   messages.map((m) => ({ role: m.role, content: m.content })),
+    // ── 2. RAG — récupération + compression ────────────────────────────────
+    const chunks      = await retrieveChunks(userMessage);
+    const ragContext  = compressRAGContext(chunks, 800);
+    const bestScore   = chunks.length > 0 ? chunks[0].score_final : 0;
+    const ragSources  = chunks.map((c) => c.source);
+
+    // ── 3. Routage Haiku / Sonnet ──────────────────────────────────────────
+    const { model, reason } = routeLLM(userMessage, bestScore);
+
+    // ── 4. Compression historique ──────────────────────────────────────────
+    const history = compressHistory(
+      messages
+        .slice(0, -1) // exclut le dernier message (= userMessage)
+        .map((m) => ({ role: m.role as "user" | "assistant", content: m.content })),
+      3
+    );
+
+    // ── 5. Appel Claude avec prompt caching ────────────────────────────────
+    const textIter = await chatWithCache({
+      userMessage,
+      ragContext,
+      history,
+      model,
+      maxTokens: 1024,
     });
 
-    // Sauvegarde asynchrone en base (fire-and-forget)
-    stream.finalMessage().then(async (finalMsg) => {
-      try {
-        const assistantContent = finalMsg.content[0]?.type === "text"
-          ? finalMsg.content[0].text
-          : "";
-
-        // Persiste user message
-        await query(
-          `INSERT INTO conversations_chat (session_id, role, contenu, modele, tokens_utilises, rag_sources, created_at)
-           VALUES ($1, 'user', $2, $3, $4, $5, NOW())`,
-          [
-            sessionId,
-            lastUserMessage.content,
-            MODEL_FAST,
-            finalMsg.usage.input_tokens,
-            chunks.length > 0 ? JSON.stringify(chunks.map((c) => c.source)) : null,
-          ]
-        );
-
-        // Persiste réponse assistant
-        await query(
-          `INSERT INTO conversations_chat (session_id, role, contenu, modele, tokens_utilises, rag_sources, created_at)
-           VALUES ($1, 'assistant', $2, $3, $4, $5, NOW())`,
-          [
-            sessionId,
-            assistantContent,
-            MODEL_FAST,
-            finalMsg.usage.output_tokens,
-            chunks.length > 0 ? JSON.stringify(chunks.map((c) => c.source)) : null,
-          ]
-        );
-      } catch {
-        // Ne pas bloquer le stream si la BDD est indispo
-      }
-    });
-
-    // Retourne le stream SSE compatible Next.js
+    // ── 6. Stream SSE + accumulation pour cache + persistance ──────────────
     const encoder = new TextEncoder();
+    let fullText  = "";
+
     const readable = new ReadableStream({
       async start(controller) {
-        for await (const chunk of stream) {
-          if (
-            chunk.type === "content_block_delta" &&
-            chunk.delta.type === "text_delta"
-          ) {
+        try {
+          for await (const chunk of textIter) {
+            fullText += chunk;
             controller.enqueue(
-              encoder.encode(`data: ${JSON.stringify({ text: chunk.delta.text })}\n\n`)
+              encoder.encode(`data: ${JSON.stringify({ text: chunk })}\n\n`)
             );
           }
+        } finally {
+          controller.enqueue(encoder.encode("data: [DONE]\n\n"));
+          controller.close();
+
+          // Post-stream : cache + persistance (fire-and-forget)
+          setCachedResponse(userMessage, fullText).catch(() => {});
+          persistMessages({
+            sessionId, userMessage, assistantText: fullText,
+            model, inputTokens: 0, outputTokens: 0,
+            ragSources, cacheHit: false,
+          });
         }
-        controller.enqueue(encoder.encode("data: [DONE]\n\n"));
-        controller.close();
       },
     });
 
     return new Response(readable, {
       headers: {
-        "Content-Type":  "text/event-stream",
-        "Cache-Control": "no-cache",
-        Connection:      "keep-alive",
+        "Content-Type":   "text/event-stream",
+        "Cache-Control":  "no-cache",
+        "Connection":     "keep-alive",
+        "X-Cache":        "MISS",
+        "X-Model":        model,
+        "X-Route-Reason": reason,
       },
     });
+
   } catch (err) {
     if (err instanceof z.ZodError) {
       return new Response(JSON.stringify({ message: "Données invalides" }), { status: 400 });

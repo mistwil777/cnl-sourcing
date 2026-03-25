@@ -1,0 +1,161 @@
+{
+  "sources": [
+    {
+      "id": "ccifv",
+      "nom": "CCI France Vietnam",
+      "url": "https://www.ccifv.org/actualites",
+      "type": "scraping",
+      "langue": "fr",
+      "secteurs": ["general", "commerce", "business"],
+      "actif": true,
+      "priorite": 1
+    },
+    {
+      "id": "douanes_fr",
+      "nom": "Douanes françaises — Actualités",
+      "url": "https://www.douane.gouv.fr/actualites",
+      "type": "scraping",
+      "langue": "fr",
+      "secteurs": ["douanes", "reglementation", "import"],
+      "actif": true,
+      "priorite": 1
+    },
+    {
+      "id": "douanes_tarifs",
+      "nom": "Douanes françaises — Tarifs douaniers",
+      "url": "https://www.douane.gouv.fr/tarifs-douaniers",
+      "type": "scraping",
+      "langue": "fr",
+      "secteurs": ["douanes", "tarifs"],
+      "actif": true,
+      "priorite": 1
+    },
+    {
+      "id": "businessfrance_vietnam",
+      "nom": "Business France — Vietnam",
+      "url": "https://www.businessfrance.fr/vietnam",
+      "type": "scraping",
+      "langue": "fr",
+      "secteurs": ["general", "marche_vietnam"],
+      "actif": true,
+      "priorite": 1
+    },
+    {
+      "id": "vir",
+      "nom": "Vietnam Investment Review",
+      "url": "https://vir.com.vn/rss/home.rss",
+      "type": "rss",
+      "langue": "en",
+      "secteurs": ["investissement", "economie", "industrie"],
+      "actif": true,
+      "priorite": 1
+    },
+    {
+      "id": "vietnamnews_economy",
+      "nom": "Vietnam News — Economy",
+      "url": "https://vietnamnews.vn/rss/economy.rss",
+      "type": "rss",
+      "langue": "en",
+      "secteurs": ["economie", "commerce", "industrie"],
+      "actif": true,
+      "priorite": 1
+    },
+    {
+      "id": "vna_en",
+      "nom": "Vietnam News Agency",
+      "url": "https://en.vietnamplus.vn/rss/home.rss",
+      "type": "rss",
+      "langue": "en",
+      "secteurs": ["general", "politique_economique"],
+      "actif": true,
+      "priorite": 2
+    },
+    {
+      "id": "vcci",
+      "nom": "VCCI — Vietnam Chamber of Commerce",
+      "url": "https://en.vcci.com.vn",
+      "type": "scraping",
+      "langue": "en",
+      "secteurs": ["commerce", "business", "opportunites"],
+      "actif": true,
+      "priorite": 1
+    },
+    {
+      "id": "vitas",
+      "nom": "Vietnam Textile & Apparel Association",
+      "url": "https://www.vitas.org.vn/en",
+      "type": "scraping",
+      "langue": "en",
+      "secteurs": ["textile", "mode"],
+      "actif": true,
+      "priorite": 2
+    },
+    {
+      "id": "just_style",
+      "nom": "Just-Style — Textile sourcing",
+      "url": "https://www.just-style.com/feed/",
+      "type": "rss",
+      "langue": "en",
+      "secteurs": ["textile", "sourcing"],
+      "actif": true,
+      "priorite": 2
+    },
+    {
+      "id": "food_navigator_asia",
+      "nom": "Food Navigator Asia",
+      "url": "https://www.foodnavigator-asia.com/rss/feed/news",
+      "type": "rss",
+      "langue": "en",
+      "secteurs": ["alimentation", "agro"],
+      "actif": true,
+      "priorite": 2
+    },
+    {
+      "id": "gso_vietnam",
+      "nom": "GSO Vietnam — General Statistics Office",
+      "url": "https://www.gso.gov.vn/en/homepage/",
+      "type": "scraping",
+      "langue": "en",
+      "secteurs": ["statistiques", "economie", "commerce_exterieur"],
+      "actif": true,
+      "priorite": 2
+    },
+    {
+      "id": "medef_international",
+      "nom": "MEDEF International",
+      "url": "https://www.medef-international.com/actualites",
+      "type": "scraping",
+      "langue": "fr",
+      "secteurs": ["commerce_international", "vietnam"],
+      "actif": true,
+      "priorite": 2
+    },
+    {
+      "id": "ambafrance_vietnam",
+      "nom": "Ambassade de France au Vietnam",
+      "url": "https://vn.ambafrance.org/spip.php?page=backend",
+      "type": "rss",
+      "langue": "fr",
+      "secteurs": ["general", "economie", "business"],
+      "actif": true,
+      "priorite": 2
+    },
+    {
+      "id": "reddit_importing",
+      "nom": "Reddit r/importing",
+      "url": "https://www.reddit.com/r/importing/.rss",
+      "type": "rss",
+      "langue": "en",
+      "secteurs": ["import", "sourcing", "retours_experience"],
+      "actif": true,
+      "priorite": 3
+    }
+  ],
+  "config": {
+    "score_threshold": 0.55,
+    "freshness_days": 45,
+    "collect_hour": 3,
+    "max_articles_per_source": 20,
+    "languages_accepted": ["fr", "en", "vi"]
+  }
+}
