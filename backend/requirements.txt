@@ -1,0 +1,17 @@
+# CNL Sourcing — Backend Python dependencies
+
+# RAG — collecte et indexation
+feedparser==6.0.11
+beautifulsoup4==4.12.3
+requests==2.31.0
+lancedb>=0.6.0
+pyarrow==14.0.2
+
+# IA
+anthropic==0.40.0
+
+# Base de données
+psycopg2-binary==2.9.9
+
+# Utilitaires
+python-dotenv==1.0.0
