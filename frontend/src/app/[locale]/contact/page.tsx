@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { useTranslations } from "next-intl";
-import { Mail, MapPin, Clock } from "lucide-react";
+import { Mail, MapPin, Clock, Calendar } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ContactForm from "@/components/forms/ContactForm";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Contactez CNL Sourcing — Anna répond sous 24h.",
+  description: "Contactez CNL Sourcing — Anna répond sous 48h. Toulouse, Occitanie.",
 };
 
 export default function ContactPage() {
@@ -51,6 +51,16 @@ export default function ContactPage() {
                   <div>
                     <p className="text-xs text-gray-400">{t("locationLabel")}</p>
                     <p className="text-brand-dark font-medium">{t("location")}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-brand-red/10 rounded-full flex items-center justify-center">
+                    <Calendar size={18} className="text-brand-red" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-400">{t("hoursLabel")}</p>
+                    <p className="text-brand-dark font-medium">{t("hours")}</p>
                   </div>
                 </div>
 

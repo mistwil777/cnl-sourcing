@@ -10,12 +10,11 @@ export const metadata: Metadata = {
   description: "Textile, alimentaire, artisanat : découvrez tous nos services de sourcing Vietnam → France.",
 };
 
-const serviceKeys = ["textile", "food", "craft", "cosmetics"] as const;
+const serviceKeys = ["sourcing", "groupage", "douane"] as const;
 const serviceIcons: Record<string, string> = {
-  textile: "👗",
-  food: "🍜",
-  craft: "🪴",
-  cosmetics: "💄",
+  sourcing: "🔍",
+  groupage: "📦",
+  douane: "🛃",
 };
 
 export default function ServicesPage() {
@@ -39,7 +38,7 @@ export default function ServicesPage() {
                 <div className="text-5xl mb-4">{serviceIcons[key]}</div>
                 <h2 className="font-serif text-2xl font-bold text-brand-dark mb-3">{t(`services.${key}.title`)}</h2>
                 <p className="text-gray-500 mb-5 leading-relaxed">{t(`services.${key}.desc`)}</p>
-                <ul className="space-y-2">
+                <ul className="space-y-2 mb-4">
                   {(["f1", "f2", "f3", "f4"] as const).map((f) => (
                     <li key={f} className="flex items-center gap-2 text-sm text-gray-600">
                       <CheckCircle size={14} className="text-brand-red shrink-0" />
@@ -47,6 +46,7 @@ export default function ServicesPage() {
                     </li>
                   ))}
                 </ul>
+                <p className="text-sm font-semibold text-brand-red">{t(`services.${key}.price`)}</p>
               </div>
             ))}
           </div>
@@ -55,8 +55,8 @@ export default function ServicesPage() {
         <section className="bg-brand-light py-16">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="section-title text-center mb-12">{t("processTitle")}</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-              {(["s1", "s2", "s3", "s4"] as const).map((s) => (
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
+              {(["s1", "s2", "s3", "s4", "s5", "s6"] as const).map((s) => (
                 <div key={s} className="text-center">
                   <div className="w-12 h-12 rounded-full bg-brand-red text-white font-bold text-lg flex items-center justify-center mx-auto mb-3 font-serif">
                     {t(`steps.${s}.n`)}

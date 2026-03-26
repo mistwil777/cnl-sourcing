@@ -7,120 +7,134 @@
     "devis": "Get a quote"
   },
   "hero": {
-    "title": "Your Vietnam – France sourcing partner",
-    "subtitle": "CNL Sourcing connects French companies with the best Vietnamese suppliers. Textiles, food, handicrafts: we secure your supply chain.",
-    "cta": "Get a free quote",
-    "services": "Our services"
-  },
-  "stats": {
-    "suppliers": "Verified suppliers",
-    "satisfaction": "Satisfied clients",
-    "delay": "Average quote time",
-    "languages": "Languages spoken"
+    "title": "Your sourcing agent in Vietnam",
+    "subtitle": "Opening the doors of Vietnam's best factories for French SMEs — textile, food, crafts",
+    "cta": {
+      "label": "Request a free quote",
+      "subtitle": "Response within 48h • Free quote • No commitment"
+    },
+    "services": "Our services",
+    "stats": {
+      "experience": "10 years Vietnam experience",
+      "suppliers": "Top 3 suppliers per mission",
+      "delay": "10-15 days for an audit",
+      "price": "From €250"
+    }
   },
   "home": {
     "expertiseTitle": "Our areas of expertise",
-    "expertiseSubtitle": "From supplier research to quality control, we handle every step of your sourcing.",
+    "expertiseSubtitle": "Textile, food, crafts: the sectors where I truly make a difference.",
     "whyTitle": "Why choose CNL Sourcing?",
-    "whySubtitle": "Anna, our Franco-Vietnamese founder, relies on a network of selected and verified suppliers to offer you secure and transparent sourcing.",
-    "whyAudited": "Audited and certified suppliers",
-    "whyReply": "Response within 24h, quote within 15 days",
-    "whyLanguage": "French, English and Vietnamese spoken",
-    "whyTracking": "Real-time order tracking",
+    "whySubtitle": "Born in Vietnam, based in Toulouse — I negotiate in Vietnamese to get local prices, not tourist prices.",
+    "whyAudited": "Suppliers audited from my trusted network",
+    "whyReply": "Response within 48h, audit report within 10-15 days",
+    "whyLanguage": "Negotiation in Vietnamese — local prices guaranteed",
+    "whyTracking": "Service contract signed systematically",
     "ctaTitle": "Ready to launch your sourcing?",
-    "ctaSubtitle": "Describe your project and receive a feasibility analysis within 24h — for free.",
-    "ctaButton": "Start now"
+    "ctaSubtitle": "Describe your project and receive a feasibility analysis within 48h — for free.",
+    "ctaButton": "Request a free quote"
   },
   "services_section": {
     "textile": {
       "title": "Textile & Fashion",
-      "desc": "Clothing, accessories, technical fabrics. BSCI and WRAP certified suppliers."
+      "desc": "Cotton, silk, uniforms, artisan fabrics. Factories selected from my trusted network."
     },
     "food": {
-      "title": "Food & Grocery",
-      "desc": "Coffee, spices, sauces, organic products. Compliance with European standards."
+      "title": "Food & Agri",
+      "desc": "Coffee, spices, cashew nuts, dry goods. Compliance with European import standards."
     },
     "craft": {
       "title": "Handicrafts & Decoration",
-      "desc": "Furniture, ceramics, lacquerware, bamboo. Authentic artisan craftsmanship."
+      "desc": "Wood, custom bamboo — Hanoi region specialty. Flexible MOQs through local network."
     }
   },
   "services_page": {
     "heroTitle": "Our sourcing services",
-    "heroSubtitle": "From supplier research to quality control, CNL Sourcing handles every step of your procurement in Vietnam.",
-    "processTitle": "Our process",
+    "heroSubtitle": "From supplier research to quality control, I handle every step of your import project from Vietnam.",
+    "processTitle": "The 6 steps of your sourcing mission",
     "ctaTitle": "Start your project",
-    "ctaSubtitle": "Free quote · Response within 24h",
+    "ctaSubtitle": "From €250 · Free quote · Response within 48h",
     "ctaButton": "Request a quote",
     "services": {
-      "textile": {
-        "title": "Textile & Fashion",
-        "desc": "Clothing, accessories, leather goods, technical fabrics. We work with BSCI, WRAP and SA8000 certified factories.",
-        "f1": "Supplier selection and audit",
-        "f2": "On-site quality control",
-        "f3": "Certification management",
-        "f4": "Real-time production tracking"
+      "sourcing": {
+        "title": "Turnkey sourcing in Vietnam",
+        "desc": "From supplier research to quality control, I handle the entire import project on your behalf.",
+        "f1": "Brief & feasibility analysis",
+        "f2": "Supplier selection and audit",
+        "f3": "Sample management",
+        "f4": "Quality control before shipment",
+        "price": "From €250 — Free quote"
       },
-      "food": {
-        "title": "Food & Grocery",
-        "desc": "Coffee, tea, spices, sauces, organic products. Compliance with HACCP standards and European customs regulations.",
-        "f1": "Sanitary certification verification",
-        "f2": "EU import regulatory analysis",
-        "f3": "Laboratory coordination",
-        "f4": "Multilingual labelling management"
+      "groupage": {
+        "title": "Groupage France ↔ Vietnam",
+        "desc": "Ideal for small volumes (samples, small batches). Share transport costs with other clients from Occitanie and divide your invoice by 3.",
+        "f1": "Collection in France and Vietnam",
+        "f2": "Shared transport costs",
+        "f3": "Ideal for samples and small runs",
+        "f4": "Regular departures from Toulouse",
+        "price": "Quote based on volume"
       },
-      "craft": {
-        "title": "Handicrafts & Decoration",
-        "desc": "Lacquered furniture, ceramics, bamboo, rattan. Direct access to Vietnamese artisan villages.",
-        "f1": "Local artisan sourcing",
-        "f2": "Customisation & OEM",
-        "f3": "Production photos and videos",
-        "f4": "Secure export packaging"
-      },
-      "cosmetics": {
-        "title": "Cosmetics & Beauty",
-        "desc": "Natural products based on local plants. Compliance with EU cosmetics regulation (CPNP).",
-        "f1": "Technical dossier verification",
-        "f2": "Dermatological testing",
-        "f3": "REACH and CPNP compliance",
-        "f4": "Private label available"
+      "douane": {
+        "title": "Customs & EVFTA support",
+        "desc": "I help you obtain your EORI number and prepare with the supplier the documents to benefit from the EVFTA agreement (often 0% customs duties on Vietnamese products).",
+        "f1": "EORI number registration",
+        "f2": "EVFTA document preparation",
+        "f3": "Applicable customs duty calculation",
+        "f4": "Coordination with freight forwarder",
+        "price": "Included in the sourcing package"
       }
     },
     "steps": {
-      "s1": { "n": "01", "title": "Analysis", "desc": "Study of your needs and AI feasibility analysis" },
-      "s2": { "n": "02", "title": "Sourcing", "desc": "Identification and selection of the best suppliers" },
-      "s3": { "n": "03", "title": "Negotiation", "desc": "Price, deadline and condition negotiation" },
-      "s4": { "n": "04", "title": "Follow-up", "desc": "Quality control, logistics and delivery" }
+      "s1": { "n": "01", "title": "Brief", "desc": "Analysis of your needs and feasibility" },
+      "s2": { "n": "02", "title": "Audit", "desc": "Supplier identification and audit" },
+      "s3": { "n": "03", "title": "Samples", "desc": "Sample ordering and validation" },
+      "s4": { "n": "04", "title": "Production", "desc": "Factory production monitoring" },
+      "s5": { "n": "05", "title": "Control", "desc": "Quality control before shipment" },
+      "s6": { "n": "06", "title": "Delivery", "desc": "Logistics coordination and delivery" }
     }
   },
   "about_page": {
     "heroTitle": "About CNL Sourcing",
-    "heroSubtitle": "A company built on trust, cultural expertise and passion for Franco-Vietnamese trade.",
+    "heroSubtitle": "Born in Vietnam, rooted in Toulouse — I am the trusted bridge that French SMEs are looking for.",
     "founderTitle": "Nguyen Cao Phuong Anh",
     "founderRole": "Founder & Director",
-    "founderBio": "Franco-Vietnamese, Anna grew up between two cultures. After studying international business, she founded CNL Sourcing to help French companies access the Vietnamese market with confidence.",
-    "storyTitle": "Our story",
-    "storyP1": "CNL Sourcing was born from a simple observation: too many French companies give up sourcing in Vietnam due to lack of reliable local contacts, language skills or regulatory knowledge.",
-    "storyP2": "Thanks to her family and professional network in Vietnam, Anna offers a turnkey service, from supplier research to delivery in France — with full transparency at every step.",
-    "valuesTitle": "Our values",
+    "founderBio": "Born and raised in Vietnam, arrived in Toulouse at 22. 8 years managing a Franco-Vietnamese parcel groupage service, then founder of CNL Sourcing.",
+    "storyTitle": "My story",
+    "storyP1": "I am Anna, founder of CNL Sourcing. Born and raised in Vietnam, I arrived in Toulouse at 22 to pursue my studies. My journey reflects my dual culture: for 8 years, I managed a parcel groupage service between France and Vietnam, building solid on-the-ground logistics expertise.",
+    "storyP2": "I created CNL Sourcing to be the trusted bridge that French SMEs need. I combine French rigour with direct access to the Vietnamese market. I negotiate in Vietnamese to obtain 'local' rates — not 'tourist' rates. My trusted network in Vietnam, built over 10 years, makes all the difference.",
+    "storyP3": "A client from Toulouse wanted to source custom wooden chairs. An English-speaking agent was asking for a MOQ of 200 units at a high price. By directly contacting a craft carpentry workshop I knew through my family network and negotiating in Vietnamese, I obtained a MOQ of 50 units with a 20% price reduction. That is where my dual culture makes all the difference: I am not a stranger to them, I am part of the network.",
+    "anecdoteTitle": "What I do in practice",
+    "quote": "I transform a complex project 10,000 km away into a serene, close-to-home experience.",
+    "certifTitle": "Certifications & affiliations",
+    "certif1": "Member of CCI Occitanie",
+    "certif2": "Active EORI number (French Customs)",
+    "certif3": "Team France Export network",
+    "certif4": "Professional liability insurance",
+    "locationLabel": "Location",
+    "locationValue": "Toulouse, Occitanie — services across France",
+    "valuesTitle": "My values",
     "values": {
       "trust": { "title": "Trust", "desc": "Direct and transparent relationship with every client" },
       "rigor": { "title": "Rigour", "desc": "Systematic supplier audit before any recommendation" },
-      "bridge": { "title": "Cultural bridge", "desc": "Deep understanding of both cultures to avoid misunderstandings" },
-      "speed": { "title": "Responsiveness", "desc": "Response within 24h, proactive follow-up on every case" }
+      "bridge": { "title": "Cultural bridge", "desc": "Negotiation in Vietnamese — access to real market prices" },
+      "speed": { "title": "Responsiveness", "desc": "Response within 48h, proactive follow-up on every case" }
     },
     "ctaButton": "Work with Anna"
   },
   "contact_page": {
     "heroTitle": "Contact us",
-    "heroSubtitle": "A question or a project? Anna replies personally within 24h.",
+    "heroSubtitle": "Let's talk about your project. I reply to every new enquiry within 48h maximum. The first exchange is free and without commitment.",
     "sectionTitle": "Let's talk about your project",
-    "sectionText": "Whether you have a precise idea or want to explore possibilities, feel free to write to us. We'll reply with a free initial analysis.",
+    "sectionText": "Let's talk about your project. I reply to every new enquiry within 48h maximum. The first exchange is free and without commitment.",
     "emailLabel": "Email",
-    "locationLabel": "Location",
-    "location": "Ho Chi Minh City, Vietnam · France",
+    "locationLabel": "Address",
+    "location": "6 rue Joseph Bosc, 31000 Toulouse · Occitanie",
+    "hoursLabel": "Availability",
+    "hours": "Monday–Friday, 9am–5pm",
     "delayLabel": "Response time",
-    "delay": "Within 24h (business days)",
+    "delay": "Within 48h maximum",
+    "zoneLabel": "Service area",
+    "zone": "Toulouse (Occitanie) — all of France digitally",
     "formTitle": "Quick message",
     "formName": "Your name",
     "formNamePlaceholder": "John Smith",
@@ -133,7 +147,7 @@
     "formSubmit": "Send",
     "formSubmitting": "Sending...",
     "formSuccess": "Message sent!",
-    "formSuccessText": "Anna will reply within 24h.",
+    "formSuccessText": "Anna will reply within 48h.",
     "formError": "Error sending message. Please try again or write directly to cnlsourcingvn@gmail.com",
     "chatHint": "Or use the AI chatbot at the bottom right for an immediate answer."
   },
@@ -141,11 +155,11 @@
     "title": "Request a free quote",
     "subtitle": "Describe your need in a few minutes. Anna analyses your request and comes back with a selection of qualified suppliers.",
     "step1": "You fill in the form",
-    "step2": "AI analysis within 24h",
+    "step2": "Anna analyses your request within 48h",
     "step3": "Detailed quote & selected suppliers",
     "willReceive": "What you will receive",
     "r1": "Complete feasibility analysis",
-    "r2": "3 to 5 pre-selected suppliers",
+    "r2": "Top 3 pre-selected suppliers",
     "r3": "Cost and deadline estimate",
     "r4": "Regulatory attention points",
     "r5": "Personalised recommendation",

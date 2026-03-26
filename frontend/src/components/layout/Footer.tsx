@@ -47,8 +47,12 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-700 mt-8 pt-6 text-center text-xs text-gray-500">
-          © {new Date().getFullYear()} CNL Sourcing. Tous droits réservés.
+        <div className="border-t border-gray-700 mt-8 pt-6 text-center text-xs text-gray-500 space-y-1">
+          <p>© {new Date().getFullYear()} CNL Sourcing. Tous droits réservés.</p>
+          <p>
+            CNL Sourcing — Nguyen Cao Phuong Anh · 6 rue Joseph Bosc, 31000 Toulouse ·
+            SIRET 53855678800031 · Agent commercial en sourcing international
+          </p>
         </div>
       </div>
     </footer>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import Header from "@/components/layout/Header";
@@ -34,8 +35,8 @@ export default function AboutPage() {
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <div>
-              <div className="bg-gradient-to-br from-brand-red/10 to-brand-gold/10 rounded-2xl aspect-[4/3] flex items-center justify-center mb-6">
-                <span className="text-8xl">👩‍💼</span>
+              <div className="rounded-2xl overflow-hidden aspect-[4/3] mb-6 relative">
+                <Image src="/images/anna.jpg" alt="Anna Nguyen — Fondatrice CNL Sourcing" fill className="object-cover" priority />
               </div>
               <div className="card">
                 <h3 className="font-serif text-xl font-bold text-brand-dark mb-1">{t("founderTitle")}</h3>
@@ -48,7 +49,28 @@ export default function AboutPage() {
               <div>
                 <h2 className="section-title">{t("storyTitle")}</h2>
                 <p className="text-gray-500 leading-relaxed mb-4">{t("storyP1")}</p>
-                <p className="text-gray-500 leading-relaxed">{t("storyP2")}</p>
+                <p className="text-gray-500 leading-relaxed mb-4">{t("storyP2")}</p>
+              </div>
+
+              <div>
+                <h3 className="font-serif text-lg font-bold text-brand-dark mb-3">{t("anecdoteTitle")}</h3>
+                <blockquote className="border-l-4 border-brand-red pl-4 italic text-gray-500 text-sm leading-relaxed mb-4">
+                  {t("storyP3")}
+                </blockquote>
+                <p className="text-brand-red font-semibold text-sm italic">« {t("quote")} »</p>
+              </div>
+
+              <div>
+                <h3 className="font-serif text-lg font-bold text-brand-dark mb-3">{t("certifTitle")}</h3>
+                <ul className="space-y-1 text-sm text-gray-600">
+                  {(["certif1", "certif2", "certif3", "certif4"] as const).map((k) => (
+                    <li key={k} className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-brand-red shrink-0" />
+                      {t(k)}
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-xs text-gray-400 mt-2">{t("locationLabel")} : {t("locationValue")}</p>
               </div>
 
               <div>

@@ -30,12 +30,13 @@ export default function HomePage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link href="/devis" className="btn-primary text-base py-3 px-8">
-                  {t("hero.cta")} <ArrowRight size={18} />
+                  {t("hero.cta.label")} <ArrowRight size={18} />
                 </Link>
                 <Link href="/services" className="btn-secondary border-white text-white hover:bg-white hover:text-brand-dark text-base py-3 px-8">
                   {t("hero.services")}
                 </Link>
               </div>
+              <p className="text-sm text-gray-400 mt-4">{t("hero.cta.subtitle")}</p>
             </div>
           </div>
         </section>
@@ -44,10 +45,10 @@ export default function HomePage() {
         <section className="bg-brand-red text-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-              <div><div className="text-3xl font-bold font-serif">50+</div><div className="text-sm text-red-200 mt-1">{t("stats.suppliers")}</div></div>
-              <div><div className="text-3xl font-bold font-serif">98%</div><div className="text-sm text-red-200 mt-1">{t("stats.satisfaction")}</div></div>
-              <div><div className="text-3xl font-bold font-serif">15j</div><div className="text-sm text-red-200 mt-1">{t("stats.delay")}</div></div>
-              <div><div className="text-3xl font-bold font-serif">3</div><div className="text-sm text-red-200 mt-1">{t("stats.languages")}</div></div>
+              <div><div className="text-xl font-bold font-serif leading-tight">{t("hero.stats.experience")}</div></div>
+              <div><div className="text-xl font-bold font-serif leading-tight">{t("hero.stats.suppliers")}</div></div>
+              <div><div className="text-xl font-bold font-serif leading-tight">{t("hero.stats.delay")}</div></div>
+              <div><div className="text-xl font-bold font-serif leading-tight">{t("hero.stats.price")}</div></div>
             </div>
           </div>
         </section>

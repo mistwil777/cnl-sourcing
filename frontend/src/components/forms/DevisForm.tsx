@@ -25,12 +25,9 @@ type DevisFormData = z.infer<typeof devisSchema>;
 
 const categories = [
   "Textile & Mode",
-  "Alimentaire & Épicerie",
-  "Artisanat & Décoration",
-  "Électronique",
-  "Cosmétiques & Beauté",
-  "Mobilier",
-  "Autre",
+  "Agroalimentaire (café, épices, produits secs)",
+  "Artisanat & Décoration (bois, bambou)",
+  "Autre (préciser dans la description)",
 ];
 
 export default function DevisForm() {

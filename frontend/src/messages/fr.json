@@ -7,120 +7,134 @@
     "devis": "Demander un devis"
   },
   "hero": {
-    "title": "Votre partenaire sourcing Vietnam – France",
-    "subtitle": "CNL Sourcing connecte les entreprises françaises aux meilleurs fournisseurs vietnamiens. Textile, alimentaire, artisanat : nous sécurisons vos approvisionnements.",
-    "cta": "Obtenir un devis gratuit",
-    "services": "Nos services"
-  },
-  "stats": {
-    "suppliers": "Fournisseurs vérifiés",
-    "satisfaction": "Clients satisfaits",
-    "delay": "Délai moyen devis",
-    "languages": "Langues parlées"
+    "title": "Votre agent de sourcing au Vietnam",
+    "subtitle": "J'ouvre les portes des meilleures usines vietnamiennes pour les PME françaises — textile, agroalimentaire, artisanat",
+    "cta": {
+      "label": "Demander un devis gratuit",
+      "subtitle": "Réponse sous 48h • Devis gratuit • Sans engagement"
+    },
+    "services": "Nos services",
+    "stats": {
+      "experience": "10 ans d'expérience Vietnam",
+      "suppliers": "Top 3 fournisseurs proposés",
+      "delay": "10-15 jours pour un audit",
+      "price": "À partir de 250€"
+    }
   },
   "home": {
     "expertiseTitle": "Nos domaines d'expertise",
-    "expertiseSubtitle": "De la recherche fournisseur au contrôle qualité, nous gérons chaque étape de votre sourcing.",
+    "expertiseSubtitle": "Textile, agroalimentaire, artisanat : les secteurs où je fais vraiment la différence.",
     "whyTitle": "Pourquoi choisir CNL Sourcing ?",
-    "whySubtitle": "Anna, notre fondatrice franco-vietnamienne, s'appuie sur un réseau de fournisseurs sélectionnés et vérifiés pour vous offrir un sourcing sécurisé et transparent.",
-    "whyAudited": "Fournisseurs audités et certifiés",
-    "whyReply": "Réponse sous 24h, devis sous 15 jours",
-    "whyLanguage": "Maîtrise du français, anglais et vietnamien",
-    "whyTracking": "Suivi en temps réel de vos commandes",
+    "whySubtitle": "Née au Vietnam, basée à Toulouse — je négocie en vietnamien pour obtenir les tarifs locaux, pas les tarifs touristes.",
+    "whyAudited": "Fournisseurs audités de mon réseau de confiance",
+    "whyReply": "Réponse sous 48h, rapport d'audit sous 10-15 jours",
+    "whyLanguage": "Négociation en vietnamien — tarifs locaux garantis",
+    "whyTracking": "Contrat de prestation signé systématiquement",
     "ctaTitle": "Prêt à lancer votre sourcing ?",
-    "ctaSubtitle": "Décrivez votre projet et recevez une analyse de faisabilité sous 24h — gratuitement.",
-    "ctaButton": "Démarrer maintenant"
+    "ctaSubtitle": "Décrivez votre projet et recevez une analyse de faisabilité sous 48h — gratuitement.",
+    "ctaButton": "Demander un devis gratuit"
   },
   "services_section": {
     "textile": {
       "title": "Textile & Mode",
-      "desc": "Vêtements, accessoires, tissus techniques. Fournisseurs certifiés BSCI et WRAP."
+      "desc": "Coton, soie, uniformes, matières artisanales. Usines sélectionnées dans mon réseau de confiance."
     },
     "food": {
-      "title": "Alimentaire & Epicerie",
-      "desc": "Café, épices, sauces, produits biologiques. Conformité aux normes européennes."
+      "title": "Agroalimentaire",
+      "desc": "Café, épices, noix de cajou, produits secs. Conformité aux normes européennes d'importation."
     },
     "craft": {
       "title": "Artisanat & Décoration",
-      "desc": "Mobilier, céramique, laque, bambou. Savoir-faire artisanal authentique."
+      "desc": "Bois, bambou sur mesure — spécialité région Hanoï. MOQ flexibles grâce au réseau local."
     }
   },
   "services_page": {
     "heroTitle": "Nos services de sourcing",
-    "heroSubtitle": "De la recherche fournisseur au contrôle qualité, CNL Sourcing prend en charge chaque étape de votre approvisionnement au Vietnam.",
-    "processTitle": "Notre processus",
+    "heroSubtitle": "De la recherche fournisseur au contrôle qualité, je prends en charge l'intégralité de votre projet d'importation depuis le Vietnam.",
+    "processTitle": "Les 6 étapes de votre mission sourcing",
     "ctaTitle": "Démarrez votre projet",
-    "ctaSubtitle": "Devis gratuit · Réponse sous 24h",
+    "ctaSubtitle": "À partir de 250€ · Devis gratuit · Réponse sous 48h",
     "ctaButton": "Demander un devis",
     "services": {
-      "textile": {
-        "title": "Textile & Mode",
-        "desc": "Vêtements, accessoires, maroquinerie, tissus techniques. Nous travaillons avec des usines certifiées BSCI, WRAP et SA8000.",
-        "f1": "Sélection et audit fournisseurs",
-        "f2": "Contrôle qualité sur site",
-        "f3": "Gestion des certifications",
-        "f4": "Suivi production en temps réel"
+      "sourcing": {
+        "title": "Sourcing clé en main au Vietnam",
+        "desc": "De la recherche fournisseur au contrôle qualité, je prends en charge l'intégralité de votre projet d'importation.",
+        "f1": "Brief & analyse de faisabilité",
+        "f2": "Sélection et audit des fournisseurs",
+        "f3": "Gestion des échantillons",
+        "f4": "Contrôle qualité avant expédition",
+        "price": "À partir de 250€ — Devis gratuit"
       },
-      "food": {
-        "title": "Alimentaire & Épicerie",
-        "desc": "Café, thé, épices, sauces, produits bio. Conformité aux normes HACCP et réglementations douanières européennes.",
-        "f1": "Vérification certifications sanitaires",
-        "f2": "Analyse réglementaire import UE",
-        "f3": "Coordination laboratoires d'analyse",
-        "f4": "Gestion étiquetage multilingue"
+      "groupage": {
+        "title": "Groupage colis France ↔ Vietnam",
+        "desc": "Idéal pour les petits volumes (échantillons, petites séries). Partagez les coûts de transport avec d'autres clients d'Occitanie et divisez votre facture par 3.",
+        "f1": "Collecte en France et au Vietnam",
+        "f2": "Mutualisation des coûts de transport",
+        "f3": "Idéal pour échantillons et petites séries",
+        "f4": "Départs réguliers depuis Toulouse",
+        "price": "Sur devis selon volume"
       },
-      "craft": {
-        "title": "Artisanat & Décoration",
-        "desc": "Mobilier laqué, céramique, bambou, rotin. Accès direct aux villages artisanaux du Vietnam.",
-        "f1": "Sourcing artisans locaux",
-        "f2": "Personnalisation & OEM",
-        "f3": "Photos et vidéos de production",
-        "f4": "Conditionnement export sécurisé"
-      },
-      "cosmetics": {
-        "title": "Cosmétiques & Beauté",
-        "desc": "Produits naturels à base de plantes locales. Conformité réglementation cosmétique UE (CPNP).",
-        "f1": "Vérification dossiers techniques",
-        "f2": "Tests dermatologiques",
-        "f3": "Conformité REACH et CPNP",
-        "f4": "Private label disponible"
+      "douane": {
+        "title": "Accompagnement douanier & EVFTA",
+        "desc": "Je vous aide à obtenir votre numéro EORI et prépare avec le fournisseur les documents pour bénéficier de l'accord EVFTA (souvent 0% de droits de douane sur les produits vietnamiens).",
+        "f1": "Obtention numéro EORI",
+        "f2": "Préparation documents EVFTA",
+        "f3": "Calcul droits de douane applicables",
+        "f4": "Coordination avec transitaire",
+        "price": "Inclus dans le pack sourcing"
       }
     },
     "steps": {
-      "s1": { "n": "01", "title": "Analyse", "desc": "Étude de votre besoin et analyse de faisabilité IA" },
-      "s2": { "n": "02", "title": "Sourcing", "desc": "Identification et sélection des meilleurs fournisseurs" },
-      "s3": { "n": "03", "title": "Négociation", "desc": "Négociation des prix, délais et conditions" },
-      "s4": { "n": "04", "title": "Suivi", "desc": "Contrôle qualité, logistique et livraison" }
+      "s1": { "n": "01", "title": "Brief", "desc": "Analyse de votre besoin et faisabilité" },
+      "s2": { "n": "02", "title": "Audit", "desc": "Identification et audit des fournisseurs" },
+      "s3": { "n": "03", "title": "Échantillons", "desc": "Commande et validation des échantillons" },
+      "s4": { "n": "04", "title": "Production", "desc": "Suivi de la production en usine" },
+      "s5": { "n": "05", "title": "Contrôle", "desc": "Contrôle qualité avant expédition" },
+      "s6": { "n": "06", "title": "Livraison", "desc": "Coordination logistique et livraison" }
     }
   },
   "about_page": {
     "heroTitle": "À propos de CNL Sourcing",
-    "heroSubtitle": "Une entreprise fondée sur la confiance, l'expertise culturelle et la passion du commerce franco-vietnamien.",
+    "heroSubtitle": "Née au Vietnam, ancrée à Toulouse — je suis le pont de confiance que les PME françaises recherchent.",
     "founderTitle": "Nguyen Cao Phuong Anh",
     "founderRole": "Fondatrice & Directrice",
-    "founderBio": "Franco-vietnamienne, Anna a grandi entre les deux cultures. Après des études de commerce international, elle a fondé CNL Sourcing pour aider les entreprises françaises à accéder au marché vietnamien en toute confiance.",
-    "storyTitle": "Notre histoire",
-    "storyP1": "CNL Sourcing est née d'un constat simple : trop d'entreprises françaises renoncent à sourcer au Vietnam faute de contacts locaux fiables, de maîtrise linguistique ou de connaissance réglementaire.",
-    "storyP2": "Grâce à son réseau familial et professionnel au Vietnam, Anna propose un service clé en main, de la recherche fournisseur à la livraison en France — avec une transparence totale à chaque étape.",
-    "valuesTitle": "Nos valeurs",
+    "founderBio": "Née et élevée au Vietnam, arrivée à Toulouse à 22 ans. 8 ans de gestion d'un service de groupage Franco-Vietnamien, puis fondatrice de CNL Sourcing.",
+    "storyTitle": "Mon parcours",
+    "storyP1": "Je suis Anna, fondatrice de CNL Sourcing. Née et élevée au Vietnam, je suis arrivée à Toulouse à 22 ans pour y poursuivre mes études. Mon parcours est le reflet de ma double culture : pendant 8 ans, j'ai géré un service de groupage de colis entre la France et le Vietnam, développant une expertise logistique solide sur le terrain.",
+    "storyP2": "J'ai créé CNL Sourcing pour être le pont de confiance dont les PME françaises ont besoin. Je combine la rigueur française avec l'accès direct au terrain vietnamien. Je négocie en vietnamien pour obtenir les tarifs « locaux » — pas les tarifs « touristes ». Mon réseau de confiance au Vietnam, bâti pendant 10 ans, fait toute la différence.",
+    "storyP3": "Un client toulousain voulait sourcer des chaises en bois sur mesure. Un agent anglophone lui demandait un MOQ de 200 unités à prix élevé. En contactant directement une menuiserie artisanale que je connaissais à travers mon réseau familial et en négociant en vietnamien, j'ai obtenu un MOQ de 50 unités avec un prix réduit de 20%. C'est là que ma double culture fait toute la différence : je ne suis pas une étrangère pour eux, je fais partie du réseau.",
+    "anecdoteTitle": "Ce que je fais concrètement",
+    "quote": "Je transforme un projet complexe à 10 000 km en une expérience sereine de proximité.",
+    "certifTitle": "Certifications & affiliations",
+    "certif1": "Membre CCI Occitanie",
+    "certif2": "Numéro EORI actif (Douanes françaises)",
+    "certif3": "Réseau Team France Export",
+    "certif4": "RC Pro souscrite",
+    "locationLabel": "Localisation",
+    "locationValue": "Toulouse, Occitanie — interventions dans toute la France",
+    "valuesTitle": "Mes valeurs",
     "values": {
       "trust": { "title": "Confiance", "desc": "Relation directe et transparente avec chaque client" },
       "rigor": { "title": "Rigueur", "desc": "Audit systématique des fournisseurs avant toute recommandation" },
-      "bridge": { "title": "Pont culturel", "desc": "Compréhension profonde des deux cultures pour éviter les malentendus" },
-      "speed": { "title": "Réactivité", "desc": "Réponse sous 24h, suivi proactif de chaque dossier" }
+      "bridge": { "title": "Pont culturel", "desc": "Négociation en vietnamien — accès aux prix réels du marché" },
+      "speed": { "title": "Réactivité", "desc": "Réponse sous 48h, suivi proactif de chaque dossier" }
     },
     "ctaButton": "Travailler avec Anna"
   },
   "contact_page": {
     "heroTitle": "Nous contacter",
-    "heroSubtitle": "Une question, un projet ? Anna répond personnellement sous 24h.",
+    "heroSubtitle": "Parlons de votre projet. Je réponds à toute nouvelle demande sous 48h maximum. Le premier échange est gratuit et sans engagement.",
     "sectionTitle": "Parlons de votre projet",
-    "sectionText": "Que vous ayez une idée précise ou que vous souhaitiez explorer les possibilités, n'hésitez pas à nous écrire. Nous vous répondons avec une première analyse gratuite.",
+    "sectionText": "Parlons de votre projet. Je réponds à toute nouvelle demande sous 48h maximum. Le premier échange est gratuit et sans engagement.",
     "emailLabel": "Email",
-    "locationLabel": "Localisation",
-    "location": "Hô Chi Minh-Ville, Vietnam · France",
+    "locationLabel": "Adresse",
+    "location": "6 rue Joseph Bosc, 31000 Toulouse · Occitanie",
+    "hoursLabel": "Disponibilité",
+    "hours": "Lundi–Vendredi, 9h00–17h00",
     "delayLabel": "Délai de réponse",
-    "delay": "Sous 24h (jours ouvrés)",
+    "delay": "Sous 48h maximum",
+    "zoneLabel": "Zone d'intervention",
+    "zone": "Toulouse (Occitanie) — toute la France en digital",
     "formTitle": "Message rapide",
     "formName": "Votre nom",
     "formNamePlaceholder": "Marie Dupont",
@@ -133,7 +147,7 @@
     "formSubmit": "Envoyer",
     "formSubmitting": "Envoi...",
     "formSuccess": "Message envoyé !",
-    "formSuccessText": "Anna vous répondra sous 24h.",
+    "formSuccessText": "Anna vous répondra sous 48h.",
     "formError": "Erreur lors de l'envoi. Réessayez ou écrivez directement à cnlsourcingvn@gmail.com",
     "chatHint": "Ou utilisez le chatbot IA en bas à droite pour une réponse immédiate."
   },
@@ -141,11 +155,11 @@
     "title": "Demander un devis gratuit",
     "subtitle": "Décrivez votre besoin en quelques minutes. Anna analyse votre demande et revient vers vous avec une sélection de fournisseurs qualifiés.",
     "step1": "Vous remplissez le formulaire",
-    "step2": "Analyse IA sous 24h",
+    "step2": "Anna analyse votre demande sous 48h",
     "step3": "Devis détaillé & fournisseurs sélectionnés",
     "willReceive": "Ce que vous recevrez",
     "r1": "Analyse de faisabilité complète",
-    "r2": "3 à 5 fournisseurs présélectionnés",
+    "r2": "Top 3 fournisseurs présélectionnés",
     "r3": "Estimation des coûts et délais",
     "r4": "Points d'attention réglementaires",
     "r5": "Recommandation personnalisée",

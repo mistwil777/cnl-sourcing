@@ -7,120 +7,134 @@
     "devis": "Yêu cầu báo giá"
   },
   "hero": {
-    "title": "Đối tác tìm nguồn cung ứng Việt Nam – Pháp",
-    "subtitle": "CNL Sourcing kết nối các doanh nghiệp Pháp với các nhà cung cấp Việt Nam tốt nhất. Dệt may, thực phẩm, thủ công mỹ nghệ: chúng tôi bảo đảm chuỗi cung ứng của bạn.",
-    "cta": "Nhận báo giá miễn phí",
-    "services": "Dịch vụ của chúng tôi"
-  },
-  "stats": {
-    "suppliers": "Nhà cung cấp được xác minh",
-    "satisfaction": "Khách hàng hài lòng",
-    "delay": "Thời gian báo giá trung bình",
-    "languages": "Ngôn ngữ"
+    "title": "Đại lý tìm nguồn hàng tại Việt Nam của bạn",
+    "subtitle": "Kết nối các doanh nghiệp Pháp với các nhà máy tốt nhất Việt Nam — dệt may, thực phẩm, thủ công mỹ nghệ",
+    "cta": {
+      "label": "Yêu cầu báo giá miễn phí",
+      "subtitle": "Phản hồi trong 48h • Báo giá miễn phí • Không ràng buộc"
+    },
+    "services": "Dịch vụ của chúng tôi",
+    "stats": {
+      "experience": "10 năm kinh nghiệm tại Việt Nam",
+      "suppliers": "Top 3 nhà cung cấp đề xuất",
+      "delay": "10-15 ngày cho một báo cáo kiểm toán",
+      "price": "Từ 250€"
+    }
   },
   "home": {
     "expertiseTitle": "Lĩnh vực chuyên môn của chúng tôi",
-    "expertiseSubtitle": "Từ tìm kiếm nhà cung cấp đến kiểm soát chất lượng, chúng tôi quản lý từng bước trong quy trình tìm nguồn cung ứng của bạn.",
+    "expertiseSubtitle": "Dệt may, thực phẩm, thủ công mỹ nghệ: những ngành tôi thực sự tạo ra sự khác biệt.",
     "whyTitle": "Tại sao chọn CNL Sourcing?",
-    "whySubtitle": "Anna, người sáng lập Pháp-Việt của chúng tôi, dựa vào mạng lưới các nhà cung cấp được chọn lọc và xác minh để cung cấp cho bạn dịch vụ tìm nguồn cung ứng an toàn và minh bạch.",
-    "whyAudited": "Nhà cung cấp được kiểm toán và chứng nhận",
-    "whyReply": "Phản hồi trong 24h, báo giá trong 15 ngày",
-    "whyLanguage": "Thành thạo tiếng Pháp, Anh và Việt",
-    "whyTracking": "Theo dõi đơn hàng theo thời gian thực",
+    "whySubtitle": "Sinh ra tại Việt Nam, làm việc tại Toulouse — tôi đàm phán bằng tiếng Việt để có mức giá địa phương, không phải giá du lịch.",
+    "whyAudited": "Nhà cung cấp được kiểm toán từ mạng lưới tin cậy của tôi",
+    "whyReply": "Phản hồi trong 48h, báo cáo kiểm toán trong 10-15 ngày",
+    "whyLanguage": "Đàm phán bằng tiếng Việt — đảm bảo giá địa phương",
+    "whyTracking": "Hợp đồng dịch vụ được ký kết có hệ thống",
     "ctaTitle": "Sẵn sàng khởi động việc tìm nguồn cung ứng?",
-    "ctaSubtitle": "Mô tả dự án của bạn và nhận phân tích khả thi trong 24h — hoàn toàn miễn phí.",
-    "ctaButton": "Bắt đầu ngay"
+    "ctaSubtitle": "Mô tả dự án của bạn và nhận phân tích khả thi trong 48h — hoàn toàn miễn phí.",
+    "ctaButton": "Yêu cầu báo giá miễn phí"
   },
   "services_section": {
     "textile": {
       "title": "Dệt may & Thời trang",
-      "desc": "Quần áo, phụ kiện, vải kỹ thuật. Nhà cung cấp được chứng nhận BSCI và WRAP."
+      "desc": "Bông, lụa, đồng phục, vải thủ công. Nhà máy được chọn lọc từ mạng lưới tin cậy của tôi."
     },
     "food": {
-      "title": "Thực phẩm & Tạp hóa",
-      "desc": "Cà phê, gia vị, nước sốt, sản phẩm hữu cơ. Tuân thủ các tiêu chuẩn châu Âu."
+      "title": "Nông sản thực phẩm",
+      "desc": "Cà phê, gia vị, hạt điều, thực phẩm khô. Tuân thủ tiêu chuẩn nhập khẩu châu Âu."
     },
     "craft": {
       "title": "Thủ công mỹ nghệ & Trang trí",
-      "desc": "Nội thất, gốm sứ, sơn mài, tre. Nghề thủ công truyền thống đích thực."
+      "desc": "Gỗ, tre theo yêu cầu — đặc sản vùng Hà Nội. MOQ linh hoạt nhờ mạng lưới địa phương."
     }
   },
   "services_page": {
     "heroTitle": "Dịch vụ tìm nguồn cung ứng",
-    "heroSubtitle": "Từ nghiên cứu nhà cung cấp đến kiểm soát chất lượng, CNL Sourcing đảm nhận từng bước trong quá trình mua hàng của bạn tại Việt Nam.",
-    "processTitle": "Quy trình của chúng tôi",
+    "heroSubtitle": "Từ nghiên cứu nhà cung cấp đến kiểm soát chất lượng, tôi đảm nhận toàn bộ dự án nhập khẩu của bạn từ Việt Nam.",
+    "processTitle": "6 bước trong nhiệm vụ tìm nguồn cung ứng của bạn",
     "ctaTitle": "Bắt đầu dự án của bạn",
-    "ctaSubtitle": "Báo giá miễn phí · Phản hồi trong 24h",
+    "ctaSubtitle": "Từ 250€ · Báo giá miễn phí · Phản hồi trong 48h",
     "ctaButton": "Yêu cầu báo giá",
     "services": {
-      "textile": {
-        "title": "Dệt may & Thời trang",
-        "desc": "Quần áo, phụ kiện, hàng da, vải kỹ thuật. Chúng tôi làm việc với các nhà máy được chứng nhận BSCI, WRAP và SA8000.",
-        "f1": "Tuyển chọn và kiểm toán nhà cung cấp",
-        "f2": "Kiểm soát chất lượng tại chỗ",
-        "f3": "Quản lý chứng nhận",
-        "f4": "Theo dõi sản xuất theo thời gian thực"
+      "sourcing": {
+        "title": "Tìm nguồn hàng trọn gói tại Việt Nam",
+        "desc": "Từ tìm kiếm nhà cung cấp đến kiểm soát chất lượng, tôi đảm nhận toàn bộ dự án nhập khẩu của bạn.",
+        "f1": "Phân tích yêu cầu & khả thi",
+        "f2": "Tuyển chọn và kiểm toán nhà cung cấp",
+        "f3": "Quản lý mẫu hàng",
+        "f4": "Kiểm soát chất lượng trước khi giao hàng",
+        "price": "Từ 250€ — Báo giá miễn phí"
       },
-      "food": {
-        "title": "Thực phẩm & Tạp hóa",
-        "desc": "Cà phê, trà, gia vị, nước sốt, sản phẩm hữu cơ. Tuân thủ tiêu chuẩn HACCP và quy định hải quan châu Âu.",
-        "f1": "Xác minh chứng nhận vệ sinh",
-        "f2": "Phân tích quy định nhập khẩu EU",
-        "f3": "Phối hợp với phòng thí nghiệm",
-        "f4": "Quản lý nhãn hiệu đa ngôn ngữ"
+      "groupage": {
+        "title": "Gom hàng Pháp ↔ Việt Nam",
+        "desc": "Lý tưởng cho khối lượng nhỏ (mẫu hàng, lô nhỏ). Chia sẻ chi phí vận chuyển với các khách hàng khác từ Occitanie và giảm hóa đơn đến 3 lần.",
+        "f1": "Thu gom tại Pháp và Việt Nam",
+        "f2": "Chia sẻ chi phí vận chuyển",
+        "f3": "Lý tưởng cho mẫu hàng và lô nhỏ",
+        "f4": "Xuất phát thường xuyên từ Toulouse",
+        "price": "Báo giá theo khối lượng"
       },
-      "craft": {
-        "title": "Thủ công mỹ nghệ & Trang trí",
-        "desc": "Nội thất sơn mài, gốm sứ, tre, mây. Tiếp cận trực tiếp các làng nghề thủ công Việt Nam.",
-        "f1": "Tìm kiếm nghệ nhân địa phương",
-        "f2": "Tùy chỉnh & OEM",
-        "f3": "Ảnh và video sản xuất",
-        "f4": "Đóng gói xuất khẩu an toàn"
-      },
-      "cosmetics": {
-        "title": "Mỹ phẩm & Làm đẹp",
-        "desc": "Sản phẩm tự nhiên từ thực vật địa phương. Tuân thủ quy định mỹ phẩm EU (CPNP).",
-        "f1": "Xác minh hồ sơ kỹ thuật",
-        "f2": "Kiểm tra da liễu",
-        "f3": "Tuân thủ REACH và CPNP",
-        "f4": "Nhãn hiệu riêng có sẵn"
+      "douane": {
+        "title": "Hỗ trợ hải quan & EVFTA",
+        "desc": "Tôi giúp bạn lấy số EORI và chuẩn bị với nhà cung cấp các tài liệu để hưởng lợi từ hiệp định EVFTA (thường 0% thuế hải quan đối với sản phẩm Việt Nam).",
+        "f1": "Đăng ký số EORI",
+        "f2": "Chuẩn bị tài liệu EVFTA",
+        "f3": "Tính thuế hải quan áp dụng",
+        "f4": "Phối hợp với công ty vận chuyển",
+        "price": "Bao gồm trong gói sourcing"
       }
     },
     "steps": {
-      "s1": { "n": "01", "title": "Phân tích", "desc": "Nghiên cứu nhu cầu và phân tích khả thi bằng AI" },
-      "s2": { "n": "02", "title": "Tìm nguồn", "desc": "Xác định và lựa chọn nhà cung cấp tốt nhất" },
-      "s3": { "n": "03", "title": "Đàm phán", "desc": "Đàm phán giá, thời hạn và điều kiện" },
-      "s4": { "n": "04", "title": "Theo dõi", "desc": "Kiểm soát chất lượng, hậu cần và giao hàng" }
+      "s1": { "n": "01", "title": "Yêu cầu", "desc": "Phân tích nhu cầu và khả thi" },
+      "s2": { "n": "02", "title": "Kiểm toán", "desc": "Xác định và kiểm toán nhà cung cấp" },
+      "s3": { "n": "03", "title": "Mẫu hàng", "desc": "Đặt hàng và phê duyệt mẫu" },
+      "s4": { "n": "04", "title": "Sản xuất", "desc": "Theo dõi sản xuất tại nhà máy" },
+      "s5": { "n": "05", "title": "Kiểm tra", "desc": "Kiểm soát chất lượng trước khi giao hàng" },
+      "s6": { "n": "06", "title": "Giao hàng", "desc": "Điều phối logistics và giao hàng" }
     }
   },
   "about_page": {
     "heroTitle": "Giới thiệu CNL Sourcing",
-    "heroSubtitle": "Một công ty được xây dựng trên sự tin tưởng, chuyên môn văn hóa và niềm đam mê thương mại Pháp-Việt.",
+    "heroSubtitle": "Sinh ra tại Việt Nam, gắn bó với Toulouse — tôi là cầu nối tin cậy mà các doanh nghiệp nhỏ và vừa Pháp đang tìm kiếm.",
     "founderTitle": "Nguyễn Cao Phương Anh",
     "founderRole": "Người sáng lập & Giám đốc",
-    "founderBio": "Là người Pháp-Việt, Anna lớn lên giữa hai nền văn hóa. Sau khi học thương mại quốc tế, cô thành lập CNL Sourcing để giúp các doanh nghiệp Pháp tiếp cận thị trường Việt Nam một cách tự tin.",
-    "storyTitle": "Câu chuyện của chúng tôi",
-    "storyP1": "CNL Sourcing ra đời từ một nhận định đơn giản: quá nhiều doanh nghiệp Pháp từ bỏ việc tìm nguồn cung ứng tại Việt Nam vì thiếu mối quan hệ địa phương đáng tin cậy, kỹ năng ngôn ngữ hoặc kiến thức pháp lý.",
-    "storyP2": "Nhờ mạng lưới gia đình và chuyên nghiệp tại Việt Nam, Anna cung cấp dịch vụ trọn gói, từ nghiên cứu nhà cung cấp đến giao hàng tại Pháp — với sự minh bạch hoàn toàn ở mọi bước.",
-    "valuesTitle": "Giá trị của chúng tôi",
+    "founderBio": "Sinh ra và lớn lên tại Việt Nam, đến Toulouse năm 22 tuổi. 8 năm quản lý dịch vụ gom hàng Pháp-Việt, sau đó thành lập CNL Sourcing.",
+    "storyTitle": "Hành trình của tôi",
+    "storyP1": "Tôi là Anna, người sáng lập CNL Sourcing. Sinh ra và lớn lên tại Việt Nam, tôi đến Toulouse năm 22 tuổi để tiếp tục học tập. Hành trình của tôi phản ánh nền văn hóa kép: trong 8 năm, tôi quản lý dịch vụ gom hàng giữa Pháp và Việt Nam, tích lũy chuyên môn logistics thực tế vững chắc.",
+    "storyP2": "Tôi thành lập CNL Sourcing để trở thành cầu nối tin cậy mà các doanh nghiệp nhỏ và vừa Pháp cần. Tôi kết hợp sự nghiêm túc của người Pháp với khả năng tiếp cận trực tiếp thị trường Việt Nam. Tôi đàm phán bằng tiếng Việt để có mức giá 'địa phương' — không phải giá 'du lịch'. Mạng lưới tin cậy của tôi tại Việt Nam, được xây dựng trong 10 năm, tạo ra sự khác biệt.",
+    "storyP3": "Một khách hàng từ Toulouse muốn tìm nguồn ghế gỗ theo yêu cầu. Một đại lý nói tiếng Anh yêu cầu MOQ 200 đơn vị với giá cao. Bằng cách liên hệ trực tiếp với một xưởng mộc thủ công tôi quen qua mạng lưới gia đình và đàm phán bằng tiếng Việt, tôi đã đạt được MOQ 50 đơn vị với giá giảm 20%. Đó chính là nơi nền văn hóa kép của tôi tạo ra sự khác biệt: tôi không phải người lạ với họ, tôi là một phần của mạng lưới.",
+    "anecdoteTitle": "Điều tôi thực sự làm",
+    "quote": "Tôi biến một dự án phức tạp cách 10.000 km thành một trải nghiệm gần gũi và yên tâm.",
+    "certifTitle": "Chứng nhận & liên kết",
+    "certif1": "Thành viên CCI Occitanie",
+    "certif2": "Số EORI đang hoạt động (Hải quan Pháp)",
+    "certif3": "Mạng lưới Team France Export",
+    "certif4": "Bảo hiểm trách nhiệm nghề nghiệp",
+    "locationLabel": "Địa điểm",
+    "locationValue": "Toulouse, Occitanie — dịch vụ trên toàn nước Pháp",
+    "valuesTitle": "Giá trị của tôi",
     "values": {
       "trust": { "title": "Tin tưởng", "desc": "Quan hệ trực tiếp và minh bạch với mỗi khách hàng" },
       "rigor": { "title": "Nghiêm túc", "desc": "Kiểm toán nhà cung cấp có hệ thống trước mọi khuyến nghị" },
-      "bridge": { "title": "Cầu nối văn hóa", "desc": "Hiểu sâu về cả hai nền văn hóa để tránh hiểu lầm" },
-      "speed": { "title": "Phản hồi nhanh", "desc": "Trả lời trong 24h, theo dõi chủ động từng hồ sơ" }
+      "bridge": { "title": "Cầu nối văn hóa", "desc": "Đàm phán bằng tiếng Việt — tiếp cận giá thực của thị trường" },
+      "speed": { "title": "Phản hồi nhanh", "desc": "Trả lời trong 48h, theo dõi chủ động từng hồ sơ" }
     },
     "ctaButton": "Làm việc với Anna"
   },
   "contact_page": {
     "heroTitle": "Liên hệ với chúng tôi",
-    "heroSubtitle": "Một câu hỏi hay dự án? Anna trả lời trực tiếp trong vòng 24h.",
+    "heroSubtitle": "Hãy nói về dự án của bạn. Tôi phản hồi mọi yêu cầu mới trong vòng 48h tối đa. Cuộc trao đổi đầu tiên hoàn toàn miễn phí và không ràng buộc.",
     "sectionTitle": "Hãy nói về dự án của bạn",
-    "sectionText": "Dù bạn có ý tưởng cụ thể hay muốn khám phá các khả năng, hãy viết cho chúng tôi. Chúng tôi sẽ trả lời với phân tích ban đầu miễn phí.",
+    "sectionText": "Hãy nói về dự án của bạn. Tôi phản hồi mọi yêu cầu mới trong vòng 48h tối đa. Cuộc trao đổi đầu tiên hoàn toàn miễn phí và không ràng buộc.",
     "emailLabel": "Email",
-    "locationLabel": "Địa điểm",
-    "location": "Thành phố Hồ Chí Minh, Việt Nam · Pháp",
+    "locationLabel": "Địa chỉ",
+    "location": "6 rue Joseph Bosc, 31000 Toulouse · Occitanie",
+    "hoursLabel": "Giờ làm việc",
+    "hours": "Thứ Hai–Thứ Sáu, 9h–17h",
     "delayLabel": "Thời gian phản hồi",
-    "delay": "Trong vòng 24h (ngày làm việc)",
+    "delay": "Trong vòng 48h tối đa",
+    "zoneLabel": "Khu vực phục vụ",
+    "zone": "Toulouse (Occitanie) — toàn nước Pháp qua kênh số",
     "formTitle": "Tin nhắn nhanh",
     "formName": "Tên của bạn",
     "formNamePlaceholder": "Nguyễn Văn A",
@@ -133,7 +147,7 @@
     "formSubmit": "Gửi",
     "formSubmitting": "Đang gửi...",
     "formSuccess": "Đã gửi tin nhắn!",
-    "formSuccessText": "Anna sẽ trả lời trong vòng 24h.",
+    "formSuccessText": "Anna sẽ trả lời trong vòng 48h.",
     "formError": "Lỗi khi gửi. Vui lòng thử lại hoặc gửi email trực tiếp tới cnlsourcingvn@gmail.com",
     "chatHint": "Hoặc sử dụng chatbot AI ở góc dưới bên phải để nhận câu trả lời ngay lập tức."
   },
@@ -141,11 +155,11 @@
     "title": "Yêu cầu báo giá miễn phí",
     "subtitle": "Mô tả nhu cầu của bạn trong vài phút. Anna phân tích yêu cầu và phản hồi với danh sách nhà cung cấp đủ tiêu chuẩn.",
     "step1": "Bạn điền vào mẫu đơn",
-    "step2": "Phân tích AI trong 24h",
+    "step2": "Anna phân tích yêu cầu trong 48h",
     "step3": "Báo giá chi tiết & nhà cung cấp được chọn",
     "willReceive": "Bạn sẽ nhận được",
     "r1": "Phân tích khả thi đầy đủ",
-    "r2": "3 đến 5 nhà cung cấp được tuyển chọn",
+    "r2": "Top 3 nhà cung cấp được tuyển chọn",
     "r3": "Ước tính chi phí và thời gian",
     "r4": "Các điểm chú ý về quy định",
     "r5": "Khuyến nghị cá nhân hóa",

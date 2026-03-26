@@ -6,13 +6,13 @@ import { CheckCircle } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Demander un devis",
-  description: "Décrivez votre projet de sourcing Vietnam. Analyse de faisabilité gratuite sous 24h.",
+  description: "Décrivez votre projet de sourcing Vietnam. Audit sourcing à partir de 250€, réponse sous 48h.",
 };
 
 const steps = [
   { n: "1", label: "Vous remplissez le formulaire" },
-  { n: "2", label: "Analyse IA sous 24h" },
-  { n: "3", label: "Devis détaillé & fournisseurs sélectionnés" },
+  { n: "2", label: "Anna analyse votre demande sous 48h" },
+  { n: "3", label: "Devis détaillé & Top 3 fournisseurs" },
 ];
 
 export default function DevisPage() {
@@ -56,9 +56,9 @@ export default function DevisPage() {
               <ul className="space-y-2">
                 {[
                   "Analyse de faisabilité complète",
-                  "3 à 5 fournisseurs présélectionnés",
+                  "Top 3 fournisseurs présélectionnés",
                   "Estimation des coûts et délais",
-                  "Points d'attention réglementaires",
+                  "Points d'attention réglementaires (douane, EVFTA)",
                   "Recommandation personnalisée",
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-2 text-sm text-gray-600">
@@ -67,6 +67,15 @@ export default function DevisPage() {
                   </li>
                 ))}
               </ul>
+            </div>
+
+            <div className="card border border-brand-red/20 bg-brand-red/5">
+              <p className="text-sm text-brand-red font-semibold leading-relaxed">
+                Audit de sourcing à partir de 250€ • Devis gratuit après premier échange
+              </p>
+              <p className="text-xs text-gray-500 mt-2">
+                Réponse sous 48h • Contrat de prestation signé systématiquement
+              </p>
             </div>
 
             <div className="card bg-brand-dark text-white">
