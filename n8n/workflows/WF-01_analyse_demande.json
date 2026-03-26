@@ -1,0 +1,163 @@
+{
+  "id": "a1b2c3d4-e5f6-7890-abcd-ef0000000001",
+  "name": "WF-01 — Analyse Demande + Notification Telegram",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "nouvelle-demande",
+        "responseMode": "onReceived",
+        "options": {
+          "responseCode": 200,
+          "responseData": "{\"success\":true,\"message\":\"Demande reçue, traitement en cours\"}"
+        }
+      },
+      "id": "wf01-node-0001-webhook-0000000000",
+      "name": "Webhook Nouvelle Demande",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "cnl-wh-nouvelle-demande"
+    },
+
+    {
+      "parameters": {
+        "jsCode": "const raw = $input.first().json;\n// n8n Webhook typeVersion 2 neste le body sous $json.body\nconst d = (raw.body && typeof raw.body === 'object') ? raw.body : raw;\n\n// Construire le message utilisateur pour Claude\nconst lignes = [\n  'Nom: ' + (d.nom || ''),\n  'Email: ' + (d.email || ''),\n  d.entreprise ? 'Entreprise: ' + d.entreprise : null,\n  d.telephone ? 'Téléphone: ' + d.telephone : null,\n  'Secteur / Catégorie: ' + (d.categorie || ''),\n  'Titre de la demande: ' + (d.titre || ''),\n  'Description: ' + (d.description || ''),\n  (d.budget_min || d.budget_max)\n    ? 'Budget: ' + (d.budget_min || '?') + '€ – ' + (d.budget_max || '?') + '€'\n    : 'Budget: non précisé',\n  d.delai ? 'Délai souhaité: ' + d.delai : 'Délai: non précisé',\n  d.quantite ? 'Quantité estimée: ' + d.quantite : null,\n].filter(Boolean).join('\\n');\n\nconst requestBody = {\n  model: 'claude-haiku-4-5-20251001',\n  max_tokens: 512,\n  system: \"Tu es l'assistant de CNL Sourcing. Analyse cette demande de sourcing et réponds UNIQUEMENT en JSON avec ces champs : secteur (string), urgence (1-5), budget_estime (string), delai_souhaite (string), resume (string de max 2 phrases naturelles). Pas de Markdown, pas d'explication, juste le JSON brut.\",\n  messages: [{ role: 'user', content: lignes }]\n};\n\n// Aplatir les données du formulaire pour les noeuds suivants\nreturn [{ json: { ...d, _claudeBody: JSON.stringify(requestBody) } }];"
+      },
+      "id": "wf01-node-0002-prepare-00000000",
+      "name": "Préparer Analyse Claude",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "={{ $env.ANTHROPIC_API_KEY }}"
+            },
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json._claudeBody }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "wf01-node-0003-claude-000000000",
+      "name": "Claude Haiku — Analyse",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [680, 300]
+    },
+
+    {
+      "parameters": {
+        "jsCode": "const resp = $input.first().json;\n// Récupérer les données du formulaire depuis le noeud Préparer (qui a déjà aplati le body)\nconst d = $('Préparer Analyse Claude').first().json;\n\n// Parser la réponse JSON de Claude\nlet analyse = {};\ntry {\n  const rawText = resp.content[0].text;\n  // Nettoyer les éventuels backticks markdown\n  const cleaned = rawText.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n  analyse = JSON.parse(cleaned);\n} catch (e) {\n  analyse = {\n    secteur: d.categorie || 'Non précisé',\n    urgence: 3,\n    budget_estime: 'À définir',\n    delai_souhaite: d.delai || 'Non précisé',\n    resume: 'Nouvelle demande reçue. Analyse manuelle requise.'\n  };\n}\n\n// Emoji urgence\nconst urgenceEmoji = ['', '🟢', '🟡', '🟠', '🔴', '🚨'][analyse.urgence] || '⚪';\n\n// Message Telegram (format HTML)\nconst lines = [\n  '<b>🆕 Nouvelle demande CNL Sourcing !</b>',\n  '',\n  '<b>Client :</b> ' + (d.nom || '') + (d.prenom ? ' ' + d.prenom : '') + (d.entreprise ? ' — ' + d.entreprise : ''),\n  '<b>Email :</b> ' + (d.email || '') + (d.telephone ? ' · ' + d.telephone : ''),\n  '',\n  '<b>Secteur :</b> ' + analyse.secteur,\n  '<b>Urgence :</b> ' + urgenceEmoji + ' ' + analyse.urgence + '/5',\n  '<b>Budget estimé :</b> ' + analyse.budget_estime,\n  '<b>Délai :</b> ' + analyse.delai_souhaite,\n  '',\n  '<b>Résumé :</b>',\n  analyse.resume,\n  '',\n  '🔗 <a href=\"http://localhost:3000/admin\">Voir dans l\\'admin</a>'\n];\n\n// Valeurs SQL-safe (échapper les apostrophes)\nconst escapeSql = (s) => String(s || '').replace(/'/g, \"''\");\n\nreturn [{\n  json: {\n    ...d,\n    analyse,\n    rawResponse: resp.content[0]?.text || '',\n    telegramText: lines.join('\\n'),\n    // Champs pré-échappés pour SQL\n    sql_resume: escapeSql(analyse.resume),\n    sql_rawResponse: escapeSql(resp.content[0]?.text || ''),\n    sql_secteur: escapeSql(analyse.secteur)\n  }\n}];"
+      },
+      "id": "wf01-node-0004-parse-000000000",
+      "name": "Parser Réponse + Préparer",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 300]
+    },
+
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ 'https://api.telegram.org/bot' + $env.TELEGRAM_BOT_TOKEN + '/sendMessage' }}",
+        "sendBody": true,
+        "specifyBody": "keypair",
+        "bodyParameters": {
+          "parameters": [
+            { "name": "chat_id", "value": "={{ $env.TELEGRAM_CHAT_ID }}" },
+            { "name": "parse_mode", "value": "HTML" },
+            { "name": "text", "value": "={{ $json.telegramText }}" },
+            { "name": "disable_web_page_preview", "value": "true" }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf01-node-0005-telegram-00000000",
+      "name": "Telegram — Notification Anna",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1120, 300]
+    },
+
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://nextjs:3000/api/internal/analyse-ia",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "x-internal-token", "value": "cnl-internal-2026" },
+            { "name": "content-type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ (() => { const d = $('Parser Réponse + Préparer').first().json; return JSON.stringify({ demandeId: d.demandeId, secteur: d.analyse.secteur, urgence: d.analyse.urgence, budgetEstime: d.analyse.budget_estime, delaiSouhaite: d.analyse.delai_souhaite, resume: d.analyse.resume, rawResponse: d.rawResponse }); })() }}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "wf01-node-0006-postgres-0000000",
+      "name": "Sauvegarder Analyse IA",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1340, 300]
+    }
+  ],
+
+  "connections": {
+    "Webhook Nouvelle Demande": {
+      "main": [[{ "node": "Préparer Analyse Claude", "type": "main", "index": 0 }]]
+    },
+    "Préparer Analyse Claude": {
+      "main": [[{ "node": "Claude Haiku — Analyse", "type": "main", "index": 0 }]]
+    },
+    "Claude Haiku — Analyse": {
+      "main": [[{ "node": "Parser Réponse + Préparer", "type": "main", "index": 0 }]]
+    },
+    "Parser Réponse + Préparer": {
+      "main": [[{ "node": "Telegram — Notification Anna", "type": "main", "index": 0 }]]
+    },
+    "Telegram — Notification Anna": {
+      "main": [[{ "node": "Sauvegarder Analyse IA", "type": "main", "index": 0 }]]
+    }
+  },
+
+  "pinData": {},
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "tags": [
+    { "name": "sourcing", "createdAt": "2026-01-01T00:00:00.000Z", "updatedAt": "2026-01-01T00:00:00.000Z" },
+    { "name": "notifications", "createdAt": "2026-01-01T00:00:00.000Z", "updatedAt": "2026-01-01T00:00:00.000Z" }
+  ],
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "instanceId": "cnl-sourcing-instance"
+  }
+}

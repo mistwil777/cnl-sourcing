@@ -52,6 +52,36 @@ export async function POST(req: NextRequest) {
       ]
     );
 
+    // 3. Déclencher le workflow n8n (fire-and-forget — ne bloque pas la réponse)
+    const n8nUrl = process.env.N8N_WEBHOOK_URL ?? "http://n8n:5678/webhook/nouvelle-demande";
+    fetch(n8nUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        // Données du formulaire
+        nom:         data.nom,
+        prenom:      data.prenom ?? null,
+        email:       data.email,
+        telephone:   data.telephone ?? null,
+        entreprise:  data.entreprise ?? null,
+        titre:       data.titre,
+        description: data.description,
+        categorie:   data.categorie,
+        budget_min:  data.budget_min ?? null,
+        budget_max:  data.budget_max ?? null,
+        quantite:    data.quantite ?? null,
+        delai:       data.delai ?? null,
+        // IDs créés en BD (nécessaires pour analyse_ia)
+        clientId:    client.id,
+        demandeId:   demande.id,
+        reference:   demande.reference,
+      }),
+      signal: AbortSignal.timeout(5000),
+    }).catch((err) => {
+      // Ne pas bloquer la réponse si n8n est indisponible
+      console.warn("[POST /api/devis] n8n webhook unreachable:", err.message);
+    });
+
     return NextResponse.json(
       { success: true, reference: demande.reference, demandeId: demande.id },
       { status: 201 }

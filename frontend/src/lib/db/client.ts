@@ -16,7 +16,8 @@ function createPool() {
     max: 10,
     idleTimeoutMillis: 30_000,
     connectionTimeoutMillis: 5_000,
-    ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
+    // SSL uniquement si explicitement demandé (false pour Docker interne)
+    ssl: process.env.POSTGRES_SSL === "true" ? { rejectUnauthorized: false } : false,
   });
 }
 

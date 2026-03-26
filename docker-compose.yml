@@ -90,6 +90,12 @@ services:
       N8N_HOST: ${DOMAIN}
       N8N_PORT: 5678
       N8N_PROTOCOL: https
+      # Variables applicatives accessibles via $env dans les workflows
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID}
+      # Autoriser l'accès à $env dans les expressions des workflows
+      N8N_BLOCK_ENV_ACCESS_IN_NODE: "false"
     volumes:
       - n8n_data:/home/node/.n8n
       - ./n8n/workflows:/home/node/.n8n/workflows
