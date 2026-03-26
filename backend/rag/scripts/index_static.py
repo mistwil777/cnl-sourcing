@@ -284,7 +284,7 @@ def main():
         results.append(res)
         total_chunks += res["chunks"]
 
-    print(f"\n{'═'*60}")
+    print(f"\n{'='*60}")
     print(f"Résumé indexation {'[DRY-RUN] ' if args.dry_run else ''}")
     print(f"  Documents traités : {len(results)}")
     print(f"  Chunks créés      : {total_chunks}")

@@ -1,82 +1,120 @@
 # FAQ CNL Sourcing — English
 
-> Status: draft — [ANNA_RESPONSE_NEEDED] answers will be completed by Anna.
-
 ---
 
 ## About CNL Sourcing
 
 ### Who is Anna and what is CNL Sourcing?
-[ANNA_RESPONSE_NEEDED]
+I am Anna, founder of CNL Sourcing. Born and raised in Vietnam,
+I arrived in Toulouse at 22 to pursue my studies, then spent 8 years
+running a France-Vietnam parcel groupage service before creating CNL Sourcing.
+My goal: open the doors of Vietnam's best factories for you by removing
+the barriers of language, distance and import risk. I combine French
+rigour with direct on-the-ground access to Vietnam.
 
 ### How long has CNL Sourcing been operating?
-[ANNA_RESPONSE_NEEDED]
+10 years of on-the-ground expertise in Vietnam, with a solid network of
+partners in Hanoi and Ho Chi Minh City. CNL Sourcing is the culmination
+of that experience, structured for French SMEs.
 
 ### In which sectors can you help me source from Vietnam?
-[ANNA_RESPONSE_NEEDED]
+Textiles (cotton, silk, uniforms, artisan fabrics — no haute couture without
+prototypes), Agri-food certified HACCP/ISO 22000/EU Organic (coffee, spices,
+cashew nuts, dry goods), Crafts and Decoration in custom wood/bamboo
+(Hanoi region). I do not work on industrial components.
 
 ### What is your geographical coverage in France?
-[ANNA_RESPONSE_NEEDED]
+Core activity in Occitanie, with nationwide support across France
+thanks to digital tools.
 
 ---
 
 ## The Sourcing Service
 
 ### How does the sourcing process work?
-[ANNA_RESPONSE_NEEDED]
+6 clear steps: 1. Brief (defining needs) → 2. Audit (selecting and
+verifying 3 factories: licences, ethics, capacity) →
+3. Sampling (prototypes received in Toulouse) → 4. Production
+(launch supervision) → 5. Control (inspection before leaving Vietnam)
+→ 6. Delivery (transport coordination to your door).
 
 ### How long does it take to find a supplier?
-[ANNA_RESPONSE_NEEDED]
+Between 10 and 15 days for a complete audit report with verified quotes.
+Up to 3 weeks for very specific products.
 
 ### How many suppliers do you propose per request?
-[ANNA_RESPONSE_NEEDED]
+Systematically a Top 3: a real comparison on price, quality and
+responsiveness, with built-in backup options.
 
 ### Do you visit suppliers in person in Vietnam?
-[ANNA_RESPONSE_NEEDED]
+I travel regularly. On a day-to-day basis, I rely on trusted local partners
+for physical audits. Every factory is verified on paper (export licences,
+ISO/HACCP certificates) before being presented to you.
 
 ### Can you negotiate prices with suppliers?
-[ANNA_RESPONSE_NEEDED]
+Yes, that is one of my key roles. I negotiate in Vietnamese to obtain
+"local" rates rather than "tourist" rates, while optimising payment terms.
 
 ### What happens if the proposed supplier doesn't meet my needs?
-[ANNA_RESPONSE_NEEDED]
+If none of the 3 suppliers works out, I carry out a second search
+at no extra charge, based on your precise feedback.
 
 ### Do you work with certified suppliers?
-[ANNA_RESPONSE_NEEDED]
+Yes. Agri-food: HACCP, ISO 22000 and EU Organic are mandatory.
+Textiles and decoration: export licences verified and compliance with
+European standards checked.
 
 ### Can you obtain samples before ordering?
-[ANNA_RESPONSE_NEEDED]
+Yes, this is a mandatory step. The client pays for sample manufacture
+(often deductible from the final order) and express shipping (DHL/FedEx).
+I centralise receipt to check compliance before forwarding to France.
+
+### Do you provide support after the introduction?
+Yes, full turnkey service: production monitoring, quality controls
+and logistics coordination through to receipt of the goods.
 
 ---
 
 ## Pricing and Payment
 
 ### What are your rates for the sourcing service?
-[ANNA_RESPONSE_NEEDED]
+From €250 for a complete audit (3 verified suppliers + comparative quotes).
+Free quote after our first exchange.
 
 ### Do you charge a flat fee or a percentage?
-[ANNA_RESPONSE_NEEDED]
+Hybrid and transparent pricing: fixed fee for research/audit
++ success commission on the order amount.
 
 ### When do I pay? What is the payment schedule?
-[ANNA_RESPONSE_NEEDED]
+The research fee is payable 100% at mission launch.
+The success commission is invoiced on order confirmation with the factory.
 
 ### What payment methods do you accept?
-[ANNA_RESPONSE_NEEDED]
+Bank transfer (preferred for businesses) and credit card
+via secure payment platform.
 
 ### Are there any hidden fees?
-[ANNA_RESPONSE_NEEDED]
+There are additional costs to anticipate: sample shipping, customs duties
+(often 0% thanks to EVFTA), import VAT, international freight.
+Also consider packaging costs — in Vietnam you can produce beautiful,
+very affordable packaging if planned into the overall sourcing.
 
 ### Do you refund if you cannot find a supplier?
-[ANNA_RESPONSE_NEEDED]
+The fee covers the investigative work and expertise. After two thorough
+searches with no viable solution, we discuss a credit towards a future mission.
 
 ---
 
 ## Logistics and Customs
 
 ### Do you also manage the transport of goods?
-[ANNA_RESPONSE_NEEDED]
+I work with partner freight forwarders for sea freight solutions
+(economical) or air freight (fast), including customs clearance.
 
 ### What are the delivery times from Vietnam?
-[ANNA_RESPONSE_NEEDED]
+Sea freight: 25 to 35 days (economical, ideal for large volumes).
+Air freight: 5 to 7 days (fast, for samples or urgent shipments).
+I help you choose the solution that fits your deadlines and budget.
 
 ### What are the customs duties for importing from Vietnam?
 Customs duties vary depending on the nature of the product (HS/NC code).
@@ -104,39 +142,55 @@ Documents typically required for importation from Vietnam:
 CNL Sourcing assists you in verifying these documents.
 
 ### Do you manage parcel groupage services between France and Vietnam?
-[ANNA_RESPONSE_NEEDED]
+Yes, always available. Ideal for small volumes (samples, small batches).
+Allows you to divide transport costs by 3 by sharing space with other
+clients from Occitanie.
+
+### Do you help with customs procedures?
+This is integrated into my service. I help you obtain your EORI number
+and prepare with the supplier the documents to benefit from EVFTA
+(preferential origin, often 0% customs duties).
 
 ---
 
 ## Guarantees and Liability
 
 ### What exactly do you guarantee?
-[ANNA_RESPONSE_NEEDED]
+I guarantee the legal existence of the factory, the compliance of the
+quote with your brief, and rigorous production monitoring.
 
 ### What happens if there is a quality issue upon receipt?
-[ANNA_RESPONSE_NEEDED]
+I immediately intervene with the supplier to negotiate a replacement,
+partial refund or discount on the next order.
 
 ### Are you liable if the supplier fails to deliver?
-[ANNA_RESPONSE_NEEDED]
+As an intermediary, my liability is a best-efforts obligation.
+My professional liability insurance secures our service exchanges.
+A service contract is signed systematically.
 
 ### Do you sign a service contract?
-[ANNA_RESPONSE_NEEDED]
+Yes, systematically. It details the scope of the mission, fees
+and the responsibilities of each party.
 
 ---
 
 ## Communication and Follow-up
 
 ### How is my request monitored?
-[ANNA_RESPONSE_NEEDED]
+Shared Google Drive for documents + WhatsApp channel for quick exchanges.
+Weekly status update by email.
 
 ### In what language do you communicate with suppliers?
-[ANNA_RESPONSE_NEEDED]
+With clients: French, English, Vietnamese.
+With suppliers: exclusively in Vietnamese.
 
 ### Are you available outside office hours?
-[ANNA_RESPONSE_NEEDED]
+Monday to Friday, 9am–5pm. Vietnam time difference (GMT+6) managed
+in the morning. Emergencies (vessel/flight departures) handled responsively.
+For clients under contract: dedicated WhatsApp number.
 
 ### How quickly do you respond to requests?
-[ANNA_RESPONSE_NEEDED]
+Within 24 to 48 hours maximum for any new enquiry.
 
 ---
 
