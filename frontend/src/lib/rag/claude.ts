@@ -9,29 +9,26 @@ import { logTokenUsage } from "@/lib/cost/logger";
 
 export const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
+  defaultHeaders: {
+    "anthropic-beta": "prompt-caching-2024-07-31",
+  },
 });
 
-export const MODEL_FAST  = process.env.ANTHROPIC_MODEL_FAST  || "claude-haiku-4-5-20251001";
-export const MODEL_SMART = process.env.ANTHROPIC_MODEL_SMART || "claude-sonnet-4-6";
+export const MODEL_FAST  = process.env.ANTHROPIC_MODEL_FAST  || "claude-3-5-haiku-20241022";
+export const MODEL_SMART = process.env.ANTHROPIC_MODEL_SMART || "claude-3-5-sonnet-20241022";
 
 // ─── System prompt Anna — mis en cache (ne change jamais) ────────────────────
 export const SYSTEM_PROMPT = `Tu es l'assistante virtuelle de CNL Sourcing, représentant Anna Nguyen Cao Phuong Anh, experte en sourcing Vietnam/France.
 Tu réponds aux questions des entrepreneurs français sur le sourcing au Vietnam.
 
 Ton rôle :
-- Répondre aux questions sur les services de sourcing (textile, alimentaire, artisanat, etc.)
-- Guider les prospects vers une demande de devis
-- Expliquer le processus, les délais, les certifications fournisseurs
-- Donner des informations générales sur l'import Vietnam → France (réglementation, Incoterms, douanes)
+Tu réponds aux questions sur les services de sourcing (textile, agroalimentaire, artisanat), tu guides les prospects vers une demande de devis, tu expliques le processus, les délais et les certifications fournisseurs, et tu donnes des informations générales sur l'import Vietnam vers France.
 
-Règles absolues :
-- Réponds toujours dans la langue de l'utilisateur (FR/EN/VI)
-- Sois professionnel, chaleureux et concis (3-5 phrases pour les réponses simples)
-- Si une question dépasse tes connaissances, propose de contacter Anna : cnlsourcingvn@gmail.com
-- Ne donne jamais de prix définitifs — oriente vers le formulaire de devis
-- N'invente pas de fournisseurs ou de données spécifiques
-- Pour les demandes de sourcing complexes : collecte les infos et indique qu'Anna répondra sous 48h
-- Si tu as des sources RAG disponibles, cite-les naturellement avec [Source: ...]`;
+Formatage — règle absolue :
+Tu réponds TOUJOURS en texte brut, sans aucun formatage Markdown. Pas de gras, pas d'italique, pas de tirets, pas de titres, pas d'émojis. Tes réponses sont courtes, naturelles et conversationnelles. Tu parles comme Anna parlerait à un client au téléphone. Maximum 4 à 5 phrases par réponse. Les listes se font avec des virgules ou des phrases, jamais avec des tirets ou des astérisques.
+
+Règles de contenu :
+Réponds toujours dans la langue de l'utilisateur (français, anglais ou vietnamien). Si une question dépasse tes connaissances, propose de contacter Anna à cnlsourcingvn@gmail.com. Ne donne jamais de prix définitifs, oriente vers le formulaire de devis. N'invente pas de fournisseurs ou de données spécifiques. Pour les demandes complexes, indique qu'Anna répondra sous 48h. Si tu as des sources RAG disponibles, cite-les naturellement avec [Source: ...].`;
 
 // ─── Type Anthropic étendu (cache usage) ─────────────────────────────────────
 type CacheUsage = Anthropic.Usage & {
@@ -49,22 +46,20 @@ export async function chatWithCache(params: {
 }): Promise<AsyncIterable<string>> {
   const { userMessage, ragContext, history, model, maxTokens = 1024 } = params;
 
-  // System blocks avec cache_control
-  const systemBlocks: Anthropic.Messages.TextBlockParam[] = [
+  // System blocks avec cache_control (beta header envoyé via defaultHeaders du client)
+  const systemBlocks = [
     {
-      type: "text",
+      type: "text" as const,
       text: SYSTEM_PROMPT,
-      // @ts-expect-error — cache_control est en beta, pas encore typé dans le SDK
-      cache_control: { type: "ephemeral" },
+      cache_control: { type: "ephemeral" as const },
     },
   ];
 
   if (ragContext) {
     systemBlocks.push({
-      type: "text",
+      type: "text" as const,
       text: `CONTEXTE DOCUMENTAIRE (sources RAG) :\n${ragContext}`,
-      // @ts-expect-error
-      cache_control: { type: "ephemeral" },
+      cache_control: { type: "ephemeral" as const },
     });
   }
 
@@ -73,13 +68,12 @@ export async function chatWithCache(params: {
     { role: "user", content: userMessage },
   ];
 
-  const stream = await anthropic.messages.stream({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const stream = anthropic.messages.stream({
     model,
-    max_tokens:  maxTokens,
-    system:      systemBlocks as unknown as string, // cast nécessaire pour le beta
+    max_tokens: maxTokens,
+    system:     systemBlocks as any,
     messages,
-    // @ts-expect-error — beta header pour prompt caching
-    betas:       ["prompt-caching-2024-07-31"],
   });
 
   // Log usage en fire-and-forget après fin du stream
