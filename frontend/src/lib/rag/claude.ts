@@ -14,8 +14,8 @@ export const anthropic = new Anthropic({
   },
 });
 
-export const MODEL_FAST  = process.env.ANTHROPIC_MODEL_FAST  || "claude-3-5-haiku-20241022";
-export const MODEL_SMART = process.env.ANTHROPIC_MODEL_SMART || "claude-3-5-sonnet-20241022";
+export const MODEL_FAST  = process.env.ANTHROPIC_MODEL_FAST  || "claude-haiku-4-5-20251001";
+export const MODEL_SMART = process.env.ANTHROPIC_MODEL_SMART || "claude-sonnet-4-6";
 
 // ─── System prompt Anna — mis en cache (ne change jamais) ────────────────────
 export const SYSTEM_PROMPT = `Tu es l'assistante virtuelle de CNL Sourcing, représentant Anna Nguyen Cao Phuong Anh, experte en sourcing Vietnam/France.
@@ -76,20 +76,9 @@ export async function chatWithCache(params: {
     messages,
   });
 
-  // Log usage en fire-and-forget après fin du stream
-  stream.finalMessage().then((msg) => {
-    const usage = msg.usage as CacheUsage;
-    logTokenUsage({
-      model,
-      input_tokens:                usage.input_tokens,
-      output_tokens:               usage.output_tokens,
-      cache_creation_input_tokens: usage.cache_creation_input_tokens ?? 0,
-      cache_read_input_tokens:     usage.cache_read_input_tokens ?? 0,
-      source:                      "chatbot",
-    }).catch(() => {});
-  }).catch(() => {});
-
-  // Retourne un AsyncIterable de chunks texte
+  // Retourne un AsyncIterable de chunks texte.
+  // IMPORTANT : finalMessage() doit être appelé APRÈS l'itération pour éviter
+  // une race condition où finalMessage() consomme le stream avant le for await.
   return (async function* () {
     for await (const chunk of stream) {
       if (
@@ -99,5 +88,17 @@ export async function chatWithCache(params: {
         yield chunk.delta.text;
       }
     }
+    // Log usage une fois le stream épuisé (fire-and-forget)
+    stream.finalMessage().then((msg) => {
+      const usage = msg.usage as CacheUsage;
+      logTokenUsage({
+        model,
+        input_tokens:                usage.input_tokens,
+        output_tokens:               usage.output_tokens,
+        cache_creation_input_tokens: usage.cache_creation_input_tokens ?? 0,
+        cache_read_input_tokens:     usage.cache_read_input_tokens ?? 0,
+        source:                      "chatbot",
+      }).catch(() => {});
+    }).catch(() => {});
   })();
 }

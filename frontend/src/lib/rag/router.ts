@@ -3,8 +3,10 @@
  * Objectif : 80% des requêtes traitées par Haiku (10× moins cher).
  */
 
+import { MODEL_FAST, MODEL_SMART } from "./claude";
+
 export interface RoutingDecision {
-  model:              "claude-haiku-4-5-20251001" | "claude-sonnet-4-6";
+  model:              string;
   reason:             string;
   estimated_cost_eur: number;
 }
@@ -52,8 +54,8 @@ function isComplex(msg: string): boolean {
  * @param bestRagScore Meilleur score RAG obtenu (0 si pas de RAG)
  */
 export function routeLLM(userMessage: string, bestRagScore: number): RoutingDecision {
-  const HAIKU  = "claude-haiku-4-5-20251001" as const;
-  const SONNET = "claude-sonnet-4-6" as const;
+  const HAIKU  = MODEL_FAST;
+  const SONNET = MODEL_SMART;
 
   // 1. Salutations → Haiku toujours
   if (isGreeting(userMessage)) {
