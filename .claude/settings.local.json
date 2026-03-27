@@ -42,7 +42,15 @@
       "Bash(tasklist:*)",
       "Bash(docker exec:*)",
       "Bash(docker restart:*)",
-      "Bash(git rm:*)"
+      "Bash(git rm:*)",
+      "Bash(node:*)",
+      "Bash(chmod +x /c/Users/lerou/Documents/GitHub/cnl-sourcing/deploy.sh)",
+      "Bash(git -C /c/Users/lerou/Documents/GitHub/cnl-sourcing check-ignore .env.production)",
+      "Bash(git:*)",
+      "Bash(npx tsc:*)",
+      "Bash(ls /c/Users/lerou/Documents/GitHub/cnl-sourcing/frontend/next.config*)",
+      "Bash(cat /c/Users/lerou/Documents/GitHub/cnl-sourcing/frontend/next.config.*)",
+      "Bash(cat /c/Users/lerou/Documents/GitHub/cnl-sourcing/frontend/src/app/[locale]/layout.tsx)"
     ]
   }
 }
