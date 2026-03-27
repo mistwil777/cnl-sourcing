@@ -932,6 +932,13 @@ export default function AdminDashboard() {
 
   useEffect(() => { fetchData(); }, []);
 
+  // ── PWA — enregistrement Service Worker ───────────────────────────────────
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").catch(() => {});
+    }
+  }, []);
+
   // ── Actions ───────────────────────────────────────────────────────────────
 
   async function handleCreateDevis(demandeId: string) {
