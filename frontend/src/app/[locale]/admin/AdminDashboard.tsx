@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -31,22 +31,48 @@ interface Demande {
   scoring_urgence: number;
 }
 
+interface LigneDevis {
+  id:               string;
+  description:      string;
+  quantite:         number;
+  unite:            string;
+  prix_unitaire_ht: number;
+  tva_taux:         number;
+}
+
 interface Devis {
-  id:             string;
-  reference:      string;
-  created_at:     string;
-  statut:         string;
-  montant_ht:     number;
-  montant_ttc:    number;
-  devise:         string;
-  date_envoi:     string | null;
-  date_expiration:string | null;
-  validite_jours: number;
-  notes:          string | null;
-  demande_titre:  string;
-  demande_id:     string;
-  client_nom:     string;
-  client_email:   string;
+  id:                  string;
+  reference:           string;
+  created_at:          string;
+  statut:              string;
+  montant_ht:          number;
+  montant_ttc:         number;
+  tva:                 number;
+  devise:              string;
+  date_envoi:          string | null;
+  date_expiration:     string | null;
+  validite_jours:      number;
+  notes:               string | null;
+  objet:               string | null;
+  lignes:              LigneDevis[];
+  conditions_paiement: string | null;
+  incoterms:           string | null;
+  pays_livraison:      string | null;
+  adresse_livraison:   string | null;
+  demande_titre:       string;
+  demande_id:          string;
+  demande_secteur:     string | null;
+  client_nom:          string;
+  client_prenom:       string;
+  client_email:        string;
+  client_telephone:    string;
+  client_entreprise:   string;
+  client_adresse:      string;
+  client_code_postal:  string;
+  client_ville:        string;
+  client_pays:         string;
+  client_siret:        string;
+  client_tva_intra:    string;
 }
 
 interface Facture {
@@ -301,67 +327,365 @@ function OngletDemandes({
 
 // ─── Onglet Devis ─────────────────────────────────────────────────────────────
 
+const CONDITIONS_PRESETS = [
+  "50% à la signature du devis, 50% avant expédition",
+  "100% à la signature du devis",
+  "30% à la commande, 70% avant expédition",
+  "Paiement à 30 jours date de facture",
+];
+
+const INCOTERMS_OPTIONS = ["FOB", "EXW", "CIF", "DAP", "DDP", "CFR"];
+
+function newLigne(): LigneDevis {
+  return { id: String(Date.now()), description: "", quantite: 1, unite: "forfait", prix_unitaire_ht: 0, tva_taux: 20 };
+}
+
 function OngletDevis({
   devis,
   onEnvoyer,
+  onRefresh,
 }: {
-  devis: Devis[];
+  devis:     Devis[];
   onEnvoyer: (devisId: string) => Promise<void>;
+  onRefresh: () => void;
 }) {
-  const [loadingIds, setLoadingIds] = useState<Set<string>>(new Set());
+  const [modal,       setModal]       = useState<Devis | null>(null);
+  const [lignes,      setLignes]      = useState<LigneDevis[]>([]);
+  const [objet,       setObjet]       = useState("");
+  const [condPmt,     setCondPmt]     = useState("");
+  const [incoterms,   setIncoterms]   = useState("");
+  const [paysLiv,     setPaysLiv]     = useState("");
+  const [notes,       setNotes]       = useState("");
+  const [saving,      setSaving]      = useState(false);
+  const [sending,     setSending]     = useState(false);
 
-  async function handleEnvoyer(id: string) {
-    setLoadingIds(prev => new Set(prev).add(id));
-    await onEnvoyer(id);
-    setLoadingIds(prev => { const s = new Set(prev); s.delete(id); return s; });
+  function openModal(d: Devis) {
+    setModal(d);
+    setLignes(d.lignes?.length ? d.lignes : [newLigne()]);
+    setObjet(d.objet ?? "");
+    setCondPmt(d.conditions_paiement ?? "");
+    setIncoterms(d.incoterms ?? "FOB");
+    setPaysLiv(d.pays_livraison ?? "France");
+    setNotes(d.notes ?? "");
   }
 
-  if (devis.length === 0) {
-    return <EmptyState message="Aucun devis pour le moment" />;
+  function updateLigne(idx: number, field: keyof LigneDevis, value: string | number) {
+    setLignes(prev => prev.map((l, i) => i === idx ? { ...l, [field]: value } : l));
   }
+
+  const totalHT  = lignes.reduce((s, l) => s + Number(l.quantite) * Number(l.prix_unitaire_ht), 0);
+  const totalTVA = lignes.reduce((s, l) => s + Number(l.quantite) * Number(l.prix_unitaire_ht) * (Number(l.tva_taux) / 100), 0);
+  const totalTTC = totalHT + totalTVA;
+
+  async function handleSave() {
+    if (!modal) return;
+    setSaving(true);
+    await fetch("/api/admin/devis/modifier", {
+      method:  "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        devis_id:            modal.id,
+        lignes,
+        objet:               objet || undefined,
+        conditions_paiement: condPmt || undefined,
+        incoterms:           incoterms || undefined,
+        pays_livraison:      paysLiv || undefined,
+        notes:               notes || undefined,
+      }),
+    });
+    setSaving(false);
+    setModal(null);
+    onRefresh();
+  }
+
+  async function handleEnvoyer() {
+    if (!modal) return;
+    setSending(true);
+    await onEnvoyer(modal.id);
+    setSending(false);
+    setModal(null);
+  }
+
+  if (devis.length === 0) return <EmptyState message="Aucun devis pour le moment" />;
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-      {devis.map(d => (
-        <div key={d.id} style={cardStyle}>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
-            <div>
-              <p style={{ margin: 0, fontWeight: 700, fontSize: "15px" }}>{d.client_nom}</p>
-              <p style={{ margin: "2px 0 0", fontSize: "12px", color: "#888" }}>{d.reference}</p>
+    <>
+      <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+        {devis.map(d => (
+          <div key={d.id} style={cardStyle}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
+              <div>
+                <p style={{ margin: 0, fontWeight: 700, fontSize: "15px" }}>
+                  {d.client_entreprise || d.client_nom}
+                </p>
+                <p style={{ margin: "2px 0 0", fontSize: "12px", color: "#888" }}>{d.reference}</p>
+              </div>
+              <DevisStatutBadge statut={d.statut} />
             </div>
-            <DevisStatutBadge statut={d.statut} />
+
+            <p style={{ fontSize: "13px", color: "#555", margin: "0 0 6px", fontStyle: "italic" }}>
+              {d.objet || d.demande_titre}
+            </p>
+
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "10px" }}>
+              {d.montant_ttc > 0
+                ? <Tag><strong>{money(d.montant_ttc, d.devise)}</strong> TTC ({d.lignes?.length ?? 0} ligne{(d.lignes?.length ?? 0) > 1 ? "s" : ""})</Tag>
+                : <span style={{ backgroundColor: "#fef0ef", color: RED, padding: "3px 10px", borderRadius: "20px", fontSize: "12px", fontWeight: 700 }}>Montant à définir</span>
+              }
+              {d.incoterms      && <Tag>{d.incoterms}</Tag>}
+              {d.pays_livraison && <Tag>Livraison : {d.pays_livraison}</Tag>}
+              {d.date_envoi     && <Tag>Envoyé le {dateStr(d.date_envoi)}</Tag>}
+            </div>
+
+            <div style={{ display: "flex", gap: "8px" }}>
+              <button onClick={() => openModal(d)} style={btnSecondary}>Voir / Modifier</button>
+              {d.statut === "brouillon" && (
+                <button onClick={() => { openModal(d); }} style={btnPrimary}>
+                  Envoyer au client
+                </button>
+              )}
+            </div>
           </div>
+        ))}
+      </div>
 
-          <p style={{ fontSize: "13px", color: "#555", margin: "0 0 6px" }}>{d.demande_titre}</p>
+      {/* ── Modal devis complet ──────────────────────────────────────────── */}
+      {modal && (
+        <div
+          style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.55)", zIndex: 1000, display: "flex", alignItems: "flex-end" }}
+          onClick={() => setModal(null)}
+        >
+          <div
+            style={{ backgroundColor: "#f5f5f5", width: "100%", borderRadius: "20px 20px 0 0", maxHeight: "92vh", overflowY: "auto", display: "flex", flexDirection: "column" }}
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Header modal */}
+            <div style={{ backgroundColor: RED, color: "#fff", padding: "16px 20px", borderRadius: "20px 20px 0 0", display: "flex", justifyContent: "space-between", alignItems: "center", flexShrink: 0 }}>
+              <div>
+                <p style={{ margin: 0, fontWeight: 800, fontSize: "16px" }}>{modal.reference}</p>
+                <p style={{ margin: "2px 0 0", fontSize: "12px", opacity: 0.85 }}>
+                  <DevisStatutBadge statut={modal.statut} />
+                </p>
+              </div>
+              <button onClick={() => setModal(null)} style={{ background: "rgba(255,255,255,0.2)", border: "none", borderRadius: "8px", padding: "6px 10px", fontSize: "16px", cursor: "pointer", color: "#fff" }}>✕</button>
+            </div>
 
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "10px" }}>
-            <Tag>
-              <strong>{money(d.montant_ttc, d.devise)}</strong> TTC
-            </Tag>
-            {d.date_envoi && <Tag>Envoyé le {dateStr(d.date_envoi)}</Tag>}
-            {d.date_expiration && <Tag>Expire le {dateStr(d.date_expiration)}</Tag>}
-          </div>
+            <div style={{ padding: "16px", display: "flex", flexDirection: "column", gap: "12px" }}>
 
-          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-            {d.statut === "brouillon" && (
-              <button
-                onClick={() => handleEnvoyer(d.id)}
-                disabled={loadingIds.has(d.id)}
-                style={{ ...btnPrimary, opacity: loadingIds.has(d.id) ? 0.7 : 1 }}
-              >
-                {loadingIds.has(d.id) ? <Spinner /> : null}
-                {loadingIds.has(d.id) ? "Envoi…" : "Envoyer au client"}
-              </button>
-            )}
-            <button style={{ ...btnSecondary, opacity: 0.5, cursor: "not-allowed" }} disabled>
-              Télécharger PDF (bientôt)
-            </button>
+              {/* ── Émetteur ──────────────────────────────────────────────── */}
+              <Section titre="CNL Sourcing — Émetteur">
+                <InfoRow label="Raison sociale" value="CNL Sourcing" />
+                <InfoRow label="Email"          value="cnlsourcingvn@gmail.com" />
+                <InfoRow label="Site"           value="cnlsourcing.com" />
+              </Section>
+
+              {/* ── Client ────────────────────────────────────────────────── */}
+              <Section titre="Client">
+                <InfoRow label="Entreprise"  value={modal.client_entreprise || "—"} />
+                <InfoRow label="Contact"     value={`${modal.client_prenom} ${modal.client_nom}`.trim()} />
+                <InfoRow label="Email"       value={modal.client_email} />
+                {modal.client_telephone && <InfoRow label="Téléphone" value={modal.client_telephone} />}
+                {(modal.client_adresse || modal.client_ville) && (
+                  <InfoRow
+                    label="Adresse"
+                    value={[modal.client_adresse, modal.client_code_postal, modal.client_ville, modal.client_pays].filter(Boolean).join(", ")}
+                  />
+                )}
+                {modal.client_siret    && <InfoRow label="SIRET"        value={modal.client_siret} />}
+                {modal.client_tva_intra && <InfoRow label="N° TVA intra" value={modal.client_tva_intra} />}
+              </Section>
+
+              {/* ── Objet ─────────────────────────────────────────────────── */}
+              <Section titre="Objet de la mission">
+                <textarea
+                  value={objet}
+                  onChange={e => setObjet(e.target.value)}
+                  placeholder="Ex : Mission de sourcing — identification et qualification de fournisseurs textile certifiés GOTS au Vietnam"
+                  rows={2}
+                  style={textareaStyle}
+                />
+              </Section>
+
+              {/* ── Lignes de prestation ──────────────────────────────────── */}
+              <Section titre={`Prestations (${lignes.length} ligne${lignes.length > 1 ? "s" : ""})`}>
+                {lignes.map((l, idx) => (
+                  <div key={l.id} style={{ backgroundColor: "#fff", borderRadius: "10px", padding: "12px", marginBottom: "8px", border: "1px solid #e8e8e8" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+                      <span style={{ fontSize: "12px", fontWeight: 700, color: "#888" }}>LIGNE {idx + 1}</span>
+                      {lignes.length > 1 && (
+                        <button
+                          onClick={() => setLignes(prev => prev.filter((_, i) => i !== idx))}
+                          style={{ background: "none", border: "none", color: "#ccc", cursor: "pointer", fontSize: "16px", padding: "0 4px" }}
+                        >✕</button>
+                      )}
+                    </div>
+
+                    <label style={fieldLabel}>Description</label>
+                    <input
+                      value={l.description}
+                      onChange={e => updateLigne(idx, "description", e.target.value)}
+                      placeholder="Ex : Honoraires de sourcing fournisseurs"
+                      style={{ ...inputStyle, marginBottom: "8px" }}
+                    />
+
+                    <div style={{ display: "grid", gridTemplateColumns: "2fr 2fr 1fr", gap: "8px" }}>
+                      <div>
+                        <label style={fieldLabel}>Quantité</label>
+                        <input type="number" min="0" step="0.01" value={l.quantite}
+                          onChange={e => updateLigne(idx, "quantite", parseFloat(e.target.value) || 0)}
+                          style={inputStyle} />
+                      </div>
+                      <div>
+                        <label style={fieldLabel}>Prix unitaire HT</label>
+                        <input type="number" min="0" step="0.01" value={l.prix_unitaire_ht}
+                          onChange={e => updateLigne(idx, "prix_unitaire_ht", parseFloat(e.target.value) || 0)}
+                          style={inputStyle} />
+                      </div>
+                      <div>
+                        <label style={fieldLabel}>TVA %</label>
+                        <select value={l.tva_taux}
+                          onChange={e => updateLigne(idx, "tva_taux", parseFloat(e.target.value))}
+                          style={{ ...inputStyle, padding: "10px 8px" }}>
+                          <option value={0}>0%</option>
+                          <option value={5.5}>5,5%</option>
+                          <option value={10}>10%</option>
+                          <option value={20}>20%</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <p style={{ margin: "8px 0 0", fontSize: "13px", color: "#888", textAlign: "right" }}>
+                      Sous-total : <strong>{money(l.quantite * l.prix_unitaire_ht, modal.devise)}</strong> HT
+                    </p>
+                  </div>
+                ))}
+
+                <button
+                  onClick={() => setLignes(prev => [...prev, newLigne()])}
+                  style={{ ...btnSecondary, width: "100%", justifyContent: "center", display: "flex" }}
+                >
+                  + Ajouter une ligne
+                </button>
+
+                {/* Récapitulatif financier */}
+                <div style={{ backgroundColor: "#fff", borderRadius: "10px", padding: "12px", marginTop: "8px", border: `1px solid ${RED}` }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", padding: "4px 0" }}>
+                    <span style={{ fontSize: "14px", color: "#666" }}>Total HT</span>
+                    <span style={{ fontSize: "14px", fontWeight: 600 }}>{money(totalHT, modal.devise)}</span>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", padding: "4px 0" }}>
+                    <span style={{ fontSize: "14px", color: "#666" }}>TVA</span>
+                    <span style={{ fontSize: "14px", fontWeight: 600 }}>{money(totalTVA, modal.devise)}</span>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 0 4px", borderTop: "1px solid #eee", marginTop: "4px" }}>
+                    <span style={{ fontSize: "16px", fontWeight: 800, color: RED }}>Total TTC</span>
+                    <span style={{ fontSize: "16px", fontWeight: 800, color: RED }}>{money(totalTTC, modal.devise)}</span>
+                  </div>
+                </div>
+              </Section>
+
+              {/* ── Conditions ────────────────────────────────────────────── */}
+              <Section titre="Conditions">
+                <label style={fieldLabel}>Conditions de paiement</label>
+                <select value={condPmt} onChange={e => setCondPmt(e.target.value)} style={{ ...inputStyle, marginBottom: "8px" }}>
+                  <option value="">— Choisir —</option>
+                  {CONDITIONS_PRESETS.map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+                {!CONDITIONS_PRESETS.includes(condPmt) && (
+                  <input value={condPmt} onChange={e => setCondPmt(e.target.value)}
+                    placeholder="Ou saisir des conditions personnalisées…"
+                    style={{ ...inputStyle, marginBottom: "8px" }} />
+                )}
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginBottom: "8px" }}>
+                  <div>
+                    <label style={fieldLabel}>Incoterms</label>
+                    <select value={incoterms} onChange={e => setIncoterms(e.target.value)} style={inputStyle}>
+                      <option value="">—</option>
+                      {INCOTERMS_OPTIONS.map(i => <option key={i} value={i}>{i}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label style={fieldLabel}>Pays de livraison</label>
+                    <input value={paysLiv} onChange={e => setPaysLiv(e.target.value)}
+                      placeholder="France" style={inputStyle} />
+                  </div>
+                </div>
+
+                <label style={fieldLabel}>Notes internes (non visibles par le client)</label>
+                <textarea value={notes} onChange={e => setNotes(e.target.value)}
+                  placeholder="Remarques fournisseur, conditions particulières…"
+                  rows={2} style={textareaStyle} />
+              </Section>
+
+              {/* ── Actions ───────────────────────────────────────────────── */}
+              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", paddingBottom: "8px" }}>
+                <button
+                  onClick={handleSave}
+                  disabled={saving}
+                  style={{ ...btnSecondary, flex: 1, justifyContent: "center", display: "flex", alignItems: "center", gap: "6px", opacity: saving ? 0.7 : 1 }}
+                >
+                  {saving ? <Spinner /> : null}
+                  {saving ? "Sauvegarde…" : "Sauvegarder"}
+                </button>
+                {modal.statut === "brouillon" && (
+                  <button
+                    onClick={handleEnvoyer}
+                    disabled={sending}
+                    style={{ ...btnPrimary, flex: 1, justifyContent: "center", opacity: sending ? 0.7 : 1 }}
+                  >
+                    {sending ? <Spinner /> : null}
+                    {sending ? "Envoi…" : "Envoyer au client"}
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         </div>
-      ))}
+      )}
+    </>
+  );
+}
+
+// ─── Composants formulaire ────────────────────────────────────────────────────
+
+function Section({ titre, children }: { titre: string; children: React.ReactNode }) {
+  return (
+    <div style={{ backgroundColor: "#fff", borderRadius: "14px", overflow: "hidden", border: "1px solid #efefef" }}>
+      <div style={{ backgroundColor: "#f8f8f8", borderBottom: "1px solid #efefef", padding: "10px 14px" }}>
+        <p style={{ margin: 0, fontSize: "12px", fontWeight: 800, color: "#555", textTransform: "uppercase", letterSpacing: "0.05em" }}>{titre}</p>
+      </div>
+      <div style={{ padding: "12px 14px" }}>{children}</div>
     </div>
   );
 }
+
+function InfoRow({ label, value }: { label: string; value: string }) {
+  if (!value || value === "—") return null;
+  return (
+    <div style={{ display: "flex", justifyContent: "space-between", padding: "5px 0", borderBottom: "1px solid #f5f5f5" }}>
+      <span style={{ fontSize: "13px", color: "#999", fontWeight: 600, minWidth: "110px" }}>{label}</span>
+      <span style={{ fontSize: "13px", color: "#333", textAlign: "right", flex: 1 }}>{value}</span>
+    </div>
+  );
+}
+
+const fieldLabel: React.CSSProperties = {
+  display: "block", fontSize: "12px", fontWeight: 700,
+  color: "#666", marginBottom: "4px",
+};
+
+const inputStyle: React.CSSProperties = {
+  width: "100%", padding: "10px 12px",
+  border: "1.5px solid #e0e0e0", borderRadius: "8px",
+  fontSize: "14px", outline: "none",
+  boxSizing: "border-box", fontFamily: "inherit",
+  backgroundColor: "#fafafa",
+};
+
+const textareaStyle: React.CSSProperties = {
+  ...inputStyle, resize: "vertical" as const,
+} as React.CSSProperties;
 
 // ─── Onglet Factures ──────────────────────────────────────────────────────────
 
@@ -815,7 +1139,7 @@ export default function AdminDashboard() {
             <OngletDemandes demandes={data.demandes} onCreateDevis={handleCreateDevis} />
           )}
           {activeTab === "Devis" && (
-            <OngletDevis devis={data.devis} onEnvoyer={handleEnvoyerDevis} />
+            <OngletDevis devis={data.devis} onEnvoyer={handleEnvoyerDevis} onRefresh={fetchData} />
           )}
           {activeTab === "Factures" && (
             <OngletFactures factures={data.factures} onRelancer={handleRelancer} />
