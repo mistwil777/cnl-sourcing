@@ -85,11 +85,17 @@ VPS Scaleway : `51.158.109.135` — domaine : `cnlsourcing.com` (DNS en cours de
 | `002_cost_monitoring.sql` | Table `usage_logs`, fonction `calculate_cost()`, vues `cout_par_jour` / `cout_global` |
 | `003_admin_test_data.sql` | 3 clients + 3 demandes + analyses IA + 1 facture en retard (données de test) |
 | `004_devis_details.sql` | Colonnes `objet/lignes/conditions_paiement/incoterms/pays_livraison` sur `devis` + `adresse/siret/tva_intra` sur `clients` |
+| `005_fournisseurs_complet.sql` | ALTER TABLE fournisseurs + 3 fournisseurs de test (Thanh Long Textile, Phu Quoc Foods, Menuiserie Bac Ha) |
+| `006_suivi_livraison.sql` | Tables `livraisons` + `livraison_events` |
+| `007_checklist_docs.sql` | Table `checklist_documents` + fonction `init_checklist_livraison(livraison_id, secteur, incoterm)` |
 
 **Pour injecter les données de test :**
 ```bash
 docker exec -i cnl_postgres psql -U cnl_user -d cnlsourcing < database/migrations/003_admin_test_data.sql
 docker exec -i cnl_postgres psql -U cnl_user -d cnlsourcing < database/migrations/004_devis_details.sql
+docker exec -i cnl_postgres psql -U cnl_user -d cnlsourcing < database/migrations/005_fournisseurs_complet.sql
+docker exec -i cnl_postgres psql -U cnl_user -d cnlsourcing < database/migrations/006_suivi_livraison.sql
+docker exec -i cnl_postgres psql -U cnl_user -d cnlsourcing < database/migrations/007_checklist_docs.sql
 ```
 
 ---
@@ -110,7 +116,62 @@ N8N_ENCRYPTION_KEY=<32 bytes hex>
 
 ---
 
-### 5. Prochaines étapes identifiées
+### 5. Module Fournisseurs (session 2026-03-28)
+
+**Nouvelles colonnes** sur `fournisseurs` : `secteur`, `moq_min/unite`, `delai_production_min/max`, `incoterms_acceptes`, `contact_langue`, `region`, `note_delais`, `note_communication`, `note_fiabilite`, `nb_missions`, `derniere_mission_date`, `notes_terrain`.
+
+**API routes fournisseurs :**
+| Route | Méthode | Rôle |
+|-------|---------|------|
+| `/api/admin/fournisseurs` | GET | Liste avec filtres secteur/actif/note |
+| `/api/admin/fournisseurs` | POST | Créer un fournisseur |
+| `/api/admin/fournisseurs/[id]` | PATCH | Modifier |
+| `/api/admin/fournisseurs/[id]/noter` | POST | Note post-mission → recalcule `note_fiabilite` = moyenne 3 critères + incrémente `nb_missions` |
+
+**Onglet "Fournisseurs"** dans le dashboard :
+- Recherche + filtres secteur/actif
+- Cartes avec avatar coloré par secteur, étoiles, badges certifications, MOQ, délai
+- Modal add/edit complet (identification, production, contact, notes terrain)
+- Modal notation 3 étoiles (qualité, délais, communication) + notes terrain
+- Modal "Associer à une demande" (liste des demandes en cours)
+
+### 6. Module Livraisons (session 2026-03-28)
+
+**Nouvelles tables :** `livraisons` (statuts : en_production → expedie → en_transit → dedouanement → livre), `livraison_events`
+
+**API routes livraisons :**
+| Route | Méthode | Rôle |
+|-------|---------|------|
+| `/api/admin/livraisons` | GET | Liste (hors livré > 30j) avec stats checklist |
+| `/api/admin/livraisons` | POST | Créer + appel `init_checklist_livraison()` auto |
+| `/api/admin/livraisons/[id]/statut` | PATCH | Changer statut + event + Telegram si livré + Brevo si expédié/livré |
+
+**Onglet "Livraisons"** dans le dashboard :
+- Timeline visuelle 5 étapes colorée
+- Badge retard si date estimée dépassée
+- Checklist documentaire (cases à cocher, barre progression, alerte obligatoire < 7j)
+- Modal création livraison (demande, fournisseur, transport, dates, tracking, marchandise)
+- Modal changement de statut
+
+### 7. Module Checklist documentaire
+
+**Table `checklist_documents`** + **fonction PostgreSQL `init_checklist_livraison()`** qui insère les docs selon secteur et incoterm.
+
+**API routes :**
+| Route | Méthode | Rôle |
+|-------|---------|------|
+| `/api/admin/checklist/[id]` | GET | Liste des docs d'une livraison |
+| `/api/admin/checklist/[id]` | PATCH | Marquer obtenu/non obtenu |
+
+### 8. Intégration globale
+
+- Onglet Demandes : bouton "Démarrer la livraison" si un devis est accepté → bascule sur onglet Livraisons avec demande pré-sélectionnée
+- Onglet Devis : bouton "Créer la livraison" sur les devis acceptés
+- Onglet Livraisons → quand livraison passe à `livre` : Telegram Anna + email Brevo client
+
+---
+
+### 9. Prochaines étapes identifiées
 
 - [ ] Configurer DNS cnlsourcing.com → 51.158.109.135 puis lancer `./deploy.sh`
 - [ ] Phase 2 : génération PDF devis (bouton placeholder déjà présent)

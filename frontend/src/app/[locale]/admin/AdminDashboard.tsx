@@ -99,6 +99,71 @@ interface CoutsMois {
   pct_sonnet:     number;
 }
 
+interface Fournisseur {
+  id:                   string;
+  nom:                  string;
+  secteur:              string | null;
+  ville:                string | null;
+  region:               string | null;
+  pays:                 string;
+  certifications:       string[];
+  moq_min:              number | null;
+  moq_unite:            string | null;
+  delai_production_min: number | null;
+  delai_production_max: number | null;
+  incoterms_acceptes:   string[];
+  contact_nom:          string | null;
+  contact_tel:          string | null;
+  contact_email:        string | null;
+  contact_langue:       string;
+  note_qualite:         number | null;
+  note_delais:          number | null;
+  note_communication:   number | null;
+  note_fiabilite:       number | null;
+  nb_missions:          number;
+  derniere_mission_date: string | null;
+  notes_terrain:        string | null;
+  actif:                boolean;
+}
+
+interface Livraison {
+  id:                   string;
+  demande_id:           string | null;
+  fournisseur_id:       string | null;
+  client_id:            string | null;
+  mode_transport:       string | null;
+  incoterm:             string | null;
+  transitaire:          string | null;
+  date_expedition:      string | null;
+  date_arrivee_estimee: string | null;
+  date_arrivee_reelle:  string | null;
+  numero_tracking:      string | null;
+  statut:               string;
+  port_depart:          string | null;
+  port_arrivee:         string | null;
+  poids_kg:             number | null;
+  volume_m3:            number | null;
+  valeur_marchandise:   number | null;
+  devise:               string;
+  notes:                string | null;
+  date_creation:        string;
+  fournisseur_nom:      string | null;
+  client_nom:           string | null;
+  demande_titre:        string | null;
+  docs_total:           number;
+  docs_obtenus:         number;
+}
+
+interface ChecklistDoc {
+  id:             string;
+  livraison_id:   string;
+  type_doc:       string;
+  obligatoire:    boolean;
+  obtenu:         boolean;
+  date_obtention: string | null;
+  notes:          string | null;
+}
+
 interface DashboardData {
   kpis:       KPIs;
   demandes:   Demande[];
@@ -198,9 +263,13 @@ function Toast({ msg, type }: { msg: string; type: "ok" | "err" }) {
 function OngletDemandes({
   demandes,
   onCreateDevis,
+  devisAcceptes,
+  onDemarrerLivraison,
 }: {
-  demandes: Demande[];
-  onCreateDevis: (demandeId: string) => Promise<void>;
+  demandes:            Demande[];
+  onCreateDevis:       (demandeId: string) => Promise<void>;
+  devisAcceptes:       Record<string, string>;
+  onDemarrerLivraison: (demandeId: string) => void;
 }) {
   const [modal,      setModal]      = useState<Demande | null>(null);
   const [loadingIds, setLoadingIds] = useState<Set<string>>(new Set());
@@ -262,6 +331,14 @@ function OngletDemandes({
                 {loadingIds.has(d.id) ? <Spinner /> : null}
                 {loadingIds.has(d.id) ? "Création…" : "Créer le devis"}
               </button>
+              {devisAcceptes[d.id] && (
+                <button
+                  onClick={() => onDemarrerLivraison(d.id)}
+                  style={{ ...btnPrimary, backgroundColor: "#2980B9" }}
+                >
+                  Démarrer la livraison
+                </button>
+              )}
             </div>
           </div>
         ))}
@@ -344,10 +421,12 @@ function OngletDevis({
   devis,
   onEnvoyer,
   onRefresh,
+  onCreerLivraison,
 }: {
-  devis:     Devis[];
-  onEnvoyer: (devisId: string) => Promise<void>;
-  onRefresh: () => void;
+  devis:            Devis[];
+  onEnvoyer:        (devisId: string) => Promise<void>;
+  onRefresh:        () => void;
+  onCreerLivraison: (demandeId: string) => void;
 }) {
   const [modal,       setModal]       = useState<Devis | null>(null);
   const [lignes,      setLignes]      = useState<LigneDevis[]>([]);
@@ -442,6 +521,14 @@ function OngletDevis({
               {d.statut === "brouillon" && (
                 <button onClick={() => { openModal(d); }} style={btnPrimary}>
                   Envoyer au client
+                </button>
+              )}
+              {d.statut === "accepté" && (
+                <button
+                  onClick={() => onCreerLivraison(d.demande_id)}
+                  style={{ ...btnPrimary, backgroundColor: "#2980B9" }}
+                >
+                  Créer la livraison
                 </button>
               )}
             </div>
@@ -827,6 +914,764 @@ function OngletCoutsIA({ couts }: { couts: CoutsMois }) {
   );
 }
 
+// ─── StarRating ───────────────────────────────────────────────────────────────
+
+function StarRating({ value, onChange }: { value: number; onChange: (n: number) => void }) {
+  return (
+    <div style={{ display: "flex", gap: "4px" }}>
+      {[1, 2, 3, 4, 5].map(n => (
+        <button
+          key={n} onClick={() => onChange(n)}
+          style={{ background: "none", border: "none", cursor: "pointer", fontSize: "28px", padding: "0 2px", color: n <= value ? "#F59E0B" : "#ddd" }}
+        >★</button>
+      ))}
+    </div>
+  );
+}
+
+// ─── Onglet Fournisseurs ──────────────────────────────────────────────────────
+
+const SECTEUR_COLORS: Record<string, string> = {
+  textile: "#8B5CF6", "agro-alimentaire": "#10B981", agro: "#10B981",
+  artisanat: "#F59E0B", electronique: "#3B82F6", cosmetique: "#EC4899", meuble: "#6B7280",
+};
+
+function getSecteurColor(secteur: string | null) {
+  if (!secteur) return "#999";
+  return SECTEUR_COLORS[secteur.toLowerCase()] ?? "#2980B9";
+}
+
+function getInitiales(nom: string) {
+  return nom.split(" ").map(w => w[0] ?? "").join("").toUpperCase().slice(0, 2);
+}
+
+function OngletFournisseurs({
+  fournisseurs,
+  demandes,
+  onRefresh,
+  onShowToast,
+}: {
+  fournisseurs: Fournisseur[];
+  demandes:     Demande[];
+  onRefresh:    () => void;
+  onShowToast:  (msg: string, type: "ok" | "err") => void;
+}) {
+  const [search,        setSearch]        = useState("");
+  const [filterSecteur, setFilterSecteur] = useState("");
+  const [filterActif,   setFilterActif]   = useState<"actif" | "inactif" | "tous">("actif");
+  const [editModal,     setEditModal]     = useState<Fournisseur | "new" | null>(null);
+  const [notationModal, setNotationModal] = useState<Fournisseur | null>(null);
+  const [associerModal, setAssocierModal] = useState<Fournisseur | null>(null);
+  const [saving,        setSaving]        = useState(false);
+
+  // Form add/edit
+  const emptyForm = { nom: "", secteur: "", ville: "", region: "", pays: "Vietnam",
+    certifications: "", moq_min: "", moq_unite: "pièces",
+    delai_production_min: "", delai_production_max: "",
+    incoterms_acceptes: "", contact_nom: "", contact_tel: "",
+    contact_email: "", contact_langue: "vi", notes_terrain: "", actif: true };
+  const [form, setForm] = useState(emptyForm);
+
+  // Form notation
+  const [noteQualite, setNoteQualite] = useState(3);
+  const [noteDelais,  setNoteDelais]  = useState(3);
+  const [noteComm,    setNoteComm]    = useState(3);
+  const [notesTerr,   setNotesTerr]   = useState("");
+
+  function openEdit(f: Fournisseur | "new") {
+    if (f === "new") {
+      setForm(emptyForm);
+    } else {
+      setForm({
+        nom: f.nom, secteur: f.secteur ?? "", ville: f.ville ?? "",
+        region: f.region ?? "", pays: f.pays,
+        certifications: (f.certifications ?? []).join(", "),
+        moq_min: f.moq_min ? String(f.moq_min) : "", moq_unite: f.moq_unite ?? "pièces",
+        delai_production_min: f.delai_production_min ? String(f.delai_production_min) : "",
+        delai_production_max: f.delai_production_max ? String(f.delai_production_max) : "",
+        incoterms_acceptes: (f.incoterms_acceptes ?? []).join(", "),
+        contact_nom: f.contact_nom ?? "", contact_tel: f.contact_tel ?? "",
+        contact_email: f.contact_email ?? "", contact_langue: f.contact_langue ?? "vi",
+        notes_terrain: f.notes_terrain ?? "", actif: f.actif,
+      });
+    }
+    setEditModal(f);
+  }
+
+  function openNotation(f: Fournisseur) {
+    setNoteQualite(Math.round(f.note_qualite ?? 3));
+    setNoteDelais(Math.round(f.note_delais ?? 3));
+    setNoteComm(Math.round(f.note_communication ?? 3));
+    setNotesTerr(f.notes_terrain ?? "");
+    setNotationModal(f);
+  }
+
+  async function handleSave() {
+    if (!form.nom) { onShowToast("Le nom est requis", "err"); return; }
+    setSaving(true);
+    try {
+      const body = {
+        nom: form.nom, secteur: form.secteur || null, ville: form.ville || null,
+        region: form.region || null, pays: form.pays,
+        certifications: form.certifications ? form.certifications.split(",").map(s => s.trim()).filter(Boolean) : [],
+        moq_min: form.moq_min ? parseInt(form.moq_min) : null, moq_unite: form.moq_unite || null,
+        delai_production_min: form.delai_production_min ? parseInt(form.delai_production_min) : null,
+        delai_production_max: form.delai_production_max ? parseInt(form.delai_production_max) : null,
+        incoterms_acceptes: form.incoterms_acceptes ? form.incoterms_acceptes.split(",").map(s => s.trim()).filter(Boolean) : [],
+        contact_nom: form.contact_nom || null, contact_tel: form.contact_tel || null,
+        contact_email: form.contact_email || null, contact_langue: form.contact_langue,
+        notes_terrain: form.notes_terrain || null, actif: form.actif,
+      };
+      const isNew = editModal === "new";
+      const url    = isNew ? "/api/admin/fournisseurs" : `/api/admin/fournisseurs/${(editModal as Fournisseur).id}`;
+      const method = isNew ? "POST" : "PATCH";
+      const res    = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      const json   = await res.json();
+      if (!res.ok) { onShowToast(json.error || "Erreur", "err"); return; }
+      onShowToast(isNew ? "Fournisseur créé" : "Fournisseur mis à jour", "ok");
+      setEditModal(null);
+      onRefresh();
+    } finally { setSaving(false); }
+  }
+
+  async function handleNotation() {
+    if (!notationModal) return;
+    setSaving(true);
+    try {
+      const res  = await fetch(`/api/admin/fournisseurs/${notationModal.id}/noter`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ note_qualite: noteQualite, note_delais: noteDelais, note_communication: noteComm, notes_terrain: notesTerr || null }),
+      });
+      const json = await res.json();
+      if (!res.ok) { onShowToast(json.error || "Erreur", "err"); return; }
+      onShowToast("Notation enregistrée", "ok");
+      setNotationModal(null);
+      onRefresh();
+    } finally { setSaving(false); }
+  }
+
+  const secteurs = Array.from(new Set(fournisseurs.map(f => f.secteur).filter((s): s is string => !!s)));
+  const filtered = fournisseurs.filter(f => {
+    if (filterActif === "actif"   && !f.actif) return false;
+    if (filterActif === "inactif" &&  f.actif) return false;
+    if (filterSecteur && f.secteur !== filterSecteur) return false;
+    if (search && !f.nom.toLowerCase().includes(search.toLowerCase())) return false;
+    return true;
+  });
+
+  return (
+    <>
+      {/* Recherche + filtres */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "12px" }}>
+        <input value={search} onChange={e => setSearch(e.target.value)}
+          placeholder="Rechercher un fournisseur…" style={{ ...inputStyle, backgroundColor: "#fff" }} />
+        <div style={{ display: "flex", gap: "8px" }}>
+          <select value={filterSecteur} onChange={e => setFilterSecteur(e.target.value)}
+            style={{ ...inputStyle, flex: 1, padding: "8px 10px" }}>
+            <option value="">Tous secteurs</option>
+            {secteurs.map(s => <option key={s} value={s}>{s}</option>)}
+          </select>
+          <select value={filterActif} onChange={e => setFilterActif(e.target.value as "actif" | "inactif" | "tous")}
+            style={{ ...inputStyle, flex: 1, padding: "8px 10px" }}>
+            <option value="actif">Actifs</option>
+            <option value="inactif">Inactifs</option>
+            <option value="tous">Tous</option>
+          </select>
+        </div>
+        <button onClick={() => openEdit("new")} style={{ ...btnPrimary, justifyContent: "center" }}>
+          + Ajouter un fournisseur
+        </button>
+      </div>
+
+      {filtered.length === 0 && <EmptyState message="Aucun fournisseur trouvé" />}
+
+      <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+        {filtered.map(f => (
+          <div key={f.id} style={cardStyle}>
+            {/* En-tête */}
+            <div style={{ display: "flex", gap: "12px", alignItems: "flex-start", marginBottom: "10px" }}>
+              <div style={{
+                width: "44px", height: "44px", borderRadius: "12px", flexShrink: 0,
+                backgroundColor: getSecteurColor(f.secteur),
+                display: "flex", alignItems: "center", justifyContent: "center",
+                color: "#fff", fontWeight: 800, fontSize: "15px",
+              }}>
+                {getInitiales(f.nom)}
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <p style={{ margin: 0, fontWeight: 700, fontSize: "15px", color: "#1a1a1a" }}>{f.nom}</p>
+                <p style={{ margin: "2px 0 0", fontSize: "12px", color: "#888" }}>
+                  {[f.ville, f.pays].filter(Boolean).join(", ")}
+                </p>
+              </div>
+              {f.note_fiabilite !== null && (
+                <div style={{ fontSize: "13px", color: "#F59E0B", whiteSpace: "nowrap", textAlign: "right" }}>
+                  {"★".repeat(Math.round(f.note_fiabilite))}{"☆".repeat(5 - Math.round(f.note_fiabilite))}
+                  <p style={{ margin: "1px 0 0", fontSize: "10px", color: "#aaa" }}>{f.nb_missions} mission{f.nb_missions !== 1 ? "s" : ""}</p>
+                </div>
+              )}
+            </div>
+
+            {/* Tags */}
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "5px", marginBottom: "8px" }}>
+              {f.secteur && <Tag>{f.secteur}</Tag>}
+              {(f.certifications ?? []).map(c => (
+                <span key={c} style={{ backgroundColor: "#EFF6FF", color: "#2563EB", padding: "2px 8px", borderRadius: "20px", fontSize: "11px", fontWeight: 700 }}>{c}</span>
+              ))}
+              {f.moq_min ? <Tag>MOQ {f.moq_min} {f.moq_unite ?? ""}</Tag> : null}
+              {(f.delai_production_min || f.delai_production_max) && (
+                <Tag>{f.delai_production_min ?? "?"}-{f.delai_production_max ?? "?"}j prod.</Tag>
+              )}
+              {f.derniere_mission_date && <Tag>Dernière mission : {dateStr(f.derniere_mission_date)}</Tag>}
+            </div>
+
+            {f.notes_terrain && (
+              <p style={{ fontSize: "12px", color: "#666", margin: "0 0 8px", lineHeight: "1.5", fontStyle: "italic" }}>
+                {f.notes_terrain}
+              </p>
+            )}
+
+            {/* Boutons */}
+            <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+              <button onClick={() => openEdit(f)} style={btnSecondary}>Modifier</button>
+              <button onClick={() => openNotation(f)} style={{ ...btnSecondary, color: "#F59E0B" }}>★ Noter</button>
+              <button onClick={() => setAssocierModal(f)} style={{ ...btnSecondary, fontSize: "13px" }}>Associer demande</button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* ── Modal Add/Edit ──────────────────────────────────────────── */}
+      {editModal !== null && (
+        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1000, display: "flex", alignItems: "flex-end" }}
+          onClick={() => setEditModal(null)}>
+          <div style={{ backgroundColor: "#f5f5f5", width: "100%", borderRadius: "20px 20px 0 0", maxHeight: "92vh", overflowY: "auto" }}
+            onClick={e => e.stopPropagation()}>
+            <div style={{ backgroundColor: RED, color: "#fff", padding: "16px 20px", borderRadius: "20px 20px 0 0", display: "flex", justifyContent: "space-between", alignItems: "center", flexShrink: 0 }}>
+              <p style={{ margin: 0, fontWeight: 800, fontSize: "16px" }}>
+                {editModal === "new" ? "Nouveau fournisseur" : `Modifier — ${(editModal as Fournisseur).nom}`}
+              </p>
+              <button onClick={() => setEditModal(null)} style={{ background: "rgba(255,255,255,0.2)", border: "none", borderRadius: "8px", padding: "6px 10px", fontSize: "16px", cursor: "pointer", color: "#fff" }}>✕</button>
+            </div>
+            <div style={{ padding: "16px", display: "flex", flexDirection: "column", gap: "12px" }}>
+              <Section titre="Identification">
+                <label style={fieldLabel}>Nom *</label>
+                <input value={form.nom} onChange={e => setForm(p => ({ ...p, nom: e.target.value }))} placeholder="Ex: Thanh Long Textile" style={{ ...inputStyle, marginBottom: "8px" }} />
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginBottom: "8px" }}>
+                  <div><label style={fieldLabel}>Secteur</label>
+                    <input value={form.secteur} onChange={e => setForm(p => ({ ...p, secteur: e.target.value }))} placeholder="textile, agro…" style={inputStyle} /></div>
+                  <div><label style={fieldLabel}>Pays</label>
+                    <input value={form.pays} onChange={e => setForm(p => ({ ...p, pays: e.target.value }))} style={inputStyle} /></div>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginBottom: "8px" }}>
+                  <div><label style={fieldLabel}>Ville</label>
+                    <input value={form.ville} onChange={e => setForm(p => ({ ...p, ville: e.target.value }))} placeholder="Hanoï" style={inputStyle} /></div>
+                  <div><label style={fieldLabel}>Région</label>
+                    <input value={form.region} onChange={e => setForm(p => ({ ...p, region: e.target.value }))} placeholder="Nord" style={inputStyle} /></div>
+                </div>
+                <label style={fieldLabel}>Certifications (séparées par virgules)</label>
+                <input value={form.certifications} onChange={e => setForm(p => ({ ...p, certifications: e.target.value }))} placeholder="ISO9001, HACCP, BIO…" style={{ ...inputStyle, marginBottom: "8px" }} />
+                <label style={fieldLabel}>Incoterms acceptés</label>
+                <input value={form.incoterms_acceptes} onChange={e => setForm(p => ({ ...p, incoterms_acceptes: e.target.value }))} placeholder="FOB, EXW, CIF…" style={inputStyle} />
+              </Section>
+
+              <Section titre="Production">
+                <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: "8px", marginBottom: "8px" }}>
+                  <div><label style={fieldLabel}>MOQ minimum</label>
+                    <input type="number" min="0" value={form.moq_min} onChange={e => setForm(p => ({ ...p, moq_min: e.target.value }))} style={inputStyle} /></div>
+                  <div><label style={fieldLabel}>Unité</label>
+                    <input value={form.moq_unite} onChange={e => setForm(p => ({ ...p, moq_unite: e.target.value }))} placeholder="pièces" style={inputStyle} /></div>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
+                  <div><label style={fieldLabel}>Délai min (jours)</label>
+                    <input type="number" min="0" value={form.delai_production_min} onChange={e => setForm(p => ({ ...p, delai_production_min: e.target.value }))} style={inputStyle} /></div>
+                  <div><label style={fieldLabel}>Délai max (jours)</label>
+                    <input type="number" min="0" value={form.delai_production_max} onChange={e => setForm(p => ({ ...p, delai_production_max: e.target.value }))} style={inputStyle} /></div>
+                </div>
+              </Section>
+
+              <Section titre="Contact">
+                <label style={fieldLabel}>Nom du contact</label>
+                <input value={form.contact_nom} onChange={e => setForm(p => ({ ...p, contact_nom: e.target.value }))} style={{ ...inputStyle, marginBottom: "8px" }} />
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginBottom: "8px" }}>
+                  <div><label style={fieldLabel}>Téléphone / WhatsApp</label>
+                    <input value={form.contact_tel} onChange={e => setForm(p => ({ ...p, contact_tel: e.target.value }))} style={inputStyle} /></div>
+                  <div><label style={fieldLabel}>Langue</label>
+                    <select value={form.contact_langue} onChange={e => setForm(p => ({ ...p, contact_langue: e.target.value }))} style={{ ...inputStyle, padding: "10px 8px" }}>
+                      <option value="vi">Vietnamien</option>
+                      <option value="en">Anglais</option>
+                      <option value="fr">Français</option>
+                      <option value="zh">Chinois</option>
+                    </select></div>
+                </div>
+                <label style={fieldLabel}>Email</label>
+                <input type="email" value={form.contact_email} onChange={e => setForm(p => ({ ...p, contact_email: e.target.value }))} style={inputStyle} />
+              </Section>
+
+              <Section titre="Notes terrain">
+                <textarea value={form.notes_terrain} onChange={e => setForm(p => ({ ...p, notes_terrain: e.target.value }))}
+                  placeholder="Observations, points d'attention, retours de visite…" rows={3} style={textareaStyle} />
+                <label style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "10px", fontSize: "14px", color: "#444", cursor: "pointer" }}>
+                  <input type="checkbox" checked={form.actif} onChange={e => setForm(p => ({ ...p, actif: e.target.checked }))} />
+                  Fournisseur actif
+                </label>
+              </Section>
+
+              <div style={{ display: "flex", gap: "8px", paddingBottom: "8px" }}>
+                <button onClick={() => setEditModal(null)} style={{ ...btnSecondary, flex: 1, justifyContent: "center" }}>Annuler</button>
+                <button onClick={handleSave} disabled={saving || !form.nom}
+                  style={{ ...btnPrimary, flex: 2, justifyContent: "center", display: "flex", alignItems: "center", gap: "6px", opacity: (saving || !form.nom) ? 0.7 : 1 }}>
+                  {saving ? <Spinner /> : null}
+                  {saving ? "Sauvegarde…" : "Enregistrer"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Modal Notation ──────────────────────────────────────────── */}
+      {notationModal && (
+        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1001, display: "flex", alignItems: "flex-end" }}
+          onClick={() => setNotationModal(null)}>
+          <div style={{ backgroundColor: "#fff", width: "100%", borderRadius: "20px 20px 0 0", padding: "24px 20px 32px", maxHeight: "80vh", overflowY: "auto" }}
+            onClick={e => e.stopPropagation()}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "20px" }}>
+              <div>
+                <h3 style={{ margin: 0, fontSize: "17px", fontWeight: 700 }}>Noter la mission</h3>
+                <p style={{ margin: "4px 0 0", fontSize: "13px", color: "#888" }}>{notationModal.nom}</p>
+              </div>
+              <button onClick={() => setNotationModal(null)} style={{ background: "none", border: "none", fontSize: "20px", cursor: "pointer", color: "#888" }}>✕</button>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+              <div>
+                <label style={{ ...fieldLabel, marginBottom: "8px" }}>Qualité des produits</label>
+                <StarRating value={noteQualite} onChange={setNoteQualite} />
+              </div>
+              <div>
+                <label style={{ ...fieldLabel, marginBottom: "8px" }}>Respect des délais</label>
+                <StarRating value={noteDelais} onChange={setNoteDelais} />
+              </div>
+              <div>
+                <label style={{ ...fieldLabel, marginBottom: "8px" }}>Communication / réactivité</label>
+                <StarRating value={noteComm} onChange={setNoteComm} />
+              </div>
+              <div>
+                <label style={fieldLabel}>Notes terrain</label>
+                <textarea value={notesTerr} onChange={e => setNotesTerr(e.target.value)}
+                  placeholder="Observations pour la prochaine mission…" rows={3} style={textareaStyle} />
+              </div>
+            </div>
+            <div style={{ display: "flex", gap: "8px", marginTop: "20px" }}>
+              <button onClick={() => setNotationModal(null)} style={{ ...btnSecondary, flex: 1, justifyContent: "center" }}>Annuler</button>
+              <button onClick={handleNotation} disabled={saving}
+                style={{ ...btnPrimary, flex: 2, justifyContent: "center", display: "flex", alignItems: "center", gap: "6px", opacity: saving ? 0.7 : 1 }}>
+                {saving ? <Spinner /> : null}
+                {saving ? "Enregistrement…" : "Enregistrer la note"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Modal Associer à demande ─────────────────────────────────── */}
+      {associerModal && (
+        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1001, display: "flex", alignItems: "flex-end" }}
+          onClick={() => setAssocierModal(null)}>
+          <div style={{ backgroundColor: "#fff", width: "100%", borderRadius: "20px 20px 0 0", padding: "24px 20px 32px", maxHeight: "75vh", overflowY: "auto" }}
+            onClick={e => e.stopPropagation()}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "16px" }}>
+              <div>
+                <h3 style={{ margin: 0, fontSize: "17px", fontWeight: 700 }}>Associer à une demande</h3>
+                <p style={{ margin: "4px 0 0", fontSize: "13px", color: "#888" }}>{associerModal.nom}</p>
+              </div>
+              <button onClick={() => setAssocierModal(null)} style={{ background: "none", border: "none", fontSize: "20px", cursor: "pointer", color: "#888" }}>✕</button>
+            </div>
+            {demandes.filter(d => !["gagnée","perdue","annulée"].includes(d.statut)).length === 0
+              ? <EmptyState message="Aucune demande en cours" />
+              : demandes.filter(d => !["gagnée","perdue","annulée"].includes(d.statut)).map(d => (
+                <div key={d.id} style={{ ...cardStyle, marginBottom: "8px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div>
+                    <p style={{ margin: 0, fontWeight: 600, fontSize: "14px" }}>{d.titre}</p>
+                    <p style={{ margin: "2px 0 0", fontSize: "12px", color: "#888" }}>{d.client_nom} · {d.secteur || "—"}</p>
+                  </div>
+                  <button onClick={() => setAssocierModal(null)} style={{ ...btnPrimary, fontSize: "12px", padding: "6px 12px" }}>
+                    Sélectionner
+                  </button>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+// ─── Onglet Livraisons ────────────────────────────────────────────────────────
+
+const STATUTS_LIV = ["en_production", "expedie", "en_transit", "dedouanement", "livre"] as const;
+const STATUTS_LIV_LABELS: Record<string, string> = {
+  en_production: "Production", expedie: "Expédié",
+  en_transit: "Transit", dedouanement: "Dédouanement", livre: "Livré",
+};
+const MODES_TRANSPORT = ["maritime", "aerien", "groupage"];
+
+function LivraisonTimeline({ statut }: { statut: string }) {
+  const currentIdx = STATUTS_LIV.indexOf(statut as typeof STATUTS_LIV[number]);
+  return (
+    <div style={{ display: "flex", alignItems: "center", margin: "10px 0 6px" }}>
+      {STATUTS_LIV.map((step, idx) => (
+        <React.Fragment key={step}>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", flex: 1 }}>
+            <div style={{
+              width: "13px", height: "13px", borderRadius: "50%", flexShrink: 0,
+              backgroundColor: idx < currentIdx ? GREEN : idx === currentIdx ? RED : "#ddd",
+            }} />
+            <p style={{ margin: "3px 0 0", fontSize: "9px", color: idx === currentIdx ? RED : "#999", textAlign: "center", fontWeight: idx === currentIdx ? 700 : 400, lineHeight: "1.2" }}>
+              {STATUTS_LIV_LABELS[step]}
+            </p>
+          </div>
+          {idx < STATUTS_LIV.length - 1 && (
+            <div style={{ flex: 2, height: "2px", backgroundColor: idx < currentIdx ? GREEN : "#e0e0e0", marginBottom: "13px" }} />
+          )}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
+function OngletLivraisons({
+  livraisons,
+  fournisseurs,
+  demandes,
+  initDemandeId,
+  onClearInitDemande,
+  onRefresh,
+  onShowToast,
+}: {
+  livraisons:         Livraison[];
+  fournisseurs:       Fournisseur[];
+  demandes:           Demande[];
+  initDemandeId:      string | null;
+  onClearInitDemande: () => void;
+  onRefresh:          () => void;
+  onShowToast:        (msg: string, type: "ok" | "err") => void;
+}) {
+  const [modalCreate,   setModalCreate]   = useState(false);
+  const [modalStatut,   setModalStatut]   = useState<Livraison | null>(null);
+  const [checklist,     setChecklist]     = useState<Record<string, ChecklistDoc[]>>({});
+  const [newStatut,     setNewStatut]     = useState("");
+  const [loadingStatut, setLoadingStatut] = useState(false);
+  const [loadingCreate, setLoadingCreate] = useState(false);
+
+  const emptyForm = {
+    demande_id: "", fournisseur_id: "", mode_transport: "maritime",
+    incoterm: "FOB", transitaire: "", date_expedition: "", date_arrivee_estimee: "",
+    numero_tracking: "", port_depart: "Haiphong", port_arrivee: "Le Havre",
+    poids_kg: "", volume_m3: "", valeur_marchandise: "", devise: "EUR", notes: "",
+  };
+  const [form, setForm] = useState(emptyForm);
+
+  // Auto-ouvre le modal si initDemandeId est défini (depuis onglet Demandes/Devis)
+  useEffect(() => {
+    if (initDemandeId) {
+      setForm(p => ({ ...p, demande_id: initDemandeId }));
+      setModalCreate(true);
+      onClearInitDemande();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initDemandeId]);
+
+  async function loadChecklist(livraisonId: string) {
+    if (checklist[livraisonId]) return;
+    const res = await fetch(`/api/admin/checklist/${livraisonId}`);
+    if (res.ok) {
+      const json = await res.json();
+      setChecklist(p => ({ ...p, [livraisonId]: json.docs }));
+    }
+  }
+
+  async function handleToggleDoc(doc: ChecklistDoc) {
+    const res = await fetch(`/api/admin/checklist/${doc.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ obtenu: !doc.obtenu }),
+    });
+    if (res.ok) {
+      setChecklist(p => ({
+        ...p,
+        [doc.livraison_id]: (p[doc.livraison_id] ?? []).map(d =>
+          d.id === doc.id ? { ...d, obtenu: !d.obtenu, date_obtention: !d.obtenu ? new Date().toISOString() : null } : d
+        ),
+      }));
+    }
+  }
+
+  async function handleCreate() {
+    if (!form.demande_id) { onShowToast("Sélectionnez une demande", "err"); return; }
+    setLoadingCreate(true);
+    try {
+      const res = await fetch("/api/admin/livraisons", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          demande_id:          form.demande_id || null,
+          fournisseur_id:      form.fournisseur_id || null,
+          mode_transport:      form.mode_transport,
+          incoterm:            form.incoterm || null,
+          transitaire:         form.transitaire || null,
+          date_expedition:     form.date_expedition || null,
+          date_arrivee_estimee: form.date_arrivee_estimee || null,
+          numero_tracking:     form.numero_tracking || null,
+          port_depart:         form.port_depart || null,
+          port_arrivee:        form.port_arrivee || null,
+          poids_kg:            form.poids_kg ? parseFloat(form.poids_kg) : null,
+          volume_m3:           form.volume_m3 ? parseFloat(form.volume_m3) : null,
+          valeur_marchandise:  form.valeur_marchandise ? parseFloat(form.valeur_marchandise) : null,
+          devise:              form.devise,
+          notes:               form.notes || null,
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok) { onShowToast(json.error || "Erreur", "err"); return; }
+      onShowToast("Livraison créée — checklist initialisée", "ok");
+      setModalCreate(false);
+      setForm(emptyForm);
+      onRefresh();
+    } finally { setLoadingCreate(false); }
+  }
+
+  async function handleChangerStatut() {
+    if (!modalStatut || !newStatut) return;
+    setLoadingStatut(true);
+    try {
+      const res = await fetch(`/api/admin/livraisons/${modalStatut.id}/statut`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ statut: newStatut }),
+      });
+      const json = await res.json();
+      if (!res.ok) { onShowToast(json.error || "Erreur", "err"); return; }
+      onShowToast(`Statut : ${STATUTS_LIV_LABELS[newStatut]}`, "ok");
+      setModalStatut(null);
+      onRefresh();
+    } finally { setLoadingStatut(false); }
+  }
+
+  function isRetard(l: Livraison) {
+    return !!(l.date_arrivee_estimee && !l.date_arrivee_reelle && l.statut !== "livre" &&
+      new Date(l.date_arrivee_estimee) < new Date());
+  }
+
+  return (
+    <>
+      <button onClick={() => { setForm(emptyForm); setModalCreate(true); }}
+        style={{ ...btnPrimary, justifyContent: "center", marginBottom: "12px", width: "100%" }}>
+        + Nouvelle livraison
+      </button>
+
+      {livraisons.length === 0 && <EmptyState message="Aucune livraison en cours" />}
+
+      <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+        {livraisons.map(l => (
+          <div key={l.id} style={{ ...cardStyle, borderTop: isRetard(l) ? `3px solid ${RED}` : "3px solid transparent" }}>
+            {/* En-tête */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "2px" }}>
+              <div>
+                <p style={{ margin: 0, fontWeight: 700, fontSize: "15px" }}>
+                  {l.fournisseur_nom ?? "Fournisseur inconnu"}
+                  {l.mode_transport && <span style={{ marginLeft: "6px", fontSize: "12px", color: "#888", fontWeight: 400 }}>({l.mode_transport})</span>}
+                </p>
+                <p style={{ margin: "2px 0 0", fontSize: "12px", color: "#888" }}>
+                  {[l.client_nom, l.demande_titre].filter(Boolean).join(" · ")}
+                </p>
+              </div>
+              {isRetard(l) && (
+                <span style={{ backgroundColor: RED, color: "#fff", padding: "2px 8px", borderRadius: "20px", fontSize: "11px", fontWeight: 700, whiteSpace: "nowrap" }}>Retard</span>
+              )}
+            </div>
+
+            <LivraisonTimeline statut={l.statut} />
+
+            {/* Infos */}
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "5px", marginBottom: "8px" }}>
+              {l.numero_tracking && <Tag>Track: {l.numero_tracking}</Tag>}
+              {l.incoterm && <Tag>{l.incoterm}</Tag>}
+              {l.date_arrivee_estimee && <Tag>Estimée : {dateStr(l.date_arrivee_estimee)}</Tag>}
+              {l.date_arrivee_reelle && (
+                <span style={{ backgroundColor: "#f0faf4", color: GREEN, padding: "2px 8px", borderRadius: "20px", fontSize: "12px", fontWeight: 600 }}>
+                  Livré le {dateStr(l.date_arrivee_reelle)}
+                </span>
+              )}
+            </div>
+
+            {/* Checklist */}
+            {checklist[l.id] ? (
+              <div style={{ borderTop: "1px solid #f0f0f0", paddingTop: "8px", marginBottom: "8px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
+                  <p style={{ margin: 0, fontSize: "11px", fontWeight: 700, color: "#888" }}>DOCUMENTS</p>
+                  <span style={{ fontSize: "11px", fontWeight: 700, color: checklist[l.id].some(d => d.obligatoire && !d.obtenu) ? RED : GREEN }}>
+                    {checklist[l.id].filter(d => d.obtenu).length}/{checklist[l.id].length} obtenus
+                  </span>
+                </div>
+                <div style={{ backgroundColor: "#f0f0f0", borderRadius: "20px", height: "5px", overflow: "hidden", marginBottom: "6px" }}>
+                  <div style={{
+                    width: `${Math.round(checklist[l.id].filter(d => d.obtenu).length / checklist[l.id].length * 100)}%`,
+                    height: "100%", backgroundColor: GREEN, borderRadius: "20px",
+                  }} />
+                </div>
+                {checklist[l.id].map(doc => {
+                  const alerteDoc = doc.obligatoire && !doc.obtenu && l.date_expedition &&
+                    new Date(l.date_expedition).getTime() - Date.now() < 7 * 24 * 3600 * 1000;
+                  return (
+                    <label key={doc.id} style={{ display: "flex", alignItems: "center", gap: "8px", padding: "3px 0", cursor: "pointer" }}>
+                      <input type="checkbox" checked={doc.obtenu} onChange={() => handleToggleDoc(doc)} />
+                      <span style={{ fontSize: "12px", color: alerteDoc ? RED : doc.obtenu ? "#bbb" : "#444", textDecoration: doc.obtenu ? "line-through" : "none", fontWeight: alerteDoc ? 700 : 400 }}>
+                        {doc.type_doc.replace(/_/g, " ")}
+                        {doc.obligatoire && !doc.obtenu && <span style={{ color: RED }}> *</span>}
+                      </span>
+                    </label>
+                  );
+                })}
+              </div>
+            ) : (
+              <button onClick={() => loadChecklist(l.id)} style={{ ...btnSecondary, fontSize: "12px", padding: "6px 12px", marginBottom: "8px" }}>
+                Voir les documents ({l.docs_obtenus}/{l.docs_total})
+              </button>
+            )}
+
+            {/* Actions */}
+            {l.statut !== "livre" && (
+              <button onClick={() => { setNewStatut(l.statut); setModalStatut(l); }} style={btnSecondary}>
+                Changer statut
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* ── Modal Créer livraison ──────────────────────────────────── */}
+      {modalCreate && (
+        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1000, display: "flex", alignItems: "flex-end" }}
+          onClick={() => setModalCreate(false)}>
+          <div style={{ backgroundColor: "#f5f5f5", width: "100%", borderRadius: "20px 20px 0 0", maxHeight: "92vh", overflowY: "auto" }}
+            onClick={e => e.stopPropagation()}>
+            <div style={{ backgroundColor: RED, color: "#fff", padding: "16px 20px", borderRadius: "20px 20px 0 0", display: "flex", justifyContent: "space-between", alignItems: "center", flexShrink: 0 }}>
+              <p style={{ margin: 0, fontWeight: 800, fontSize: "16px" }}>Nouvelle livraison</p>
+              <button onClick={() => setModalCreate(false)} style={{ background: "rgba(255,255,255,0.2)", border: "none", borderRadius: "8px", padding: "6px 10px", fontSize: "16px", cursor: "pointer", color: "#fff" }}>✕</button>
+            </div>
+            <div style={{ padding: "16px", display: "flex", flexDirection: "column", gap: "12px" }}>
+              <Section titre="Demande & Fournisseur">
+                <label style={fieldLabel}>Demande *</label>
+                <select value={form.demande_id} onChange={e => setForm(p => ({ ...p, demande_id: e.target.value }))}
+                  style={{ ...inputStyle, marginBottom: "8px", padding: "10px 8px" }}>
+                  <option value="">— Sélectionner —</option>
+                  {demandes.map(d => <option key={d.id} value={d.id}>{d.titre} ({d.client_nom})</option>)}
+                </select>
+                <label style={fieldLabel}>Fournisseur</label>
+                <select value={form.fournisseur_id} onChange={e => setForm(p => ({ ...p, fournisseur_id: e.target.value }))}
+                  style={{ ...inputStyle, padding: "10px 8px" }}>
+                  <option value="">— Sélectionner —</option>
+                  {fournisseurs.filter(f => f.actif).map(f => <option key={f.id} value={f.id}>{f.nom} ({f.ville ?? f.pays})</option>)}
+                </select>
+              </Section>
+
+              <Section titre="Transport">
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginBottom: "8px" }}>
+                  <div><label style={fieldLabel}>Mode</label>
+                    <select value={form.mode_transport} onChange={e => setForm(p => ({ ...p, mode_transport: e.target.value }))}
+                      style={{ ...inputStyle, padding: "10px 8px" }}>
+                      {MODES_TRANSPORT.map(m => <option key={m} value={m}>{m}</option>)}
+                    </select></div>
+                  <div><label style={fieldLabel}>Incoterm</label>
+                    <select value={form.incoterm} onChange={e => setForm(p => ({ ...p, incoterm: e.target.value }))}
+                      style={{ ...inputStyle, padding: "10px 8px" }}>
+                      {INCOTERMS_OPTIONS.map(i => <option key={i} value={i}>{i}</option>)}
+                    </select></div>
+                </div>
+                <label style={fieldLabel}>Transitaire</label>
+                <input value={form.transitaire} onChange={e => setForm(p => ({ ...p, transitaire: e.target.value }))}
+                  placeholder="Nom du transitaire" style={{ ...inputStyle, marginBottom: "8px" }} />
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
+                  <div><label style={fieldLabel}>Port départ</label>
+                    <input value={form.port_depart} onChange={e => setForm(p => ({ ...p, port_depart: e.target.value }))} style={inputStyle} /></div>
+                  <div><label style={fieldLabel}>Port arrivée</label>
+                    <input value={form.port_arrivee} onChange={e => setForm(p => ({ ...p, port_arrivee: e.target.value }))} style={inputStyle} /></div>
+                </div>
+              </Section>
+
+              <Section titre="Dates & Tracking">
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginBottom: "8px" }}>
+                  <div><label style={fieldLabel}>Date expédition</label>
+                    <input type="date" value={form.date_expedition} onChange={e => setForm(p => ({ ...p, date_expedition: e.target.value }))} style={inputStyle} /></div>
+                  <div><label style={fieldLabel}>Arrivée estimée</label>
+                    <input type="date" value={form.date_arrivee_estimee} onChange={e => setForm(p => ({ ...p, date_arrivee_estimee: e.target.value }))} style={inputStyle} /></div>
+                </div>
+                <label style={fieldLabel}>Numéro de tracking</label>
+                <input value={form.numero_tracking} onChange={e => setForm(p => ({ ...p, numero_tracking: e.target.value }))}
+                  placeholder="Ex: COSU1234567890" style={inputStyle} />
+              </Section>
+
+              <Section titre="Marchandise">
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "8px" }}>
+                  <div><label style={fieldLabel}>Poids (kg)</label>
+                    <input type="number" min="0" step="0.1" value={form.poids_kg} onChange={e => setForm(p => ({ ...p, poids_kg: e.target.value }))} style={inputStyle} /></div>
+                  <div><label style={fieldLabel}>Volume (m³)</label>
+                    <input type="number" min="0" step="0.01" value={form.volume_m3} onChange={e => setForm(p => ({ ...p, volume_m3: e.target.value }))} style={inputStyle} /></div>
+                  <div><label style={fieldLabel}>Valeur (EUR)</label>
+                    <input type="number" min="0" step="0.01" value={form.valeur_marchandise} onChange={e => setForm(p => ({ ...p, valeur_marchandise: e.target.value }))} style={inputStyle} /></div>
+                </div>
+              </Section>
+
+              <div style={{ display: "flex", gap: "8px", paddingBottom: "8px" }}>
+                <button onClick={() => setModalCreate(false)} style={{ ...btnSecondary, flex: 1, justifyContent: "center" }}>Annuler</button>
+                <button onClick={handleCreate} disabled={loadingCreate}
+                  style={{ ...btnPrimary, flex: 2, justifyContent: "center", display: "flex", alignItems: "center", gap: "6px", opacity: loadingCreate ? 0.7 : 1 }}>
+                  {loadingCreate ? <Spinner /> : null}
+                  {loadingCreate ? "Création…" : "Créer la livraison"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Modal Changer statut ─────────────────────────────────────── */}
+      {modalStatut && (
+        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1001, display: "flex", alignItems: "flex-end" }}
+          onClick={() => setModalStatut(null)}>
+          <div style={{ backgroundColor: "#fff", width: "100%", borderRadius: "20px 20px 0 0", padding: "24px 20px 32px" }}
+            onClick={e => e.stopPropagation()}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "16px" }}>
+              <div>
+                <h3 style={{ margin: 0, fontSize: "17px", fontWeight: 700 }}>Changer le statut</h3>
+                <p style={{ margin: "4px 0 0", fontSize: "13px", color: "#888" }}>{modalStatut.fournisseur_nom ?? "Livraison"}</p>
+              </div>
+              <button onClick={() => setModalStatut(null)} style={{ background: "none", border: "none", fontSize: "20px", cursor: "pointer", color: "#888" }}>✕</button>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "16px" }}>
+              {STATUTS_LIV.map(s => (
+                <button key={s} onClick={() => setNewStatut(s)}
+                  style={{ ...btnSecondary, textAlign: "left", backgroundColor: newStatut === s ? RED : "#f2f2f2", color: newStatut === s ? "#fff" : "#444", padding: "12px 16px" }}>
+                  {STATUTS_LIV_LABELS[s]}
+                </button>
+              ))}
+            </div>
+            <button onClick={handleChangerStatut}
+              disabled={loadingStatut || !newStatut || newStatut === modalStatut.statut}
+              style={{ ...btnPrimary, width: "100%", justifyContent: "center", display: "flex", alignItems: "center", gap: "6px", opacity: (loadingStatut || !newStatut || newStatut === modalStatut.statut) ? 0.7 : 1 }}>
+              {loadingStatut ? <Spinner /> : null}
+              {loadingStatut ? "Mise à jour…" : "Confirmer"}
+            </button>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
 // ─── Micro-composants ─────────────────────────────────────────────────────────
 
 function Tag({ children }: { children: React.ReactNode }) {
@@ -904,7 +1749,7 @@ const labelStyle: React.CSSProperties = {
 
 // ─── Composant principal ──────────────────────────────────────────────────────
 
-const TABS = ["Demandes", "Devis", "Factures", "Coûts IA"] as const;
+const TABS = ["Demandes", "Devis", "Factures", "Fournisseurs", "Livraisons", "Coûts IA"] as const;
 type Tab = typeof TABS[number];
 
 export default function AdminDashboard() {
@@ -912,6 +1757,9 @@ export default function AdminDashboard() {
   const [loading,   setLoading]   = useState(true);
   const [activeTab, setActiveTab] = useState<Tab>("Demandes");
   const [toast,     setToast]     = useState<{ msg: string; type: "ok" | "err" } | null>(null);
+  const [fournisseurs,            setFournisseurs]            = useState<Fournisseur[]>([]);
+  const [livraisons,              setLivraisons]              = useState<Livraison[]>([]);
+  const [initLivraisonDemandeId,  setInitLivraisonDemandeId]  = useState<string | null>(null);
 
   function showToast(msg: string, type: "ok" | "err") {
     setToast({ msg, type });
@@ -930,7 +1778,21 @@ export default function AdminDashboard() {
     }
   }
 
-  useEffect(() => { fetchData(); }, []);
+  async function fetchFournisseurs() {
+    try {
+      const res = await fetch("/api/admin/fournisseurs");
+      if (res.ok) { const j = await res.json(); setFournisseurs(j.fournisseurs ?? []); }
+    } catch {}
+  }
+
+  async function fetchLivraisons() {
+    try {
+      const res = await fetch("/api/admin/livraisons");
+      if (res.ok) { const j = await res.json(); setLivraisons(j.livraisons ?? []); }
+    } catch {}
+  }
+
+  useEffect(() => { fetchData(); fetchFournisseurs(); fetchLivraisons(); }, []);
 
   // ── PWA — enregistrement Service Worker ───────────────────────────────────
   useEffect(() => {
@@ -1000,12 +1862,22 @@ export default function AdminDashboard() {
     }
   }
 
+  function handleDemarrerLivraison(demandeId: string) {
+    setInitLivraisonDemandeId(demandeId);
+    setActiveTab("Livraisons");
+  }
+
   // ── Calcul badge urgences ─────────────────────────────────────────────────
 
   const hasUrgent = data
     ? data.demandes.some(d => d.scoring_urgence >= 4) ||
       data.factures.some(f => f.en_retard)
     : false;
+
+  const devisAcceptes: Record<string, string> = {};
+  if (data) {
+    for (const d of data.devis) { if (d.statut === "accepté") devisAcceptes[d.demande_id] = d.id; }
+  }
 
   // ── Loading ───────────────────────────────────────────────────────────────
 
@@ -1103,9 +1975,11 @@ export default function AdminDashboard() {
           }}>
             {TABS.map(tab => {
               const active = activeTab === tab;
-              const count = tab === "Demandes" ? data.demandes.length
-                : tab === "Devis"    ? data.devis.length
-                : tab === "Factures" ? data.factures.length
+              const count = tab === "Demandes"     ? data.demandes.length
+                : tab === "Devis"        ? data.devis.length
+                : tab === "Factures"     ? data.factures.length
+                : tab === "Fournisseurs" ? fournisseurs.length
+                : tab === "Livraisons"   ? livraisons.length
                 : null;
               return (
                 <button
@@ -1143,13 +2017,42 @@ export default function AdminDashboard() {
 
           {/* ── Contenu onglets ────────────────────────────────────────────── */}
           {activeTab === "Demandes" && (
-            <OngletDemandes demandes={data.demandes} onCreateDevis={handleCreateDevis} />
+            <OngletDemandes
+              demandes={data.demandes}
+              onCreateDevis={handleCreateDevis}
+              devisAcceptes={devisAcceptes}
+              onDemarrerLivraison={handleDemarrerLivraison}
+            />
           )}
           {activeTab === "Devis" && (
-            <OngletDevis devis={data.devis} onEnvoyer={handleEnvoyerDevis} onRefresh={fetchData} />
+            <OngletDevis
+              devis={data.devis}
+              onEnvoyer={handleEnvoyerDevis}
+              onRefresh={fetchData}
+              onCreerLivraison={handleDemarrerLivraison}
+            />
           )}
           {activeTab === "Factures" && (
             <OngletFactures factures={data.factures} onRelancer={handleRelancer} />
+          )}
+          {activeTab === "Fournisseurs" && (
+            <OngletFournisseurs
+              fournisseurs={fournisseurs}
+              demandes={data.demandes}
+              onRefresh={fetchFournisseurs}
+              onShowToast={showToast}
+            />
+          )}
+          {activeTab === "Livraisons" && (
+            <OngletLivraisons
+              livraisons={livraisons}
+              fournisseurs={fournisseurs}
+              demandes={data.demandes}
+              initDemandeId={initLivraisonDemandeId}
+              onClearInitDemande={() => setInitLivraisonDemandeId(null)}
+              onRefresh={fetchLivraisons}
+              onShowToast={showToast}
+            />
           )}
           {activeTab === "Coûts IA" && (
             <OngletCoutsIA couts={data.couts_mois} />
