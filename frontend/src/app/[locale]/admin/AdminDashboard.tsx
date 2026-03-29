@@ -2,11 +2,26 @@
 
 import React, { useEffect, useState } from "react";
 
+interface EmailItem {
+  id:         string;
+  uid:        number;
+  from:       string;
+  from_email: string;
+  subject:    string;
+  date:       string;
+  snippet:    string;
+  body:       string;
+  seen:       boolean;
+  importance: number;
+  resume:     string;
+  action:     string;
+}
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface KPIs {
-  demandes_semaine:   number;
-  devis_brouillon:    number;
+  demandes_actives:   number;
+  devis_actifs:       number;
   paiements_attendus: number;
   ca_mois:            number;
 }
@@ -164,11 +179,40 @@ interface ChecklistDoc {
   notes:          string | null;
 }
 
+interface HistoriqueItem {
+  id:          string;
+  reference:   string;
+  statut:      string;
+  client_nom:  string;
+  client_prenom?: string;
+  titre?:       string;
+  demande_titre?: string;
+  montant_ttc?: number;
+  devise?:      string;
+  created_at?:  string;
+  updated_at?:  string;
+}
+
+interface DemandeContexte {
+  id:         string;
+  reference:  string;
+  titre:      string;
+  statut:     string;
+  secteur:    string | null;
+  client_nom: string;
+}
+
 interface DashboardData {
-  kpis:       KPIs;
-  demandes:   Demande[];
-  devis:      Devis[];
-  factures:   Facture[];
+  kpis:               KPIs;
+  demandes:           Demande[];
+  devis:              Devis[];
+  factures:           Facture[];
+  demandes_contexte:  DemandeContexte[];
+  historique: {
+    demandes: HistoriqueItem[];
+    devis:    HistoriqueItem[];
+    factures: HistoriqueItem[];
+  };
   couts_mois: CoutsMois;
 }
 
@@ -245,6 +289,120 @@ function Spinner() {
   );
 }
 
+// ─── RefinementBar ────────────────────────────────────────────────────────────
+// Permet à Anna de demander des modifications par texte ou par voix.
+
+function RefinementBar({
+  context,
+  content,
+  onRefined,
+  disabled,
+}: {
+  context:    "email" | "devis" | "general";
+  content:    string;
+  onRefined:  (newContent: string) => void;
+  disabled?:  boolean;
+}) {
+  const [instruction, setInstruction] = useState("");
+  const [loading,     setLoading]     = useState(false);
+  const [listening,   setListening]   = useState(false);
+
+  function startVoice() {
+    const SR = (window as unknown as Record<string, unknown>).SpeechRecognition
+            || (window as unknown as Record<string, unknown>).webkitSpeechRecognition;
+    if (!SR) { alert("Reconnaissance vocale non disponible sur ce navigateur."); return; }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const rec = new (SR as any)();
+    rec.lang = "fr-FR";
+    rec.continuous = false;
+    rec.interimResults = false;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    rec.onresult = (e: any) => {
+      const transcript = e.results?.[0]?.[0]?.transcript ?? "";
+      setInstruction(prev => (prev ? prev + " " : "") + transcript);
+    };
+    rec.onerror = () => setListening(false);
+    rec.onend   = () => setListening(false);
+    rec.start();
+    setListening(true);
+  }
+
+  async function handleRefine() {
+    if (!instruction.trim() || loading) return;
+    setLoading(true);
+    try {
+      const res = await fetch("/api/admin/ai-refine", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content, instruction: instruction.trim(), context }),
+      });
+      const json = await res.json();
+      if (json.refined) {
+        onRefined(json.refined);
+        setInstruction("");
+      }
+    } catch {}
+    setLoading(false);
+  }
+
+  return (
+    <div style={{ marginTop: "10px", backgroundColor: "#f8f8f8", borderRadius: "12px", padding: "10px 12px", border: "1.5px solid #e8e8e8" }}>
+      <p style={{ margin: "0 0 6px", fontSize: "11px", fontWeight: 800, color: "#888", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+        Demander une modification
+      </p>
+      <div style={{ display: "flex", gap: "6px", alignItems: "flex-end" }}>
+        <textarea
+          value={instruction}
+          onChange={e => setInstruction(e.target.value)}
+          onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleRefine(); } }}
+          placeholder={`ex : "Raccourcis le message" · "Mets l'accent sur le délai" · "Sois plus formel"`}
+          rows={2}
+          style={{
+            flex: 1, padding: "8px 10px",
+            border: "1.5px solid #e0e0e0", borderRadius: "8px",
+            fontSize: "13px", fontFamily: "inherit",
+            resize: "none", outline: "none",
+            backgroundColor: "#fff",
+          }}
+          disabled={disabled || loading}
+        />
+        <button
+          onClick={startVoice}
+          disabled={listening || loading || disabled}
+          title="Dicter une instruction"
+          style={{
+            width: "40px", height: "40px", borderRadius: "50%", border: "none", cursor: "pointer",
+            backgroundColor: listening ? RED : "#e8e8e8",
+            color: listening ? "#fff" : "#555",
+            fontSize: "18px", flexShrink: 0,
+            transition: "background-color 0.2s",
+          }}
+        >
+          🎤
+        </button>
+        <button
+          onClick={handleRefine}
+          disabled={!instruction.trim() || loading || disabled}
+          style={{
+            ...btnPrimary,
+            padding: "0 14px", height: "40px", flexShrink: 0,
+            opacity: (!instruction.trim() || loading || disabled) ? 0.5 : 1,
+            display: "flex", alignItems: "center", gap: "6px",
+          }}
+        >
+          {loading ? <><Spinner /> Modification…</> : "Modifier ↵"}
+        </button>
+      </div>
+      {listening && (
+        <p style={{ margin: "6px 0 0", fontSize: "12px", color: RED, fontWeight: 600 }}>
+          ● Écoute en cours… (parlez maintenant)
+        </p>
+      )}
+    </div>
+  );
+
+}
+
 function Toast({ msg, type }: { msg: string; type: "ok" | "err" }) {
   return (
     <div style={{
@@ -260,19 +418,233 @@ function Toast({ msg, type }: { msg: string; type: "ok" | "err" }) {
 
 // ─── Onglet Demandes ──────────────────────────────────────────────────────────
 
+// ─── Onglet Emails ───────────────────────────────────────────────────────────
+
+const IMPORT_COLORS: Record<number, string> = { 5: "#C0392B", 4: "#E67E22", 3: "#2980B9", 2: "#888", 1: "#bbb" };
+const IMPORT_LABELS: Record<number, string> = { 5: "Urgent", 4: "Important", 3: "Normal", 2: "Info", 1: "Auto" };
+
+function OngletEmails({
+  emails,
+  loading,
+  onRefresh,
+}: {
+  emails:    EmailItem[];
+  loading:   boolean;
+  onRefresh: () => void;
+}) {
+  const [selected,    setSelected]    = useState<EmailItem | null>(null);
+  const [draft,       setDraft]       = useState("");
+  const [drafting,    setDrafting]    = useState(false);
+  const [sending,     setSending]     = useState(false);
+  const [sentIds,     setSentIds]     = useState<Set<string>>(new Set());
+  const [filter,      setFilter]      = useState<"all" | "unread" | "important">("all");
+
+  const visible = emails.filter(e => {
+    if (filter === "unread")    return !e.seen;
+    if (filter === "important") return e.importance >= 4;
+    return true;
+  });
+
+  async function handleGenerateDraft(e: EmailItem) {
+    setDrafting(true);
+    setDraft("");
+    try {
+      const res = await fetch("/api/admin/emails/draft", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ from: e.from, subject: e.subject, body: e.body }),
+      });
+      const json = await res.json();
+      setDraft(json.draft ?? "");
+    } catch {}
+    setDrafting(false);
+  }
+
+  async function handleSend(e: EmailItem) {
+    if (!draft.trim()) return;
+    setSending(true);
+    try {
+      const res = await fetch("/api/admin/emails/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ to: e.from_email, to_name: e.from, subject: e.subject, body: draft }),
+      });
+      if (res.ok) {
+        setSentIds(s => new Set(s).add(e.id));
+        setSelected(null);
+        setDraft("");
+      }
+    } catch {}
+    setSending(false);
+  }
+
+  if (loading) {
+    return (
+      <div style={{ textAlign: "center", padding: "40px 0" }}>
+        <div style={{ width: "32px", height: "32px", border: `3px solid ${RED}`, borderTopColor: "transparent", borderRadius: "50%", margin: "0 auto 12px", animation: "spin 0.8s linear infinite" }} />
+        <p style={{ color: "#888", fontSize: "14px" }}>Chargement des emails…</p>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {/* ── Barre d'outils ──────────────────────────────────────────────── */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+        <div style={{ display: "flex", gap: "6px" }}>
+          {(["all", "unread", "important"] as const).map(f => (
+            <button key={f} onClick={() => setFilter(f)} style={{
+              padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: 600, cursor: "pointer", border: "none",
+              background: filter === f ? RED : "#eee", color: filter === f ? "#fff" : "#555",
+            }}>
+              {f === "all" ? "Tous" : f === "unread" ? "Non lus" : "Importants"}
+            </button>
+          ))}
+        </div>
+        <button onClick={onRefresh} style={{ background: "none", border: "none", cursor: "pointer", fontSize: "18px" }} title="Actualiser">↻</button>
+      </div>
+
+      {visible.length === 0 && <EmptyState message="Aucun email dans cette catégorie" />}
+
+      {/* ── Liste emails ─────────────────────────────────────────────────── */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+        {visible.map(e => {
+          const sent    = sentIds.has(e.id);
+          const impColor = IMPORT_COLORS[e.importance] ?? "#888";
+          return (
+            <div
+              key={e.id}
+              onClick={() => { setSelected(e); setDraft(""); }}
+              style={{
+                ...cardStyle,
+                borderLeft: `4px solid ${impColor}`,
+                opacity: e.seen ? 0.8 : 1,
+                cursor: "pointer",
+              }}
+            >
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "4px" }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ margin: 0, fontSize: "14px", fontWeight: e.seen ? 500 : 700, color: "#1a1a1a", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {e.from}
+                  </p>
+                  <p style={{ margin: "2px 0 0", fontSize: "13px", color: "#555", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {e.subject}
+                  </p>
+                </div>
+                <div style={{ marginLeft: "8px", textAlign: "right", flexShrink: 0 }}>
+                  <p style={{ margin: 0, fontSize: "11px", color: "#aaa" }}>{new Date(e.date).toLocaleDateString("fr-FR", { day: "numeric", month: "short" })}</p>
+                  <span style={{ fontSize: "10px", fontWeight: 700, color: impColor }}>{IMPORT_LABELS[e.importance]}</span>
+                </div>
+              </div>
+              <p style={{ margin: "4px 0 0", fontSize: "12px", color: "#888", lineHeight: "1.4" }}>{e.resume}</p>
+              {e.action && (
+                <p style={{ margin: "4px 0 0", fontSize: "11px", color: impColor, fontWeight: 600 }}>→ {e.action}</p>
+              )}
+              {sent && <p style={{ margin: "4px 0 0", fontSize: "11px", color: GREEN, fontWeight: 700 }}>✓ Réponse envoyée</p>}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* ── Modal email ─────────────────────────────────────────────────── */}
+      {selected && (
+        <div
+          style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1000, display: "flex", alignItems: "flex-end" }}
+          onClick={() => { setSelected(null); setDraft(""); }}
+        >
+          <div
+            style={{ backgroundColor: "#fff", width: "100%", borderRadius: "20px 20px 0 0", padding: "20px 20px 32px", maxHeight: "90vh", overflowY: "auto" }}
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "12px" }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <p style={{ margin: 0, fontWeight: 700, fontSize: "15px" }}>{selected.subject}</p>
+                <p style={{ margin: "2px 0 0", fontSize: "12px", color: "#888" }}>{selected.from} · {new Date(selected.date).toLocaleString("fr-FR")}</p>
+              </div>
+              <button onClick={() => { setSelected(null); setDraft(""); }} style={{ background: "none", border: "none", fontSize: "20px", cursor: "pointer", color: "#888", marginLeft: "8px" }}>✕</button>
+            </div>
+
+            {/* Corps email */}
+            <div style={{ backgroundColor: "#f9f9f9", borderRadius: "10px", padding: "14px", marginBottom: "16px", fontSize: "14px", lineHeight: "1.7", color: "#333", whiteSpace: "pre-wrap", maxHeight: "200px", overflowY: "auto" }}>
+              {selected.body || selected.snippet}
+            </div>
+
+            {/* Résumé IA */}
+            <div style={{ backgroundColor: "#f0f6ff", borderRadius: "10px", padding: "10px 14px", marginBottom: "16px" }}>
+              <p style={{ margin: "0 0 2px", fontSize: "11px", fontWeight: 800, color: "#2980B9", textTransform: "uppercase" }}>Analyse IA</p>
+              <p style={{ margin: 0, fontSize: "13px", color: "#333" }}>{selected.resume}</p>
+              {selected.action && <p style={{ margin: "4px 0 0", fontSize: "12px", color: IMPORT_COLORS[selected.importance], fontWeight: 600 }}>→ {selected.action}</p>}
+            </div>
+
+            {/* Zone réponse */}
+            {!draft && (
+              <button
+                onClick={() => handleGenerateDraft(selected)}
+                disabled={drafting}
+                style={{ ...btnPrimary, width: "100%", opacity: drafting ? 0.7 : 1 }}
+              >
+                {drafting ? <><Spinner /> Génération de la réponse…</> : "✦ Générer une réponse avec l'IA"}
+              </button>
+            )}
+
+            {draft && (
+              <>
+                <p style={{ margin: "0 0 6px", fontSize: "12px", fontWeight: 700, color: "#555" }}>RÉPONSE (modifiable)</p>
+                <textarea
+                  value={draft}
+                  onChange={ev => setDraft(ev.target.value)}
+                  rows={8}
+                  style={{ width: "100%", padding: "12px", border: "1.5px solid #e0e0e0", borderRadius: "10px", fontSize: "14px", lineHeight: "1.6", fontFamily: "inherit", resize: "vertical", boxSizing: "border-box" }}
+                />
+
+                {/* ── Barre de raffinage IA ──────────────────────────────── */}
+                <RefinementBar
+                  context="email"
+                  content={draft}
+                  onRefined={setDraft}
+                  disabled={drafting || sending}
+                />
+
+                <div style={{ display: "flex", gap: "8px", marginTop: "10px" }}>
+                  <button onClick={() => handleGenerateDraft(selected)} disabled={drafting} style={{ flex: 1, padding: "12px", borderRadius: "10px", border: "1.5px solid #ddd", background: "#f5f5f5", fontSize: "14px", cursor: "pointer", fontFamily: "inherit" }}>
+                    ↻ Regénérer
+                  </button>
+                  <button
+                    onClick={() => handleSend(selected)}
+                    disabled={sending}
+                    style={{ ...btnPrimary, flex: 2, opacity: sending ? 0.7 : 1 }}
+                  >
+                    {sending ? <><Spinner /> Envoi…</> : "Envoyer →"}
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+// ─── Onglet Demandes ──────────────────────────────────────────────────────────
+
 function OngletDemandes({
   demandes,
   onCreateDevis,
   devisAcceptes,
   onDemarrerLivraison,
+  historique,
 }: {
   demandes:            Demande[];
   onCreateDevis:       (demandeId: string) => Promise<void>;
   devisAcceptes:       Record<string, string>;
   onDemarrerLivraison: (demandeId: string) => void;
+  historique:          HistoriqueItem[];
 }) {
-  const [modal,      setModal]      = useState<Demande | null>(null);
-  const [loadingIds, setLoadingIds] = useState<Set<string>>(new Set());
+  const [modal,        setModal]        = useState<Demande | null>(null);
+  const [loadingIds,   setLoadingIds]   = useState<Set<string>>(new Set());
+  const [showHisto,    setShowHisto]    = useState(false);
 
   async function handleCreate(d: Demande) {
     setLoadingIds(prev => new Set(prev).add(d.id));
@@ -398,6 +770,37 @@ function OngletDemandes({
           </div>
         </div>
       )}
+
+      {/* ── Historique ─────────────────────────────────────────────────────── */}
+      {historique.length > 0 && (
+        <div style={{ marginTop: "20px" }}>
+          <button
+            onClick={() => setShowHisto(h => !h)}
+            style={{ background: "none", border: "none", cursor: "pointer", fontSize: "13px", color: "#888", padding: "0", display: "flex", alignItems: "center", gap: "6px" }}
+          >
+            <span style={{ fontSize: "16px" }}>{showHisto ? "▾" : "▸"}</span>
+            Historique ({historique.length} clôturée{historique.length > 1 ? "s" : ""})
+          </button>
+          {showHisto && (
+            <div style={{ marginTop: "10px", display: "flex", flexDirection: "column", gap: "6px" }}>
+              {historique.map(h => {
+                const statutColor = h.statut === "gagnée" ? GREEN : h.statut === "perdue" ? RED : "#888";
+                return (
+                  <div key={h.id} style={{ ...cardStyle, opacity: 0.75 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <div>
+                        <p style={{ margin: 0, fontSize: "14px", fontWeight: 600, color: "#333" }}>{h.titre}</p>
+                        <p style={{ margin: "2px 0 0", fontSize: "12px", color: "#888" }}>{h.client_nom} · {h.reference}</p>
+                      </div>
+                      <span style={{ fontSize: "11px", fontWeight: 700, color: statutColor, textTransform: "uppercase" }}>{h.statut}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
     </>
   );
 }
@@ -422,11 +825,13 @@ function OngletDevis({
   onEnvoyer,
   onRefresh,
   onCreerLivraison,
+  historique,
 }: {
   devis:            Devis[];
   onEnvoyer:        (devisId: string) => Promise<void>;
   onRefresh:        () => void;
   onCreerLivraison: (demandeId: string) => void;
+  historique:       HistoriqueItem[];
 }) {
   const [modal,       setModal]       = useState<Devis | null>(null);
   const [lignes,      setLignes]      = useState<LigneDevis[]>([]);
@@ -437,6 +842,7 @@ function OngletDevis({
   const [notes,       setNotes]       = useState("");
   const [saving,      setSaving]      = useState(false);
   const [sending,     setSending]     = useState(false);
+  const [showHisto,   setShowHisto]   = useState(false);
 
   function openModal(d: Devis) {
     setModal(d);
@@ -730,6 +1136,40 @@ function OngletDevis({
           </div>
         </div>
       )}
+
+      {/* ── Historique devis ──────────────────────────────────────────────── */}
+      {historique.length > 0 && (
+        <div style={{ marginTop: "20px" }}>
+          <button
+            onClick={() => setShowHisto(h => !h)}
+            style={{ background: "none", border: "none", cursor: "pointer", fontSize: "13px", color: "#888", padding: "0", display: "flex", alignItems: "center", gap: "6px" }}
+          >
+            <span style={{ fontSize: "16px" }}>{showHisto ? "▾" : "▸"}</span>
+            Historique ({historique.length} clôturé{historique.length > 1 ? "s" : ""})
+          </button>
+          {showHisto && (
+            <div style={{ marginTop: "10px", display: "flex", flexDirection: "column", gap: "6px" }}>
+              {historique.map(h => {
+                const statutColor = h.statut === "accepté" ? GREEN : h.statut === "refusé" ? RED : "#888";
+                return (
+                  <div key={h.id} style={{ ...cardStyle, opacity: 0.75 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <div>
+                        <p style={{ margin: 0, fontSize: "14px", fontWeight: 600, color: "#333" }}>{h.demande_titre ?? h.titre}</p>
+                        <p style={{ margin: "2px 0 0", fontSize: "12px", color: "#888" }}>
+                          {h.client_nom} · {h.reference}
+                          {h.montant_ttc ? ` · ${money(h.montant_ttc, h.devise)}` : ""}
+                        </p>
+                      </div>
+                      <span style={{ fontSize: "11px", fontWeight: 700, color: statutColor, textTransform: "uppercase" }}>{h.statut}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
     </>
   );
 }
@@ -779,12 +1219,15 @@ const textareaStyle: React.CSSProperties = {
 function OngletFactures({
   factures,
   onRelancer,
+  historique,
 }: {
-  factures: Facture[];
-  onRelancer: (factureId: string) => Promise<string>;
+  factures:    Facture[];
+  onRelancer:  (factureId: string) => Promise<string>;
+  historique:  HistoriqueItem[];
 }) {
-  const [loadingIds, setLoadingIds]       = useState<Set<string>>(new Set());
-  const [emailPreview, setEmailPreview]   = useState<string | null>(null);
+  const [loadingIds,   setLoadingIds]   = useState<Set<string>>(new Set());
+  const [emailPreview, setEmailPreview] = useState<string | null>(null);
+  const [showHisto,    setShowHisto]    = useState(false);
 
   async function handleRelancer(id: string) {
     setLoadingIds(prev => new Set(prev).add(id));
@@ -849,6 +1292,37 @@ function OngletFactures({
               <p style={{ fontSize: "14px", lineHeight: "1.7", color: "#333", margin: 0, whiteSpace: "pre-wrap" }}>{emailPreview}</p>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* ── Historique factures payées ────────────────────────────────────── */}
+      {historique.length > 0 && (
+        <div style={{ marginTop: "20px" }}>
+          <button
+            onClick={() => setShowHisto(h => !h)}
+            style={{ background: "none", border: "none", cursor: "pointer", fontSize: "13px", color: "#888", padding: "0", display: "flex", alignItems: "center", gap: "6px" }}
+          >
+            <span style={{ fontSize: "16px" }}>{showHisto ? "▾" : "▸"}</span>
+            Payées ({historique.length} facture{historique.length > 1 ? "s" : ""})
+          </button>
+          {showHisto && (
+            <div style={{ marginTop: "10px", display: "flex", flexDirection: "column", gap: "6px" }}>
+              {historique.map(h => (
+                <div key={h.id} style={{ ...cardStyle, opacity: 0.75 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div>
+                      <p style={{ margin: 0, fontSize: "14px", fontWeight: 600, color: "#333" }}>{h.client_nom}</p>
+                      <p style={{ margin: "2px 0 0", fontSize: "12px", color: "#888" }}>
+                        {h.reference}
+                        {h.montant_ttc ? ` · ${money(h.montant_ttc, h.devise)}` : ""}
+                      </p>
+                    </div>
+                    <span style={{ fontSize: "11px", fontWeight: 700, color: GREEN, textTransform: "uppercase" }}>payé</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </>
@@ -952,7 +1426,7 @@ function OngletFournisseurs({
   onShowToast,
 }: {
   fournisseurs: Fournisseur[];
-  demandes:     Demande[];
+  demandes:     DemandeContexte[];
   onRefresh:    () => void;
   onShowToast:  (msg: string, type: "ok" | "err") => void;
 }) {
@@ -1353,7 +1827,7 @@ function OngletLivraisons({
 }: {
   livraisons:         Livraison[];
   fournisseurs:       Fournisseur[];
-  demandes:           Demande[];
+  demandes:           DemandeContexte[];
   initDemandeId:      string | null;
   onClearInitDemande: () => void;
   onRefresh:          () => void;
@@ -1749,17 +2223,19 @@ const labelStyle: React.CSSProperties = {
 
 // ─── Composant principal ──────────────────────────────────────────────────────
 
-const TABS = ["Demandes", "Devis", "Factures", "Fournisseurs", "Livraisons", "Coûts IA"] as const;
+const TABS = ["Emails", "Demandes", "Devis", "Factures", "Fournisseurs", "Livraisons", "Coûts IA"] as const;
 type Tab = typeof TABS[number];
 
 export default function AdminDashboard() {
   const [data,      setData]      = useState<DashboardData | null>(null);
   const [loading,   setLoading]   = useState(true);
-  const [activeTab, setActiveTab] = useState<Tab>("Demandes");
+  const [activeTab, setActiveTab] = useState<Tab>("Emails");
   const [toast,     setToast]     = useState<{ msg: string; type: "ok" | "err" } | null>(null);
   const [fournisseurs,            setFournisseurs]            = useState<Fournisseur[]>([]);
   const [livraisons,              setLivraisons]              = useState<Livraison[]>([]);
   const [initLivraisonDemandeId,  setInitLivraisonDemandeId]  = useState<string | null>(null);
+  const [emails,                  setEmails]                  = useState<EmailItem[]>([]);
+  const [emailsLoading,           setEmailsLoading]           = useState(false);
 
   function showToast(msg: string, type: "ok" | "err") {
     setToast({ msg, type });
@@ -1792,7 +2268,16 @@ export default function AdminDashboard() {
     } catch {}
   }
 
-  useEffect(() => { fetchData(); fetchFournisseurs(); fetchLivraisons(); }, []);
+  async function fetchEmails(force = false) {
+    setEmailsLoading(true);
+    try {
+      const res = await fetch(`/api/admin/emails${force ? "?refresh=1" : ""}`);
+      if (res.ok) { const j = await res.json(); setEmails(j.emails ?? []); }
+    } catch {}
+    setEmailsLoading(false);
+  }
+
+  useEffect(() => { fetchData(); fetchFournisseurs(); fetchLivraisons(); fetchEmails(); }, []);
 
   // ── PWA — enregistrement Service Worker ───────────────────────────────────
   useEffect(() => {
@@ -1876,7 +2361,9 @@ export default function AdminDashboard() {
 
   const devisAcceptes: Record<string, string> = {};
   if (data) {
-    for (const d of data.devis) { if (d.statut === "accepté") devisAcceptes[d.demande_id] = d.id; }
+    for (const d of data.historique.devis) {
+      if (d.statut === "accepté") devisAcceptes[d.id] = d.id;
+    }
   }
 
   // ── Loading ───────────────────────────────────────────────────────────────
@@ -1941,15 +2428,16 @@ export default function AdminDashboard() {
           {/* ── KPI Grid ───────────────────────────────────────────────────── */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "16px" }}>
             <KpiCard
-              label="Demandes cette semaine"
-              value={String(data.kpis.demandes_semaine)}
+              label="Demandes à traiter"
+              value={String(data.kpis.demandes_actives)}
               icon="📥"
+              highlight={data.kpis.demandes_actives > 0}
             />
             <KpiCard
-              label="Devis à valider"
-              value={String(data.kpis.devis_brouillon)}
+              label="Devis en cours"
+              value={String(data.kpis.devis_actifs)}
               icon="📋"
-              highlight={data.kpis.devis_brouillon > 0}
+              highlight={data.kpis.devis_actifs > 0}
             />
             <KpiCard
               label="Paiements attendus"
@@ -1975,9 +2463,12 @@ export default function AdminDashboard() {
           }}>
             {TABS.map(tab => {
               const active = activeTab === tab;
-              const count = tab === "Demandes"     ? data.demandes.length
+              const urgentFact  = data.factures.filter(f => f.en_retard).length;
+              const unreadEmails = emails.filter(e => !e.seen && e.importance >= 3).length;
+              const count = tab === "Emails"       ? (unreadEmails || null)
+                : tab === "Demandes"     ? data.demandes.length
                 : tab === "Devis"        ? data.devis.length
-                : tab === "Factures"     ? data.factures.length
+                : tab === "Factures"     ? (urgentFact > 0 ? urgentFact : data.factures.length || null)
                 : tab === "Fournisseurs" ? fournisseurs.length
                 : tab === "Livraisons"   ? livraisons.length
                 : null;
@@ -2016,12 +2507,20 @@ export default function AdminDashboard() {
           </div>
 
           {/* ── Contenu onglets ────────────────────────────────────────────── */}
+          {activeTab === "Emails" && (
+            <OngletEmails
+              emails={emails}
+              loading={emailsLoading}
+              onRefresh={() => fetchEmails(true)}
+            />
+          )}
           {activeTab === "Demandes" && (
             <OngletDemandes
               demandes={data.demandes}
               onCreateDevis={handleCreateDevis}
               devisAcceptes={devisAcceptes}
               onDemarrerLivraison={handleDemarrerLivraison}
+              historique={data.historique.demandes}
             />
           )}
           {activeTab === "Devis" && (
@@ -2030,15 +2529,20 @@ export default function AdminDashboard() {
               onEnvoyer={handleEnvoyerDevis}
               onRefresh={fetchData}
               onCreerLivraison={handleDemarrerLivraison}
+              historique={data.historique.devis}
             />
           )}
           {activeTab === "Factures" && (
-            <OngletFactures factures={data.factures} onRelancer={handleRelancer} />
+            <OngletFactures
+              factures={data.factures}
+              onRelancer={handleRelancer}
+              historique={data.historique.factures}
+            />
           )}
           {activeTab === "Fournisseurs" && (
             <OngletFournisseurs
               fournisseurs={fournisseurs}
-              demandes={data.demandes}
+              demandes={data.demandes_contexte}
               onRefresh={fetchFournisseurs}
               onShowToast={showToast}
             />
@@ -2047,7 +2551,7 @@ export default function AdminDashboard() {
             <OngletLivraisons
               livraisons={livraisons}
               fournisseurs={fournisseurs}
-              demandes={data.demandes}
+              demandes={data.demandes_contexte}
               initDemandeId={initLivraisonDemandeId}
               onClearInitDemande={() => setInitLivraisonDemandeId(null)}
               onRefresh={fetchLivraisons}

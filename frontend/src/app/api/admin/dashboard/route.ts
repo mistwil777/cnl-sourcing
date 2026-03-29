@@ -8,22 +8,22 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const [kpis, demandes, devis, factures, couts] = await Promise.all([
+    const [kpis, demandes, devis, factures, couts, demandesContexte, historiqueD, historiqueV, historiqueF] = await Promise.all([
 
       // ── KPIs ────────────────────────────────────────────────────────────────
       query<Record<string, unknown>>(`
         SELECT
           (SELECT COUNT(*)::int FROM demandes
-           WHERE created_at >= NOW() - INTERVAL '7 days')                        AS demandes_semaine,
-          (SELECT COUNT(*)::int FROM devis WHERE statut = 'brouillon')           AS devis_brouillon,
+           WHERE statut IN ('nouvelle','en_analyse'))                           AS demandes_actives,
+          (SELECT COUNT(*)::int FROM devis WHERE statut IN ('brouillon','envoyé')) AS devis_actifs,
           (SELECT COALESCE(SUM(montant_ttc), 0)::float FROM factures
-           WHERE statut_paiement = 'en_attente')                                 AS paiements_attendus,
+           WHERE statut_paiement = 'en_attente')                                AS paiements_attendus,
           (SELECT COALESCE(SUM(montant_ttc), 0)::float FROM factures
            WHERE statut_paiement = 'payé'
              AND DATE_TRUNC('month', date_emission) = DATE_TRUNC('month', NOW())) AS ca_mois
       `),
 
-      // ── Demandes (20 dernières, triées urgence DESC) ─────────────────────────
+      // ── Demandes actives (à traiter) ────────────────────────────────────────
       query<Record<string, unknown>>(`
         SELECT
           d.id, d.reference, d.created_at, d.statut,
@@ -47,14 +47,14 @@ export async function GET(req: NextRequest) {
           SELECT faisabilite_score, resume
           FROM analyse_ia
           WHERE demande_id = d.id
-          ORDER BY created_at DESC
-          LIMIT 1
+          ORDER BY created_at DESC LIMIT 1
         ) a ON true
+        WHERE d.statut IN ('nouvelle', 'en_analyse')
         ORDER BY scoring_urgence DESC, d.created_at DESC
         LIMIT 20
       `),
 
-      // ── Devis ───────────────────────────────────────────────────────────────
+      // ── Devis actifs (brouillon ou envoyé) ──────────────────────────────────
       query<Record<string, unknown>>(`
         SELECT
           dev.id, dev.reference, dev.created_at, dev.statut,
@@ -86,10 +86,11 @@ export async function GET(req: NextRequest) {
         FROM devis dev
         JOIN demandes dem ON dem.id = dev.demande_id
         JOIN clients  c   ON c.id  = dem.client_id
+        WHERE dev.statut IN ('brouillon', 'envoyé')
         ORDER BY dev.created_at DESC
       `),
 
-      // ── Factures ────────────────────────────────────────────────────────────
+      // ── Factures actives (en attente de paiement) ───────────────────────────
       query<Record<string, unknown>>(`
         SELECT
           f.id, f.reference,
@@ -108,6 +109,7 @@ export async function GET(req: NextRequest) {
           ) AS en_retard
         FROM factures f
         JOIN clients c ON c.id = f.client_id
+        WHERE f.statut_paiement = 'en_attente'
         ORDER BY f.date_echeance ASC NULLS LAST
       `),
 
@@ -123,6 +125,67 @@ export async function GET(req: NextRequest) {
         FROM usage_logs
         WHERE DATE_TRUNC('month', date) = DATE_TRUNC('month', NOW())
       `),
+
+      // ── Toutes les demandes non-archivées (contexte livraisons/fournisseurs) ─
+      query<Record<string, unknown>>(`
+        SELECT d.id, d.reference, d.titre, d.statut, d.categorie AS secteur,
+               c.nom AS client_nom
+        FROM demandes d
+        JOIN clients c ON c.id = d.client_id
+        WHERE d.statut NOT IN ('gagnée', 'perdue', 'annulée')
+        ORDER BY d.created_at DESC
+        LIMIT 50
+      `),
+
+      // ── Historique demandes (60 derniers jours) ──────────────────────────────
+      query<Record<string, unknown>>(`
+        SELECT
+          d.id, d.reference, d.created_at, d.statut,
+          d.titre, d.categorie AS secteur,
+          c.nom AS client_nom, c.email AS client_email,
+          COALESCE(c.prenom, '') AS client_prenom
+        FROM demandes d
+        JOIN clients c ON c.id = d.client_id
+        WHERE d.statut IN ('gagnée', 'perdue', 'annulée')
+          AND d.updated_at >= NOW() - INTERVAL '60 days'
+        ORDER BY d.updated_at DESC
+        LIMIT 30
+      `),
+
+      // ── Historique devis (60 derniers jours) ────────────────────────────────
+      query<Record<string, unknown>>(`
+        SELECT
+          dev.id, dev.reference, dev.created_at, dev.statut,
+          dev.montant_ttc::float,
+          COALESCE(dev.devise, 'EUR') AS devise,
+          dem.titre AS demande_titre,
+          c.nom AS client_nom,
+          COALESCE(c.prenom, '') AS client_prenom
+        FROM devis dev
+        JOIN demandes dem ON dem.id = dev.demande_id
+        JOIN clients  c   ON c.id  = dem.client_id
+        WHERE dev.statut IN ('accepté', 'refusé', 'expiré')
+          AND dev.updated_at >= NOW() - INTERVAL '60 days'
+        ORDER BY dev.updated_at DESC
+        LIMIT 30
+      `),
+
+      // ── Historique factures payées (60 derniers jours) ──────────────────────
+      query<Record<string, unknown>>(`
+        SELECT
+          f.id, f.reference, f.date_emission, f.date_echeance,
+          f.montant_ttc::float,
+          COALESCE(f.devise, 'EUR') AS devise,
+          f.statut_paiement,
+          c.nom AS client_nom, c.email AS client_email,
+          COALESCE(c.prenom, '') AS client_prenom
+        FROM factures f
+        JOIN clients c ON c.id = f.client_id
+        WHERE f.statut_paiement = 'payé'
+          AND f.updated_at >= NOW() - INTERVAL '60 days'
+        ORDER BY f.updated_at DESC
+        LIMIT 30
+      `),
     ]);
 
     const c = couts[0] ?? {};
@@ -133,6 +196,12 @@ export async function GET(req: NextRequest) {
       demandes,
       devis,
       factures,
+      demandes_contexte: demandesContexte,
+      historique: {
+        demandes: historiqueD,
+        devis:    historiqueV,
+        factures: historiqueF,
+      },
       couts_mois: {
         ...c,
         budget_eur: parseFloat(process.env.LLM_BUDGET_EUR || "30"),

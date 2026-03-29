@@ -59,6 +59,12 @@ desktop.ini
 *.swp
 *.swo
 
+# Claude Code
+.claude/settings.local.json
+
+# Lock files (régénérés en CI/prod)
+frontend/package-lock.json
+
 # Testing
 coverage/
 .nyc_output/
