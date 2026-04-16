@@ -7,7 +7,33 @@ import Footer from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
   title: "Nos services de sourcing Vietnam",
-  description: "Textile, alimentaire, artisanat : découvrez tous nos services de sourcing Vietnam → France.",
+  description:
+    "Sourcing textile, agroalimentaire et artisanat Vietnam → France. Groupage fret, assistance douanière EVFTA. Audit à partir de 250€, réponse sous 48h.",
+  keywords: [
+    "services sourcing Vietnam",
+    "sourcing textile Vietnam France",
+    "import agroalimentaire Vietnam",
+    "groupage fret Vietnam",
+    "douane import Vietnam",
+    "EVFTA import France",
+    "artisanat Vietnam import",
+  ],
+  alternates: {
+    canonical: "https://cnlsourcing.com/fr/services",
+    languages: {
+      fr: "https://cnlsourcing.com/fr/services",
+      en: "https://cnlsourcing.com/en/services",
+      vi: "https://cnlsourcing.com/vi/services",
+      "x-default": "https://cnlsourcing.com/fr/services",
+    },
+  },
+  openGraph: {
+    title: "Services de sourcing Vietnam | CNL Sourcing",
+    description:
+      "Sourcing textile, agroalimentaire et artisanat Vietnam → France. Groupage fret, assistance douanière EVFTA.",
+    url: "https://cnlsourcing.com/fr/services",
+    images: [{ url: "/icons/icon-512.png", width: 512, height: 512, alt: "Services CNL Sourcing" }],
+  },
 };
 
 const serviceKeys = ["sourcing", "groupage", "douane"] as const;

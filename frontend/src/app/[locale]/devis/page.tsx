@@ -5,8 +5,32 @@ import DevisForm from "@/components/forms/DevisForm";
 import { CheckCircle } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Demander un devis",
-  description: "Décrivez votre projet de sourcing Vietnam. Audit sourcing à partir de 250€, réponse sous 48h.",
+  title: "Demander un devis sourcing Vietnam",
+  description:
+    "Décrivez votre projet d'import Vietnam en quelques minutes. Audit sourcing à partir de 250€ — Top 3 fournisseurs, estimation coûts et délais, réponse sous 48h.",
+  keywords: [
+    "devis sourcing Vietnam",
+    "audit sourcing Vietnam",
+    "devis import Vietnam France",
+    "demande sourcing PME",
+    "tarif sourcing Vietnam",
+  ],
+  alternates: {
+    canonical: "https://cnlsourcing.com/fr/devis",
+    languages: {
+      fr: "https://cnlsourcing.com/fr/devis",
+      en: "https://cnlsourcing.com/en/devis",
+      vi: "https://cnlsourcing.com/vi/devis",
+      "x-default": "https://cnlsourcing.com/fr/devis",
+    },
+  },
+  openGraph: {
+    title: "Demander un devis sourcing Vietnam | CNL Sourcing",
+    description:
+      "Audit sourcing Vietnam à partir de 250€. Top 3 fournisseurs, estimation coûts et délais, réponse sous 48h.",
+    url: "https://cnlsourcing.com/fr/devis",
+    images: [{ url: "/icons/icon-512.png", width: 512, height: 512, alt: "Devis sourcing Vietnam" }],
+  },
 };
 
 const steps = [

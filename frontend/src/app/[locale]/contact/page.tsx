@@ -6,8 +6,30 @@ import Footer from "@/components/layout/Footer";
 import ContactForm from "@/components/forms/ContactForm";
 
 export const metadata: Metadata = {
-  title: "Contact",
-  description: "Contactez CNL Sourcing — Anna répond sous 48h. Toulouse, Occitanie.",
+  title: "Contact — CNL Sourcing Toulouse",
+  description:
+    "Contactez CNL Sourcing — Anna Nguyen répond sous 48h. Email : cnlsourcingvn@gmail.com. Basé à Toulouse, Occitanie.",
+  keywords: [
+    "contact CNL Sourcing",
+    "agent sourcing Vietnam Toulouse",
+    "contacter agent sourcing",
+    "sourcing Vietnam Occitanie",
+  ],
+  alternates: {
+    canonical: "https://cnlsourcing.com/fr/contact",
+    languages: {
+      fr: "https://cnlsourcing.com/fr/contact",
+      en: "https://cnlsourcing.com/en/contact",
+      vi: "https://cnlsourcing.com/vi/contact",
+      "x-default": "https://cnlsourcing.com/fr/contact",
+    },
+  },
+  openGraph: {
+    title: "Contact — CNL Sourcing Toulouse",
+    description: "Contactez Anna Nguyen, agent sourcing Vietnam basé à Toulouse. Réponse sous 48h.",
+    url: "https://cnlsourcing.com/fr/contact",
+    images: [{ url: "/icons/icon-512.png", width: 512, height: 512, alt: "Contact CNL Sourcing" }],
+  },
 };
 
 export default function ContactPage() {

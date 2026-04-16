@@ -1,8 +1,57 @@
+import type { Metadata } from "next";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { ArrowRight, Shield, Clock, Globe, TrendingUp } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+
+const descriptions: Record<string, string> = {
+  fr: "Agent de sourcing Vietnam pour PME françaises. Textile, agroalimentaire, artisanat — fournisseurs audités, négociation en vietnamien, tarifs locaux garantis. Audit à partir de 250€, réponse sous 48h.",
+  en: "Vietnam sourcing agent for French SMEs. Textiles, food & beverage, crafts — audited suppliers, Vietnamese-speaking negotiator, local pricing guaranteed.",
+  vi: "Đại lý tìm nguồn cung ứng Việt Nam cho doanh nghiệp Pháp. Dệt may, thực phẩm, thủ công mỹ nghệ — nhà cung cấp được kiểm toán, đàm phán bằng tiếng Việt.",
+};
+
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const desc = descriptions[locale] ?? descriptions.fr;
+
+  return {
+    title: {
+      absolute:
+        locale === "fr"
+          ? "CNL Sourcing — Agent de sourcing Vietnam France | PME"
+          : locale === "en"
+          ? "CNL Sourcing — Vietnam France Sourcing Agent | SME"
+          : "CNL Sourcing — Đại lý tìm nguồn cung ứng Việt Nam Pháp",
+    },
+    description: desc,
+    alternates: {
+      canonical: `https://cnlsourcing.com/${locale}`,
+      languages: {
+        fr: "https://cnlsourcing.com/fr",
+        en: "https://cnlsourcing.com/en",
+        vi: "https://cnlsourcing.com/vi",
+        "x-default": "https://cnlsourcing.com/fr",
+      },
+    },
+    openGraph: {
+      title: "CNL Sourcing — Agent de sourcing Vietnam France",
+      description: desc,
+      url: `https://cnlsourcing.com/${locale}`,
+      images: [
+        {
+          url: "/icons/icon-512.png",
+          width: 512,
+          height: 512,
+          alt: "CNL Sourcing — Agent sourcing Vietnam France",
+        },
+      ],
+    },
+  };
+}
 
 export default function HomePage() {
   const t = useTranslations();

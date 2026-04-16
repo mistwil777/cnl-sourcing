@@ -7,8 +7,39 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
-  title: "À propos — Anna Nguyen, CNL Sourcing",
-  description: "Découvrez Anna Nguyen, fondatrice franco-vietnamienne de CNL Sourcing, et notre mission.",
+  title: "À propos — Anna Nguyen, fondatrice CNL Sourcing",
+  description:
+    "Anna Nguyen, fondatrice franco-vietnamienne de CNL Sourcing. 10 ans d'expérience Vietnam, négociation en vietnamien, réseau de fournisseurs audités à Hanoï et Hô Chi Minh-Ville.",
+  keywords: [
+    "Anna Nguyen sourcing Vietnam",
+    "fondatrice CNL Sourcing",
+    "agent sourcing franco-vietnamien",
+    "expert import Vietnam France",
+    "Toulouse sourcing international",
+  ],
+  alternates: {
+    canonical: "https://cnlsourcing.com/fr/about",
+    languages: {
+      fr: "https://cnlsourcing.com/fr/about",
+      en: "https://cnlsourcing.com/en/about",
+      vi: "https://cnlsourcing.com/vi/about",
+      "x-default": "https://cnlsourcing.com/fr/about",
+    },
+  },
+  openGraph: {
+    title: "À propos — Anna Nguyen, fondatrice CNL Sourcing",
+    description:
+      "Anna Nguyen, fondatrice franco-vietnamienne de CNL Sourcing. 10 ans d'expérience Vietnam, négociation en vietnamien.",
+    url: "https://cnlsourcing.com/fr/about",
+    images: [
+      {
+        url: "/images/anna.jpg",
+        width: 800,
+        height: 600,
+        alt: "Anna Nguyen — Fondatrice CNL Sourcing",
+      },
+    ],
+  },
 };
 
 const valueKeys = [

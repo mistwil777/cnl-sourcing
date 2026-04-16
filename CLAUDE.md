@@ -27,6 +27,7 @@ Sync : `bash ~/Documents/GitHub/wilfried-ai-factory/sync-skills.sh`
 | `metier/sourcing-international` | ✅ Appliquée |
 | `metier/facturation-pme` | ✅ Implémentée |
 | `qualite/checklist-deploiement` | ✅ Appliquée |
+| `core/seo-cnl` | ✅ Implémentée |
 
 ## Principes non négociables
 1. Scripts SQL/Bash d'abord — IA uniquement si valeur ajoutée réelle
