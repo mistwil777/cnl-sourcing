@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
   const actif   = searchParams.get("actif");
   const note    = searchParams.get("note_min");
 
-  const conditions: string[] = [];
+  const conditions: string[] = ["deleted_at IS NULL"];
   const params: unknown[] = [];
   let idx = 1;
 
@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
   if (actif !== null && actif !== "") { conditions.push(`actif = $${idx++}`); params.push(actif === "true"); }
   if (note) { conditions.push(`note_fiabilite >= $${idx++}`); params.push(parseFloat(note)); }
 
-  const where = conditions.length ? `WHERE ${conditions.join(" AND ")}` : "";
+  const where = `WHERE ${conditions.join(" AND ")}`;
 
   const rows = await query<Record<string, unknown>>(`
     SELECT

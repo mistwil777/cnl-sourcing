@@ -634,17 +634,32 @@ function OngletDemandes({
   onCreateDevis,
   devisAcceptes,
   onDemarrerLivraison,
+  onDelete,
   historique,
 }: {
   demandes:            Demande[];
   onCreateDevis:       (demandeId: string) => Promise<void>;
   devisAcceptes:       Record<string, string>;
   onDemarrerLivraison: (demandeId: string) => void;
+  onDelete:            (id: string) => Promise<void>;
   historique:          HistoriqueItem[];
 }) {
-  const [modal,        setModal]        = useState<Demande | null>(null);
-  const [loadingIds,   setLoadingIds]   = useState<Set<string>>(new Set());
-  const [showHisto,    setShowHisto]    = useState(false);
+  const [modal,         setModal]         = useState<Demande | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<Demande | null>(null);
+  const [loadingIds,    setLoadingIds]    = useState<Set<string>>(new Set());
+  const [deletingId,    setDeletingId]    = useState<string | null>(null);
+  const [showHisto,     setShowHisto]     = useState(false);
+
+  async function handleDelete() {
+    if (!deleteConfirm) return;
+    setDeletingId(deleteConfirm.id);
+    try {
+      await onDelete(deleteConfirm.id);
+    } finally {
+      setDeletingId(null);
+      setDeleteConfirm(null);
+    }
+  }
 
   async function handleCreate(d: Demande) {
     setLoadingIds(prev => new Set(prev).add(d.id));
@@ -669,7 +684,22 @@ function OngletDemandes({
                 </p>
                 <p style={{ margin: "2px 0 0", fontSize: "12px", color: "#888" }}>{d.client_email}</p>
               </div>
-              <UrgenceBadge score={d.scoring_urgence} />
+              <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                <UrgenceBadge score={d.scoring_urgence} />
+                <button
+                  onClick={() => setDeleteConfirm(d)}
+                  title="Supprimer cette demande"
+                  style={{ background: "none", border: "none", cursor: "pointer", padding: "4px", color: "#ccc", display: "flex", alignItems: "center" }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                    <path d="M10 11v6" />
+                    <path d="M14 11v6" />
+                    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                  </svg>
+                </button>
+              </div>
             </div>
 
             {/* Infos */}
@@ -767,6 +797,42 @@ function OngletDemandes({
                 <p style={{ fontSize: "14px", color: "#333", lineHeight: "1.6", margin: 0 }}>{modal.resume_ia}</p>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* ── Modal suppression demande ──────────────────────────────────────── */}
+      {deleteConfirm && (
+        <div
+          style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1100, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}
+          onClick={() => setDeleteConfirm(null)}
+        >
+          <div
+            style={{ backgroundColor: "#fff", borderRadius: "16px", padding: "24px 20px", width: "100%", maxWidth: "380px" }}
+            onClick={e => e.stopPropagation()}
+          >
+            <h3 style={{ margin: "0 0 8px", fontSize: "17px", fontWeight: 700, color: "#1a1a1a" }}>Supprimer cette demande ?</h3>
+            <p style={{ margin: "0 0 4px", fontSize: "14px", color: "#555" }}>
+              Client : <strong>{deleteConfirm.client_nom} {deleteConfirm.client_prenom}</strong>
+            </p>
+            <p style={{ margin: "0 0 20px", fontSize: "12px", color: "#e74c3c", fontWeight: 600 }}>
+              Cette action est irréversible.
+            </p>
+            <div style={{ display: "flex", gap: "10px" }}>
+              <button
+                onClick={() => setDeleteConfirm(null)}
+                style={{ flex: 1, padding: "10px", borderRadius: "10px", border: "1px solid #ddd", background: "#fff", fontSize: "14px", fontWeight: 600, cursor: "pointer", color: "#555" }}
+              >
+                Annuler
+              </button>
+              <button
+                onClick={handleDelete}
+                disabled={deletingId === deleteConfirm.id}
+                style={{ flex: 1, padding: "10px", borderRadius: "10px", border: "none", background: "#e74c3c", fontSize: "14px", fontWeight: 600, cursor: "pointer", color: "#fff", opacity: deletingId === deleteConfirm.id ? 0.7 : 1 }}
+              >
+                {deletingId === deleteConfirm.id ? "Suppression…" : "Supprimer"}
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -1436,6 +1502,8 @@ function OngletFournisseurs({
   const [editModal,     setEditModal]     = useState<Fournisseur | "new" | null>(null);
   const [notationModal, setNotationModal] = useState<Fournisseur | null>(null);
   const [associerModal, setAssocierModal] = useState<Fournisseur | null>(null);
+  const [deleteModal,   setDeleteModal]   = useState<Fournisseur | null>(null);
+  const [deletingId,    setDeletingId]    = useState<string | null>(null);
   const [saving,        setSaving]        = useState(false);
 
   // Form add/edit
@@ -1525,6 +1593,21 @@ function OngletFournisseurs({
     } finally { setSaving(false); }
   }
 
+  async function handleDeleteFournisseur() {
+    if (!deleteModal) return;
+    setDeletingId(deleteModal.id);
+    try {
+      const res = await fetch(`/api/admin/fournisseurs/${deleteModal.id}`, { method: "DELETE" });
+      const json = await res.json();
+      if (!res.ok) { onShowToast(json.error || "Erreur", "err"); return; }
+      onShowToast("Fournisseur supprimé", "ok");
+      setDeleteModal(null);
+      onRefresh();
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
   const secteurs = Array.from(new Set(fournisseurs.map(f => f.secteur).filter((s): s is string => !!s)));
   const filtered = fournisseurs.filter(f => {
     if (filterActif === "actif"   && !f.actif) return false;
@@ -1607,10 +1690,23 @@ function OngletFournisseurs({
             )}
 
             {/* Boutons */}
-            <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", alignItems: "center" }}>
               <button onClick={() => openEdit(f)} style={btnSecondary}>Modifier</button>
               <button onClick={() => openNotation(f)} style={{ ...btnSecondary, color: "#F59E0B" }}>★ Noter</button>
               <button onClick={() => setAssocierModal(f)} style={{ ...btnSecondary, fontSize: "13px" }}>Associer demande</button>
+              <button
+                onClick={() => setDeleteModal(f)}
+                title="Supprimer ce fournisseur"
+                style={{ marginLeft: "auto", background: "none", border: "none", cursor: "pointer", padding: "4px", color: "#ccc", display: "flex", alignItems: "center" }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="3 6 5 6 21 6" />
+                  <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                  <path d="M10 11v6" />
+                  <path d="M14 11v6" />
+                  <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                </svg>
+              </button>
             </div>
           </div>
         ))}
@@ -1776,6 +1872,42 @@ function OngletFournisseurs({
                 </div>
               ))
             }
+          </div>
+        </div>
+      )}
+
+      {/* ── Modal suppression fournisseur ──────────────────────────────────── */}
+      {deleteModal && (
+        <div
+          style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1100, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}
+          onClick={() => setDeleteModal(null)}
+        >
+          <div
+            style={{ backgroundColor: "#fff", borderRadius: "16px", padding: "24px 20px", width: "100%", maxWidth: "380px" }}
+            onClick={e => e.stopPropagation()}
+          >
+            <h3 style={{ margin: "0 0 8px", fontSize: "17px", fontWeight: 700, color: "#1a1a1a" }}>Supprimer ce fournisseur ?</h3>
+            <p style={{ margin: "0 0 4px", fontSize: "14px", color: "#555" }}>
+              <strong>{deleteModal.nom}</strong>
+            </p>
+            <p style={{ margin: "0 0 20px", fontSize: "12px", color: "#e74c3c", fontWeight: 600 }}>
+              Attention : ses livraisons associées resteront en base.
+            </p>
+            <div style={{ display: "flex", gap: "10px" }}>
+              <button
+                onClick={() => setDeleteModal(null)}
+                style={{ flex: 1, padding: "10px", borderRadius: "10px", border: "1px solid #ddd", background: "#fff", fontSize: "14px", fontWeight: 600, cursor: "pointer", color: "#555" }}
+              >
+                Annuler
+              </button>
+              <button
+                onClick={handleDeleteFournisseur}
+                disabled={deletingId === deleteModal.id}
+                style={{ flex: 1, padding: "10px", borderRadius: "10px", border: "none", background: "#e74c3c", fontSize: "14px", fontWeight: 600, cursor: "pointer", color: "#fff", opacity: deletingId === deleteModal.id ? 0.7 : 1 }}
+              >
+                {deletingId === deleteModal.id ? "Suppression…" : "Supprimer"}
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -2352,6 +2484,18 @@ export default function AdminDashboard() {
     setActiveTab("Livraisons");
   }
 
+  async function handleDeleteDemande(id: string) {
+    try {
+      const res = await fetch(`/api/admin/demandes/${id}`, { method: "DELETE" });
+      const json = await res.json();
+      if (!res.ok) { showToast(json.error || "Erreur", "err"); return; }
+      showToast("Demande supprimée", "ok");
+      fetchData();
+    } catch {
+      showToast("Erreur réseau", "err");
+    }
+  }
+
   // ── Calcul badge urgences ─────────────────────────────────────────────────
 
   const hasUrgent = data
@@ -2520,6 +2664,7 @@ export default function AdminDashboard() {
               onCreateDevis={handleCreateDevis}
               devisAcceptes={devisAcceptes}
               onDemarrerLivraison={handleDemarrerLivraison}
+              onDelete={handleDeleteDemande}
               historique={data.historique.demandes}
             />
           )}

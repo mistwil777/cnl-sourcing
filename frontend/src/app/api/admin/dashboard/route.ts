@@ -14,7 +14,8 @@ export async function GET(req: NextRequest) {
       query<Record<string, unknown>>(`
         SELECT
           (SELECT COUNT(*)::int FROM demandes
-           WHERE statut IN ('nouvelle','en_analyse'))                           AS demandes_actives,
+           WHERE statut IN ('nouvelle','en_analyse')
+             AND deleted_at IS NULL)                                            AS demandes_actives,
           (SELECT COUNT(*)::int FROM devis WHERE statut IN ('brouillon','envoyé')) AS devis_actifs,
           (SELECT COALESCE(SUM(montant_ttc), 0)::float FROM factures
            WHERE statut_paiement = 'en_attente')                                AS paiements_attendus,
@@ -50,6 +51,7 @@ export async function GET(req: NextRequest) {
           ORDER BY created_at DESC LIMIT 1
         ) a ON true
         WHERE d.statut IN ('nouvelle', 'en_analyse')
+          AND d.deleted_at IS NULL
         ORDER BY scoring_urgence DESC, d.created_at DESC
         LIMIT 20
       `),
@@ -133,6 +135,7 @@ export async function GET(req: NextRequest) {
         FROM demandes d
         JOIN clients c ON c.id = d.client_id
         WHERE d.statut NOT IN ('gagnée', 'perdue', 'annulée')
+          AND d.deleted_at IS NULL
         ORDER BY d.created_at DESC
         LIMIT 50
       `),
@@ -147,6 +150,7 @@ export async function GET(req: NextRequest) {
         FROM demandes d
         JOIN clients c ON c.id = d.client_id
         WHERE d.statut IN ('gagnée', 'perdue', 'annulée')
+          AND d.deleted_at IS NULL
           AND d.updated_at >= NOW() - INTERVAL '60 days'
         ORDER BY d.updated_at DESC
         LIMIT 30
