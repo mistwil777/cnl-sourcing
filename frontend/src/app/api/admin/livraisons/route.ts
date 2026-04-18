@@ -27,8 +27,8 @@ export async function GET(req: NextRequest) {
     LEFT JOIN fournisseurs f ON f.id = l.fournisseur_id
     LEFT JOIN clients      c ON c.id = l.client_id
     LEFT JOIN demandes     d ON d.id = l.demande_id
-    WHERE l.statut != 'livre'
-       OR l.date_arrivee_reelle >= NOW() - INTERVAL '30 days'
+    WHERE l.deleted_at IS NULL
+      AND (l.statut != 'livre' OR l.date_arrivee_reelle >= NOW() - INTERVAL '30 days')
     ORDER BY l.date_creation DESC
   `);
 

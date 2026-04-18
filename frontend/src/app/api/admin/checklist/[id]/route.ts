@@ -19,6 +19,7 @@ export async function GET(
       obtenu, date_obtention, notes
     FROM checklist_documents
     WHERE livraison_id = $1
+      AND deleted_at IS NULL
     ORDER BY obligatoire DESC, type_doc ASC
   `, [params.id]);
 

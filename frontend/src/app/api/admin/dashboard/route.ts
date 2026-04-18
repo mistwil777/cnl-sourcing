@@ -16,11 +16,11 @@ export async function GET(req: NextRequest) {
           (SELECT COUNT(*)::int FROM demandes
            WHERE statut IN ('nouvelle','en_analyse')
              AND deleted_at IS NULL)                                            AS demandes_actives,
-          (SELECT COUNT(*)::int FROM devis WHERE statut IN ('brouillon','envoyé')) AS devis_actifs,
+          (SELECT COUNT(*)::int FROM devis WHERE statut IN ('brouillon','envoyé') AND deleted_at IS NULL) AS devis_actifs,
           (SELECT COALESCE(SUM(montant_ttc), 0)::float FROM factures
-           WHERE statut_paiement = 'en_attente')                                AS paiements_attendus,
+           WHERE statut_paiement = 'en_attente' AND deleted_at IS NULL)         AS paiements_attendus,
           (SELECT COALESCE(SUM(montant_ttc), 0)::float FROM factures
-           WHERE statut_paiement = 'payé'
+           WHERE statut_paiement = 'payé' AND deleted_at IS NULL
              AND DATE_TRUNC('month', date_emission) = DATE_TRUNC('month', NOW())) AS ca_mois
       `),
 
@@ -89,6 +89,7 @@ export async function GET(req: NextRequest) {
         JOIN demandes dem ON dem.id = dev.demande_id
         JOIN clients  c   ON c.id  = dem.client_id
         WHERE dev.statut IN ('brouillon', 'envoyé')
+          AND dev.deleted_at IS NULL
         ORDER BY dev.created_at DESC
       `),
 
@@ -112,6 +113,7 @@ export async function GET(req: NextRequest) {
         FROM factures f
         JOIN clients c ON c.id = f.client_id
         WHERE f.statut_paiement = 'en_attente'
+          AND f.deleted_at IS NULL
         ORDER BY f.date_echeance ASC NULLS LAST
       `),
 
@@ -169,6 +171,7 @@ export async function GET(req: NextRequest) {
         JOIN demandes dem ON dem.id = dev.demande_id
         JOIN clients  c   ON c.id  = dem.client_id
         WHERE dev.statut IN ('accepté', 'refusé', 'expiré')
+          AND dev.deleted_at IS NULL
           AND dev.updated_at >= NOW() - INTERVAL '60 days'
         ORDER BY dev.updated_at DESC
         LIMIT 30
@@ -186,6 +189,7 @@ export async function GET(req: NextRequest) {
         FROM factures f
         JOIN clients c ON c.id = f.client_id
         WHERE f.statut_paiement = 'payé'
+          AND f.deleted_at IS NULL
           AND f.updated_at >= NOW() - INTERVAL '60 days'
         ORDER BY f.updated_at DESC
         LIMIT 30

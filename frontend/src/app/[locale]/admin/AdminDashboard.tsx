@@ -891,24 +891,39 @@ function OngletDevis({
   onEnvoyer,
   onRefresh,
   onCreerLivraison,
+  onDelete,
   historique,
 }: {
   devis:            Devis[];
   onEnvoyer:        (devisId: string) => Promise<void>;
   onRefresh:        () => void;
   onCreerLivraison: (demandeId: string) => void;
+  onDelete:         (id: string) => Promise<void>;
   historique:       HistoriqueItem[];
 }) {
-  const [modal,       setModal]       = useState<Devis | null>(null);
-  const [lignes,      setLignes]      = useState<LigneDevis[]>([]);
-  const [objet,       setObjet]       = useState("");
-  const [condPmt,     setCondPmt]     = useState("");
-  const [incoterms,   setIncoterms]   = useState("");
-  const [paysLiv,     setPaysLiv]     = useState("");
-  const [notes,       setNotes]       = useState("");
-  const [saving,      setSaving]      = useState(false);
-  const [sending,     setSending]     = useState(false);
-  const [showHisto,   setShowHisto]   = useState(false);
+  const [modal,         setModal]         = useState<Devis | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<Devis | null>(null);
+  const [deletingId,    setDeletingId]    = useState<string | null>(null);
+  const [lignes,        setLignes]        = useState<LigneDevis[]>([]);
+  const [objet,         setObjet]         = useState("");
+  const [condPmt,       setCondPmt]       = useState("");
+  const [incoterms,     setIncoterms]     = useState("");
+  const [paysLiv,       setPaysLiv]       = useState("");
+  const [notes,         setNotes]         = useState("");
+  const [saving,        setSaving]        = useState(false);
+  const [sending,       setSending]       = useState(false);
+  const [showHisto,     setShowHisto]     = useState(false);
+
+  async function handleDelete() {
+    if (!deleteConfirm) return;
+    setDeletingId(deleteConfirm.id);
+    try {
+      await onDelete(deleteConfirm.id);
+    } finally {
+      setDeletingId(null);
+      setDeleteConfirm(null);
+    }
+  }
 
   function openModal(d: Devis) {
     setModal(d);
@@ -964,14 +979,28 @@ function OngletDevis({
       <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
         {devis.map(d => (
           <div key={d.id} style={cardStyle}>
-            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "8px" }}>
               <div>
                 <p style={{ margin: 0, fontWeight: 700, fontSize: "15px" }}>
                   {d.client_entreprise || d.client_nom}
                 </p>
                 <p style={{ margin: "2px 0 0", fontSize: "12px", color: "#888" }}>{d.reference}</p>
               </div>
-              <DevisStatutBadge statut={d.statut} />
+              <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                <DevisStatutBadge statut={d.statut} />
+                <button
+                  onClick={() => setDeleteConfirm(d)}
+                  title="Supprimer ce devis"
+                  style={{ background: "none", border: "none", cursor: "pointer", padding: "4px", color: "#ccc", display: "flex", alignItems: "center" }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                    <path d="M10 11v6" /><path d="M14 11v6" />
+                    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                  </svg>
+                </button>
+              </div>
             </div>
 
             <p style={{ fontSize: "13px", color: "#555", margin: "0 0 6px", fontStyle: "italic" }}>
@@ -1203,6 +1232,37 @@ function OngletDevis({
         </div>
       )}
 
+      {/* ── Modal suppression devis ──────────────────────────────────────── */}
+      {deleteConfirm && (
+        <div
+          style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1100, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}
+          onClick={() => setDeleteConfirm(null)}
+        >
+          <div
+            style={{ backgroundColor: "#fff", borderRadius: "16px", padding: "24px 20px", width: "100%", maxWidth: "380px" }}
+            onClick={e => e.stopPropagation()}
+          >
+            <h3 style={{ margin: "0 0 8px", fontSize: "17px", fontWeight: 700, color: "#1a1a1a" }}>Supprimer ce devis ?</h3>
+            <p style={{ margin: "0 0 4px", fontSize: "14px", color: "#555" }}>
+              {deleteConfirm.objet || deleteConfirm.demande_titre} — <strong>{money(deleteConfirm.montant_ttc, deleteConfirm.devise)}</strong>
+            </p>
+            <p style={{ margin: "0 0 20px", fontSize: "12px", color: "#e74c3c", fontWeight: 600 }}>
+              La facture associée ne sera pas supprimée.
+            </p>
+            <div style={{ display: "flex", gap: "10px" }}>
+              <button onClick={() => setDeleteConfirm(null)}
+                style={{ flex: 1, padding: "10px", borderRadius: "10px", border: "1px solid #ddd", background: "#fff", fontSize: "14px", fontWeight: 600, cursor: "pointer", color: "#555" }}>
+                Annuler
+              </button>
+              <button onClick={handleDelete} disabled={deletingId === deleteConfirm.id}
+                style={{ flex: 1, padding: "10px", borderRadius: "10px", border: "none", background: "#e74c3c", fontSize: "14px", fontWeight: 600, cursor: "pointer", color: "#fff", opacity: deletingId === deleteConfirm.id ? 0.7 : 1 }}>
+                {deletingId === deleteConfirm.id ? "Suppression…" : "Supprimer"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── Historique devis ──────────────────────────────────────────────── */}
       {historique.length > 0 && (
         <div style={{ marginTop: "20px" }}>
@@ -1285,15 +1345,30 @@ const textareaStyle: React.CSSProperties = {
 function OngletFactures({
   factures,
   onRelancer,
+  onDelete,
   historique,
 }: {
   factures:    Facture[];
   onRelancer:  (factureId: string) => Promise<string>;
+  onDelete:    (id: string) => Promise<void>;
   historique:  HistoriqueItem[];
 }) {
-  const [loadingIds,   setLoadingIds]   = useState<Set<string>>(new Set());
-  const [emailPreview, setEmailPreview] = useState<string | null>(null);
-  const [showHisto,    setShowHisto]    = useState(false);
+  const [loadingIds,    setLoadingIds]    = useState<Set<string>>(new Set());
+  const [emailPreview,  setEmailPreview]  = useState<string | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<Facture | null>(null);
+  const [deletingId,    setDeletingId]    = useState<string | null>(null);
+  const [showHisto,     setShowHisto]     = useState(false);
+
+  async function handleDelete() {
+    if (!deleteConfirm) return;
+    setDeletingId(deleteConfirm.id);
+    try {
+      await onDelete(deleteConfirm.id);
+    } finally {
+      setDeletingId(null);
+      setDeleteConfirm(null);
+    }
+  }
 
   async function handleRelancer(id: string) {
     setLoadingIds(prev => new Set(prev).add(id));
@@ -1311,12 +1386,26 @@ function OngletFactures({
       <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
         {factures.map(f => (
           <div key={f.id} style={cardStyle}>
-            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "8px" }}>
               <div>
                 <p style={{ margin: 0, fontWeight: 700, fontSize: "15px" }}>{f.client_nom}</p>
                 <p style={{ margin: "2px 0 0", fontSize: "12px", color: "#888" }}>{f.reference}</p>
               </div>
-              <StatutPaiementBadge facture={f} />
+              <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                <StatutPaiementBadge facture={f} />
+                <button
+                  onClick={() => setDeleteConfirm(f)}
+                  title="Supprimer cette facture"
+                  style={{ background: "none", border: "none", cursor: "pointer", padding: "4px", color: "#ccc", display: "flex", alignItems: "center" }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                    <path d="M10 11v6" /><path d="M14 11v6" />
+                    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                  </svg>
+                </button>
+              </div>
             </div>
 
             <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "10px" }}>
@@ -1338,6 +1427,37 @@ function OngletFactures({
           </div>
         ))}
       </div>
+
+      {/* ── Modal suppression facture ──────────────────────────────────────── */}
+      {deleteConfirm && (
+        <div
+          style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1100, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}
+          onClick={() => setDeleteConfirm(null)}
+        >
+          <div
+            style={{ backgroundColor: "#fff", borderRadius: "16px", padding: "24px 20px", width: "100%", maxWidth: "380px" }}
+            onClick={e => e.stopPropagation()}
+          >
+            <h3 style={{ margin: "0 0 8px", fontSize: "17px", fontWeight: 700, color: "#1a1a1a" }}>Supprimer cette facture ?</h3>
+            <p style={{ margin: "0 0 4px", fontSize: "14px", color: "#555" }}>
+              {deleteConfirm.reference} — <strong>{money(deleteConfirm.montant_ttc, deleteConfirm.devise)}</strong>
+            </p>
+            <p style={{ margin: "0 0 20px", fontSize: "12px", color: "#e74c3c", fontWeight: 600 }}>
+              Cette action est irréversible.
+            </p>
+            <div style={{ display: "flex", gap: "10px" }}>
+              <button onClick={() => setDeleteConfirm(null)}
+                style={{ flex: 1, padding: "10px", borderRadius: "10px", border: "1px solid #ddd", background: "#fff", fontSize: "14px", fontWeight: 600, cursor: "pointer", color: "#555" }}>
+                Annuler
+              </button>
+              <button onClick={handleDelete} disabled={deletingId === deleteConfirm.id}
+                style={{ flex: 1, padding: "10px", borderRadius: "10px", border: "none", background: "#e74c3c", fontSize: "14px", fontWeight: 600, cursor: "pointer", color: "#fff", opacity: deletingId === deleteConfirm.id ? 0.7 : 1 }}>
+                {deletingId === deleteConfirm.id ? "Suppression…" : "Supprimer"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modal aperçu email de relance */}
       {emailPreview && (
@@ -1967,6 +2087,8 @@ function OngletLivraisons({
 }) {
   const [modalCreate,   setModalCreate]   = useState(false);
   const [modalStatut,   setModalStatut]   = useState<Livraison | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<Livraison | null>(null);
+  const [deletingId,    setDeletingId]    = useState<string | null>(null);
   const [checklist,     setChecklist]     = useState<Record<string, ChecklistDoc[]>>({});
   const [newStatut,     setNewStatut]     = useState("");
   const [loadingStatut, setLoadingStatut] = useState(false);
@@ -2066,6 +2188,21 @@ function OngletLivraisons({
     } finally { setLoadingStatut(false); }
   }
 
+  async function handleDeleteLivraison() {
+    if (!deleteConfirm) return;
+    setDeletingId(deleteConfirm.id);
+    try {
+      const res  = await fetch(`/api/admin/livraisons/${deleteConfirm.id}`, { method: "DELETE" });
+      const json = await res.json();
+      if (!res.ok) { onShowToast(json.error || "Erreur", "err"); return; }
+      onShowToast("Livraison supprimée", "ok");
+      setDeleteConfirm(null);
+      onRefresh();
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
   function isRetard(l: Livraison) {
     return !!(l.date_arrivee_estimee && !l.date_arrivee_reelle && l.statut !== "livre" &&
       new Date(l.date_arrivee_estimee) < new Date());
@@ -2085,7 +2222,7 @@ function OngletLivraisons({
           <div key={l.id} style={{ ...cardStyle, borderTop: isRetard(l) ? `3px solid ${RED}` : "3px solid transparent" }}>
             {/* En-tête */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "2px" }}>
-              <div>
+              <div style={{ flex: 1 }}>
                 <p style={{ margin: 0, fontWeight: 700, fontSize: "15px" }}>
                   {l.fournisseur_nom ?? "Fournisseur inconnu"}
                   {l.mode_transport && <span style={{ marginLeft: "6px", fontSize: "12px", color: "#888", fontWeight: 400 }}>({l.mode_transport})</span>}
@@ -2094,9 +2231,23 @@ function OngletLivraisons({
                   {[l.client_nom, l.demande_titre].filter(Boolean).join(" · ")}
                 </p>
               </div>
-              {isRetard(l) && (
-                <span style={{ backgroundColor: RED, color: "#fff", padding: "2px 8px", borderRadius: "20px", fontSize: "11px", fontWeight: 700, whiteSpace: "nowrap" }}>Retard</span>
-              )}
+              <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                {isRetard(l) && (
+                  <span style={{ backgroundColor: RED, color: "#fff", padding: "2px 8px", borderRadius: "20px", fontSize: "11px", fontWeight: 700, whiteSpace: "nowrap" }}>Retard</span>
+                )}
+                <button
+                  onClick={() => setDeleteConfirm(l)}
+                  title="Supprimer cette livraison"
+                  style={{ background: "none", border: "none", cursor: "pointer", padding: "4px", color: "#ccc", display: "flex", alignItems: "center" }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                    <path d="M10 11v6" /><path d="M14 11v6" />
+                    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                  </svg>
+                </button>
+              </div>
             </div>
 
             <LivraisonTimeline statut={l.statut} />
@@ -2157,6 +2308,38 @@ function OngletLivraisons({
           </div>
         ))}
       </div>
+
+      {/* ── Modal suppression livraison ────────────────────────────────── */}
+      {deleteConfirm && (
+        <div
+          style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1100, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}
+          onClick={() => setDeleteConfirm(null)}
+        >
+          <div
+            style={{ backgroundColor: "#fff", borderRadius: "16px", padding: "24px 20px", width: "100%", maxWidth: "380px" }}
+            onClick={e => e.stopPropagation()}
+          >
+            <h3 style={{ margin: "0 0 8px", fontSize: "17px", fontWeight: 700, color: "#1a1a1a" }}>Supprimer cette livraison ?</h3>
+            <p style={{ margin: "0 0 4px", fontSize: "14px", color: "#555" }}>
+              <strong>{deleteConfirm.fournisseur_nom ?? "Fournisseur inconnu"}</strong>
+              {deleteConfirm.demande_titre ? ` — ${deleteConfirm.demande_titre}` : ""}
+            </p>
+            <p style={{ margin: "0 0 20px", fontSize: "12px", color: "#e74c3c", fontWeight: 600 }}>
+              Les événements et documents associés seront également archivés.
+            </p>
+            <div style={{ display: "flex", gap: "10px" }}>
+              <button onClick={() => setDeleteConfirm(null)}
+                style={{ flex: 1, padding: "10px", borderRadius: "10px", border: "1px solid #ddd", background: "#fff", fontSize: "14px", fontWeight: 600, cursor: "pointer", color: "#555" }}>
+                Annuler
+              </button>
+              <button onClick={handleDeleteLivraison} disabled={deletingId === deleteConfirm.id}
+                style={{ flex: 1, padding: "10px", borderRadius: "10px", border: "none", background: "#e74c3c", fontSize: "14px", fontWeight: 600, cursor: "pointer", color: "#fff", opacity: deletingId === deleteConfirm.id ? 0.7 : 1 }}>
+                {deletingId === deleteConfirm.id ? "Suppression…" : "Supprimer"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Modal Créer livraison ──────────────────────────────────── */}
       {modalCreate && (
@@ -2496,6 +2679,30 @@ export default function AdminDashboard() {
     }
   }
 
+  async function handleDeleteDevis(id: string) {
+    try {
+      const res = await fetch(`/api/admin/devis/${id}`, { method: "DELETE" });
+      const json = await res.json();
+      if (!res.ok) { showToast(json.error || "Erreur", "err"); return; }
+      showToast("Devis supprimé", "ok");
+      fetchData();
+    } catch {
+      showToast("Erreur réseau", "err");
+    }
+  }
+
+  async function handleDeleteFacture(id: string) {
+    try {
+      const res = await fetch(`/api/admin/factures/${id}`, { method: "DELETE" });
+      const json = await res.json();
+      if (!res.ok) { showToast(json.error || "Erreur", "err"); return; }
+      showToast("Facture archivée", "ok");
+      fetchData();
+    } catch {
+      showToast("Erreur réseau", "err");
+    }
+  }
+
   // ── Calcul badge urgences ─────────────────────────────────────────────────
 
   const hasUrgent = data
@@ -2674,6 +2881,7 @@ export default function AdminDashboard() {
               onEnvoyer={handleEnvoyerDevis}
               onRefresh={fetchData}
               onCreerLivraison={handleDemarrerLivraison}
+              onDelete={handleDeleteDevis}
               historique={data.historique.devis}
             />
           )}
@@ -2681,6 +2889,7 @@ export default function AdminDashboard() {
             <OngletFactures
               factures={data.factures}
               onRelancer={handleRelancer}
+              onDelete={handleDeleteFacture}
               historique={data.historique.factures}
             />
           )}
