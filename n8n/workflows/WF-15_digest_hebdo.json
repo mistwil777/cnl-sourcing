@@ -1,8 +1,162 @@
 {
-  "_comment": "Phase 3 — en attente création profil LinkedIn Anna",
-  "name": "",
-  "nodes": [],
-  "connections": {},
+  "name": "WF-15 — Récepteur Telegram (réponses Anna)",
+  "nodes": [
+    {
+      "id": "wf15-node-0001-webhook",
+      "name": "Webhook Telegram entrant",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 300],
+      "webhookId": "telegram-anna-incoming",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "telegram-anna-incoming",
+        "responseMode": "onReceived",
+        "responseData": "firstEntryJson",
+        "options": {}
+      }
+    },
+    {
+      "id": "wf15-node-0002-parse-msg",
+      "name": "Extraire et classifier message Anna",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [220, 300],
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body || $input.first().json;\nconst msg  = body.message || body.edited_message;\nif (!msg) return [];\n\nconst chatId   = String(msg.chat?.id || '');\nconst text     = (msg.text || '').trim();\nconst fromId   = String(msg.from?.id || '');\nconst dateUnix = msg.date || Math.floor(Date.now()/1000);\n\n// Sécurité : messages d'Anna uniquement\nconst ANNA_CHAT_ID = $env.TELEGRAM_CHAT_ID;\nif (chatId !== ANNA_CHAT_ID && fromId !== ANNA_CHAT_ID) return [];\n\n// Lundi de la semaine courante\nconst now  = new Date(dateUnix * 1000);\nconst day  = now.getDay();\nconst diff = day === 0 ? -6 : 1 - day;\nconst lundi = new Date(now);\nlundi.setDate(now.getDate() + diff);\nlundi.setHours(0, 0, 0, 0);\nconst semaine = lundi.toISOString().split('T')[0];\n\n// Cherche un UUID dans le message (identifiant du post)\nconst uuidMatch = text.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i);\nconst postId    = uuidMatch ? uuidMatch[0] : null;\n\n// Classification :\n// - 'approve'  → commence par OK + UUID\n// - 'modifier' → contient un UUID + instructions (tout le reste du texte)\n// - 'insight'  → pas de UUID = réponse check-in\nlet type = 'insight';\nlet instructions = '';\n\nif (postId) {\n  const isOk = /^ok\\b/i.test(text);\n  if (isOk) {\n    type = 'approve';\n  } else {\n    type = 'modifier';\n    // Les instructions = texte sans l'UUID\n    instructions = text.replace(uuidMatch[0], '').replace(/^[\\s\\-:,]+/, '').trim();\n  }\n}\n\nreturn [{ json: { text, semaine, type, postId, instructions, chatId } }];"
+      }
+    },
+    {
+      "id": "wf15-node-0003-route",
+      "name": "Router : type de message",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [460, 300],
+      "parameters": {
+        "mode": "expression",
+        "output": "={{ $json.type === 'approve' ? 1 : $json.type === 'modifier' ? 2 : 0 }}",
+        "rules": {
+          "rules": [
+            { "outputKey": "0" },
+            { "outputKey": "1" },
+            { "outputKey": "2" }
+          ]
+        }
+      }
+    },
+    {
+      "id": "wf15-node-0004-save-insight",
+      "name": "Sauvegarder réponse check-in",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [700, 100],
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ 'https://cnlsourcing.com/api/internal/anna-insights/' + $json.semaine }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "x-internal-token", "value": "={{ $env.N8N_INTERNAL_TOKEN }}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ reponse: $json.text }) }}",
+        "options": { "timeout": 10000 }
+      }
+    },
+    {
+      "id": "wf15-node-0005-approve-post",
+      "name": "Approuver post LinkedIn",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [700, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "https://cnlsourcing.com/api/internal/linkedin-posts/approuver",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "x-internal-token", "value": "={{ $env.N8N_INTERNAL_TOKEN }}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ post_id: $json.postId }) }}",
+        "options": { "timeout": 15000 }
+      }
+    },
+    {
+      "id": "wf15-node-0006-call-modifier",
+      "name": "Demander modification à Claude",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [700, 500],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ 'https://cnlsourcing.com/api/internal/linkedin-posts/' + $json.postId + '/modifier' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "x-internal-token", "value": "={{ $env.N8N_INTERNAL_TOKEN }}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ instructions: $json.instructions }) }}",
+        "options": { "timeout": 30000 }
+      }
+    },
+    {
+      "id": "wf15-node-0007-telegram-preview-v2",
+      "name": "Telegram — Nouvelle version du post",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [960, 500],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ 'https://api.telegram.org/bot' + $env.TELEGRAM_BOT_TOKEN + '/sendMessage' }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  chat_id: $env.TELEGRAM_CHAT_ID,\n  parse_mode: 'HTML',\n  disable_web_page_preview: true,\n  text: '✏️ <b>Post modifié — nouvelle version</b>\\n\\n' + $json.contenu + '\\n\\n─────────────────\\n📋 <b>Pour publier :</b> réponds <code>OK ' + $json.id + '</code>\\n✏️ <b>Encore des modifs ?</b> Écris tes instructions + l\\'ID : <code>' + $json.id + '</code>'\n}) }}",
+        "options": { "timeout": 10000 }
+      }
+    },
+    {
+      "id": "wf15-node-0008-ack-insight",
+      "name": "Telegram — Accusé check-in",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [960, 100],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ 'https://api.telegram.org/bot' + $env.TELEGRAM_BOT_TOKEN + '/sendMessage' }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  chat_id: $env.TELEGRAM_CHAT_ID,\n  parse_mode: 'HTML',\n  text: '👍 Reçu ! Ta réponse enrichira les posts LinkedIn de cette semaine.'\n}) }}",
+        "options": { "timeout": 10000 }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Telegram entrant": { "main": [[{ "node": "Extraire et classifier message Anna", "type": "main", "index": 0 }]] },
+    "Extraire et classifier message Anna": { "main": [[{ "node": "Router : type de message", "type": "main", "index": 0 }]] },
+    "Router : type de message": {
+      "main": [
+        [{ "node": "Sauvegarder réponse check-in", "type": "main", "index": 0 }],
+        [{ "node": "Approuver post LinkedIn", "type": "main", "index": 0 }],
+        [{ "node": "Demander modification à Claude", "type": "main", "index": 0 }]
+      ]
+    },
+    "Sauvegarder réponse check-in":   { "main": [[{ "node": "Telegram — Accusé check-in", "type": "main", "index": 0 }]] },
+    "Demander modification à Claude":  { "main": [[{ "node": "Telegram — Nouvelle version du post", "type": "main", "index": 0 }]] }
+  },
   "active": false,
-  "settings": {}
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true
+  }
 }

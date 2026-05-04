@@ -85,11 +85,13 @@ services:
       DB_POSTGRESDB_DATABASE: ${POSTGRES_DB}
       DB_POSTGRESDB_USER: ${POSTGRES_USER}
       DB_POSTGRESDB_PASSWORD: ${POSTGRES_PASSWORD}
-      # URL
+      # URL et sous-chemin (CRITIQUE pour reverse proxy Nginx sur /n8n/)
       WEBHOOK_URL: https://${DOMAIN}/n8n/
       N8N_HOST: ${DOMAIN}
       N8N_PORT: 5678
       N8N_PROTOCOL: https
+      N8N_PATH: /n8n/
+      N8N_EDITOR_BASE_URL: https://${DOMAIN}/n8n/
       # Variables applicatives accessibles via $env dans les workflows
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}

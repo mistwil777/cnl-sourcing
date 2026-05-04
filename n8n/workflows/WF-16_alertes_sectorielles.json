@@ -1,8 +1,74 @@
 {
-  "_comment": "Phase 3 — en attente création profil LinkedIn Anna",
-  "name": "",
-  "nodes": [],
-  "connections": {},
+  "name": "WF-16 — Check-in Telegram hebdomadaire Anna",
+  "nodes": [
+    {
+      "id": "wf16-node-0001-schedule",
+      "name": "Lundi 9h — Envoyer questions",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 300],
+      "parameters": {
+        "rule": {
+          "interval": [{ "field": "cronExpression", "expression": "0 9 * * 1" }]
+        }
+      }
+    },
+    {
+      "id": "wf16-node-0002-prepare",
+      "name": "Préparer les 3 questions",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [220, 300],
+      "parameters": {
+        "jsCode": "// Génère 3 questions contextuelles selon la semaine\nconst now = new Date();\nconst weekNum = Math.ceil(now.getDate() / 7);\n\n// Banque de questions — varie chaque semaine\nconst banques = {\n  q1: [\n    \"Un client ou projet dont tu es particulièrement fière cette semaine ?\",\n    \"Une bonne nouvelle côté fournisseur Vietnam cette semaine ?\",\n    \"Un succès récent que tu aimerais partager avec ta communauté LinkedIn ?\",\n    \"Quel client ou secteur t'a surpris positivement cette semaine ?\"\n  ],\n  q2: [\n    \"Un défi ou obstacle que tu as surmonté (ou qui t'attend) ?\",\n    \"Quelque chose qui t'a compliqué la tâche cette semaine dans le sourcing ?\",\n    \"Un problème logistique ou douanier récent qui illustre les défis du métier ?\",\n    \"Une négociation difficile ou un point de tension avec un fournisseur ?\"\n  ],\n  q3: [\n    \"Un conseil ou insight à partager sur le sourcing Vietnam pour les PME françaises ?\",\n    \"Quelque chose que tu ferais différemment si tu recommençais dans ce métier ?\",\n    \"Un mythe sur l'import Vietnam que tu voudrais démystifier ?\",\n    \"Ta vision pour les 6 prochains mois sur l'activité import France-Vietnam ?\"\n  ]\n};\n\nconst idx = (weekNum - 1) % 4;\nconst q1 = banques.q1[idx];\nconst q2 = banques.q2[idx];\nconst q3 = banques.q3[idx];\n\nconst semaine = new Date(now);\nsemaine.setHours(0,0,0,0);\nsemaine.setDate(now.getDate() - now.getDay() + 1); // lundi\n\nconst message = `🗓 <b>Check-in hebdomadaire CNL Sourcing</b>\\n\\nBonjour Anna ! 3 petites questions pour personnaliser tes posts LinkedIn de la semaine. Réponds quand tu peux, en 1 ou plusieurs messages. Je rassemble tout.\\n\\n<b>1.</b> ${q1}\\n\\n<b>2.</b> ${q2}\\n\\n<b>3.</b> ${q3}\\n\\n<i>Réponds directement dans ce chat. Tes réponses enrichiront les posts publiés cette semaine.</i>`;\n\nreturn [{ json: { message, q1, q2, q3, semaine: semaine.toISOString().split('T')[0] } }];"
+      }
+    },
+    {
+      "id": "wf16-node-0003-telegram-send",
+      "name": "Telegram — Envoyer questions à Anna",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [440, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ 'https://api.telegram.org/bot' + $env.TELEGRAM_BOT_TOKEN + '/sendMessage' }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ chat_id: $env.TELEGRAM_CHAT_ID, parse_mode: 'HTML', text: $json.message, disable_web_page_preview: true }) }}",
+        "options": { "timeout": 10000 }
+      }
+    },
+    {
+      "id": "wf16-node-0004-save-semaine",
+      "name": "Créer entrée insight semaine",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [660, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "https://cnlsourcing.com/api/internal/anna-insights",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "x-internal-token", "value": "={{ $env.N8N_INTERNAL_TOKEN }}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ semaine: $('Préparer les 3 questions').item.json.semaine, question_1: $('Préparer les 3 questions').item.json.q1, question_2: $('Préparer les 3 questions').item.json.q2, question_3: $('Préparer les 3 questions').item.json.q3 }) }}",
+        "options": { "timeout": 10000 }
+      }
+    }
+  ],
+  "connections": {
+    "Lundi 9h — Envoyer questions":  { "main": [[{ "node": "Préparer les 3 questions", "type": "main", "index": 0 }]] },
+    "Préparer les 3 questions":      { "main": [[{ "node": "Telegram — Envoyer questions à Anna", "type": "main", "index": 0 }]] },
+    "Telegram — Envoyer questions à Anna": { "main": [[{ "node": "Créer entrée insight semaine", "type": "main", "index": 0 }]] }
+  },
   "active": false,
-  "settings": {}
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true
+  }
 }

@@ -1,8 +1,193 @@
 {
-  "_comment": "Phase 3 — en attente création profil LinkedIn Anna",
-  "name": "",
-  "nodes": [],
-  "connections": {},
+  "name": "WF-14 — Veille RSS France-Vietnam",
+  "nodes": [
+    {
+      "id": "wf14-node-0001-schedule",
+      "name": "Déclencheur quotidien 7h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 300],
+      "parameters": {
+        "rule": {
+          "interval": [{ "field": "cronExpression", "expression": "0 7 * * *" }]
+        }
+      }
+    },
+    {
+      "id": "wf14-node-0002-rss-vnexpress",
+      "name": "RSS — VnExpress International",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [220, 60],
+      "parameters": { "url": "https://e.vnexpress.net/rss/news.rss" }
+    },
+    {
+      "id": "wf14-node-0003-rss-vietnam-news",
+      "name": "RSS — Vietnam News",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [220, 200],
+      "parameters": { "url": "https://vietnamnews.vn/rss/politics.rss" }
+    },
+    {
+      "id": "wf14-node-0004-rss-freightwaves",
+      "name": "RSS — FreightWaves",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [220, 340],
+      "parameters": { "url": "https://www.freightwaves.com/news/feed" }
+    },
+    {
+      "id": "wf14-node-0005-rss-jorf",
+      "name": "RSS — Douane.gouv.fr",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [220, 480],
+      "parameters": { "url": "https://www.douane.gouv.fr/rss.xml" }
+    },
+    {
+      "id": "wf14-node-0006-http-cci",
+      "name": "HTTP — CCI France Vietnam",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [220, 620],
+      "parameters": {
+        "method": "GET",
+        "url": "https://ccifv.com/wp-json/wp/v2/posts?per_page=5&_fields=title,link,date,excerpt",
+        "options": { "timeout": 10000 }
+      }
+    },
+    {
+      "id": "wf14-node-0007-merge",
+      "name": "Fusionner toutes les sources",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [460, 340],
+      "parameters": { "mode": "append" }
+    },
+    {
+      "id": "wf14-node-0008-normalise",
+      "name": "Normaliser articles",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 340],
+      "parameters": {
+        "jsCode": "const items = [];\nfor (const item of $input.all()) {\n  const d = item.json;\n  const titre  = (d.title?.rendered || d.title || '').toString().replace(/<[^>]+>/g,'').trim();\n  const url    = d.link || d.guid || '';\n  const publie = d.pubDate || d.isoDate || d.date || new Date().toISOString();\n  const resume = (d.contentSnippet || d.summary || d.excerpt?.rendered || '').replace(/<[^>]+>/g,'').slice(0, 600);\n  const feedUrl = d.feed?.url || '';\n  const source  = feedUrl.includes('vnexpress') ? 'vnexpress'\n    : feedUrl.includes('vietnamnews') ? 'vietnamnews'\n    : feedUrl.includes('freightwaves') ? 'freightwaves'\n    : feedUrl.includes('douane') ? 'douane'\n    : (url.includes('ccifv') || d.link?.includes('ccifv')) ? 'ccifv'\n    : 'autre';\n  if (url && titre && titre.length > 5) {\n    items.push({ json: { titre, url, resume, source, publie_le: new Date(publie).toISOString() } });\n  }\n}\nreturn items;"
+      }
+    },
+    {
+      "id": "wf14-node-0009-filtre-mots",
+      "name": "Filtre pré-pertinence",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 340],
+      "parameters": {
+        "jsCode": "const KW = ['vietnam','viet nam','import','export','fournisseur','sourcing','supply chain','douane','taxe','tarif','textile','tissu','vêtement','garment','agroalimentaire','alimentaire','café','riz','crevette','artisanat','handicraft','transport','maritime','fret','shipping','conteneur','port','grève','blocage','guerre','sanction','industrie','manufacture','usine','économie','investissement','france','europe','ue','franco-vietnamien'];\nconst out = [];\nfor (const item of $input.all()) {\n  const text = (item.json.titre + ' ' + item.json.resume).toLowerCase();\n  if (KW.some(kw => text.includes(kw))) out.push(item);\n}\nreturn out;"
+      }
+    },
+    {
+      "id": "wf14-node-0010-claude-score",
+      "name": "Claude Haiku — Score pertinence",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1120, 340],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "x-api-key", "value": "={{ $env.ANTHROPIC_API_KEY }}" },
+            { "name": "anthropic-version", "value": "2023-06-01" },
+            { "name": "content-type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 50, messages: [{ role: 'user', content: 'CNL Sourcing = agence sourcing France-Vietnam (textile, agroalimentaire, artisanat). Note la pertinence de cet article pour notre audience PME française importatrice. Réponds UNIQUEMENT avec un chiffre entre 0.0 et 1.0.\\n\\nTitre: ' + $json.titre + '\\nRésumé: ' + $json.resume }] }) }}",
+        "options": { "timeout": 15000 }
+      }
+    },
+    {
+      "id": "wf14-node-0011-parse-score",
+      "name": "Associer score à l'article",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1340, 340],
+      "parameters": {
+        "jsCode": "const items = [];\nconst all = $input.all();\nfor (let i = 0; i < all.length; i++) {\n  const scoreRaw = all[i].json.content?.[0]?.text || '0';\n  const score = parseFloat(scoreRaw.match(/[0-9.]+/)?.[0] || '0');\n  // Récupère l'item source via le contexte de l'exécution courante\n  const src = all[i].json;\n  items.push({ json: {\n    titre:      src.titre || '',\n    url:        src.url   || '',\n    resume:     src.resume || '',\n    source:     src.source || '',\n    publie_le:  src.publie_le || new Date().toISOString(),\n    pertinence: score\n  }});\n}\nreturn items;"
+      }
+    },
+    {
+      "id": "wf14-node-0012-filtre-score",
+      "name": "Filtre score >= 0.55",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [1560, 340],
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": false, "leftValue": "", "typeValidation": "loose" },
+          "conditions": [
+            {
+              "id": "cond-pertinence",
+              "leftValue": "={{ $json.pertinence }}",
+              "rightValue": 0.55,
+              "operator": { "type": "number", "operation": "gte" }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "wf14-node-0013-save-db",
+      "name": "Sauvegarder en base",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1780, 340],
+      "parameters": {
+        "method": "POST",
+        "url": "https://cnlsourcing.com/api/internal/veille",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "x-internal-token", "value": "={{ $env.N8N_INTERNAL_TOKEN }}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": { "timeout": 10000 }
+      }
+    }
+  ],
+  "connections": {
+    "Déclencheur quotidien 7h": {
+      "main": [[
+        { "node": "RSS — VnExpress International", "type": "main", "index": 0 },
+        { "node": "RSS — Vietnam News", "type": "main", "index": 0 },
+        { "node": "RSS — FreightWaves", "type": "main", "index": 0 },
+        { "node": "RSS — Douane.gouv.fr", "type": "main", "index": 0 },
+        { "node": "HTTP — CCI France Vietnam", "type": "main", "index": 0 }
+      ]]
+    },
+    "RSS — VnExpress International":    { "main": [[{ "node": "Fusionner toutes les sources", "type": "main", "index": 0 }]] },
+    "RSS — Vietnam News":               { "main": [[{ "node": "Fusionner toutes les sources", "type": "main", "index": 1 }]] },
+    "RSS — FreightWaves":               { "main": [[{ "node": "Fusionner toutes les sources", "type": "main", "index": 2 }]] },
+    "RSS — Douane.gouv.fr":             { "main": [[{ "node": "Fusionner toutes les sources", "type": "main", "index": 3 }]] },
+    "HTTP — CCI France Vietnam":        { "main": [[{ "node": "Fusionner toutes les sources", "type": "main", "index": 4 }]] },
+    "Fusionner toutes les sources":     { "main": [[{ "node": "Normaliser articles", "type": "main", "index": 0 }]] },
+    "Normaliser articles":              { "main": [[{ "node": "Filtre pré-pertinence", "type": "main", "index": 0 }]] },
+    "Filtre pré-pertinence":            { "main": [[{ "node": "Claude Haiku — Score pertinence", "type": "main", "index": 0 }]] },
+    "Claude Haiku — Score pertinence":  { "main": [[{ "node": "Associer score à l'article", "type": "main", "index": 0 }]] },
+    "Associer score à l'article":       { "main": [[{ "node": "Filtre score >= 0.55", "type": "main", "index": 0 }]] },
+    "Filtre score >= 0.55":             { "main": [[{ "node": "Sauvegarder en base", "type": "main", "index": 0 }]] }
+  },
   "active": false,
-  "settings": {}
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  }
 }
