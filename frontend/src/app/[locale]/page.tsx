@@ -142,8 +142,12 @@ export default function HomePage() {
                   ))}
                 </ul>
               </div>
-              <div className="bg-gradient-to-br from-brand-red/10 to-brand-gold/10 rounded-2xl aspect-square flex items-center justify-center">
-                <span className="text-8xl">🇻🇳</span>
+              <div className="flex items-center justify-center">
+                <img
+                  src="/images/logo-cnl.png"
+                  alt="CNL Sourcing"
+                  className="w-full max-w-sm rounded-2xl shadow-2xl"
+                />
               </div>
             </div>
           </div>
