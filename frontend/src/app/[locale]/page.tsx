@@ -142,8 +142,14 @@ export default function HomePage() {
                   ))}
                 </ul>
               </div>
-              <div className="bg-gradient-to-br from-brand-red/10 to-brand-gold/10 rounded-2xl aspect-square flex items-center justify-center">
-                <span className="text-8xl">🇻🇳</span>
+              <div className="bg-gradient-to-br from-brand-red/10 to-brand-gold/10 rounded-2xl aspect-square flex items-center justify-center p-8">
+                <img
+                  src="/images/logo-cnl-emblem.svg"
+                  alt="CNL Sourcing — Agent France Vietnam"
+                  className="w-full h-full object-contain drop-shadow-xl"
+                  width={400}
+                  height={400}
+                />
               </div>
             </div>
           </div>

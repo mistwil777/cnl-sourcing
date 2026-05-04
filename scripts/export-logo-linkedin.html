@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<!--
+  CNL Sourcing — Export logo LinkedIn en PNG 400×400
+  Ouvrir dans Chrome/Edge, cliquer "Télécharger PNG"
+-->
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Export Logo CNL Sourcing — LinkedIn</title>
+  <style>
+    body { font-family: Arial, sans-serif; display:flex; flex-direction:column; align-items:center; padding:40px; background:#f5f5f5; }
+    h1 { color:#8B1A1A; margin-bottom:8px; }
+    p  { color:#666; margin-bottom:24px; }
+    canvas { border-radius:8px; box-shadow:0 4px 24px rgba(0,0,0,0.15); }
+    button {
+      margin-top:24px; padding:14px 36px;
+      background:#8B1A1A; color:white; border:none;
+      border-radius:8px; font-size:16px; cursor:pointer;
+      letter-spacing:1px;
+    }
+    button:hover { background:#6d1414; }
+    .note { margin-top:16px; font-size:12px; color:#999; }
+  </style>
+</head>
+<body>
+  <h1>Logo CNL Sourcing — LinkedIn</h1>
+  <p>Aperçu 400×400 px — Format recommandé LinkedIn</p>
+  <canvas id="c" width="400" height="400"></canvas>
+  <button onclick="download()">Télécharger PNG (400×400)</button>
+  <p class="note">Le fichier PNG sera nommé <strong>cnl-sourcing-logo-linkedin.png</strong></p>
+
+  <script>
+    const canvas = document.getElementById('c');
+    const ctx    = canvas.getContext('2d');
+
+    function draw() {
+      const W = 400, H = 400;
+
+      // ── Fond rouge ──────────────────────────────────────────────────────
+      ctx.fillStyle = '#8B1A1A';
+      ctx.fillRect(0, 0, W, H);
+
+      // ── Bordures dorées ─────────────────────────────────────────────────
+      ctx.fillStyle = '#C9A84C';
+      ctx.fillRect(0, 0, W, 3.5);
+      ctx.fillRect(0, H - 3.5, W, 3.5);
+
+      // ── Coins dorés ─────────────────────────────────────────────────────
+      ctx.fillStyle = 'rgba(201,168,76,0.5)';
+      // coin haut-gauche
+      ctx.fillRect(28, 28, 28, 2); ctx.fillRect(28, 28, 2, 28);
+      // coin haut-droit
+      ctx.fillRect(344, 28, 28, 2); ctx.fillRect(370, 28, 2, 28);
+      // coin bas-gauche
+      ctx.fillRect(28, 370, 28, 2); ctx.fillRect(28, 344, 2, 28);
+      // coin bas-droit
+      ctx.fillRect(344, 370, 28, 2); ctx.fillRect(370, 344, 2, 28);
+
+      // ── Arc pont France–Vietnam ─────────────────────────────────────────
+      // Point gauche (or = France)
+      ctx.beginPath();
+      ctx.arc(128, 238, 6.5, 0, Math.PI * 2);
+      ctx.fillStyle = '#C9A84C';
+      ctx.fill();
+
+      // Point droit (blanc = Vietnam)
+      ctx.beginPath();
+      ctx.arc(272, 238, 6.5, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255,255,255,0.7)';
+      ctx.fill();
+
+      // Courbe
+      ctx.beginPath();
+      ctx.moveTo(134, 238);
+      ctx.quadraticCurveTo(200, 168, 266, 238);
+      ctx.strokeStyle = '#C9A84C';
+      ctx.lineWidth   = 2.5;
+      ctx.lineCap     = 'round';
+      ctx.globalAlpha = 0.9;
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      // ── CNL ─────────────────────────────────────────────────────────────
+      ctx.fillStyle    = 'white';
+      ctx.font         = 'bold 96px Georgia, serif';
+      ctx.textAlign    = 'center';
+      ctx.textBaseline = 'alphabetic';
+      ctx.letterSpacing = '-4px';
+      ctx.fillText('CNL', 200, 232);
+
+      // ── Ligne dorée ──────────────────────────────────────────────────────
+      ctx.fillStyle = '#C9A84C';
+      ctx.fillRect(128, 248, 144, 2);
+
+      // ── SOURCING ─────────────────────────────────────────────────────────
+      ctx.fillStyle    = '#C9A84C';
+      ctx.font         = '400 16px Arial, Helvetica, sans-serif';
+      ctx.letterSpacing = '9px';
+      ctx.fillText('SOURCING', 200, 272);
+
+      // ── FRANCE · VIETNAM ─────────────────────────────────────────────────
+      ctx.fillStyle    = 'rgba(255,255,255,0.45)';
+      ctx.font         = '300 11px Arial, Helvetica, sans-serif';
+      ctx.letterSpacing = '4px';
+      ctx.fillText('FRANCE · VIETNAM', 200, 320);
+    }
+
+    function download() {
+      const link = document.createElement('a');
+      link.download = 'cnl-sourcing-logo-linkedin.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    draw();
+  </script>
+</body>
+</html>
