@@ -1,7 +1,7 @@
 "use client";
 
 import { useLocale } from "next-intl";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 const locales = [
   { code: "fr", label: "FR" },
@@ -12,10 +12,8 @@ const locales = [
 export default function LocaleSwitcher() {
   const locale = useLocale();
   const pathname = usePathname();
-  const router = useRouter();
 
   const switchLocale = (newLocale: string) => {
-    // Remplace le préfixe de locale dans le pathname
     const segments = pathname.split("/");
     if (["fr", "en", "vi"].includes(segments[1])) {
       segments[1] = newLocale === "fr" ? "" : newLocale;
@@ -23,7 +21,8 @@ export default function LocaleSwitcher() {
       segments.splice(1, 0, newLocale === "fr" ? "" : newLocale);
     }
     const newPath = segments.join("/").replace("//", "/") || "/";
-    router.push(newPath);
+    // Rechargement complet nécessaire pour réinitialiser le contexte i18n
+    window.location.href = newPath;
   };
 
   return (
