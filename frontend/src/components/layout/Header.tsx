@@ -27,12 +27,9 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href={`${base}/`} className="flex items-center">
-            <img
-              src="/images/logo-cnl.png"
-              alt="CNL Sourcing"
-              className="h-10 w-auto"
-            />
+          <Link href={`${base}/`} className="flex items-center gap-2">
+            <span className="font-serif text-2xl font-bold text-brand-red">CNL</span>
+            <span className="font-serif text-2xl font-bold text-brand-dark">Sourcing</span>
           </Link>
 
           {/* Nav desktop */}
