@@ -32,7 +32,11 @@ export const metadata: Metadata = {
     description:
       "Sourcing textile, agroalimentaire et artisanat Vietnam → France. Groupage fret, assistance douanière EVFTA.",
     url: "https://cnlsourcing.com/fr/services",
-    images: [{ url: "/icons/icon-512.png", width: 512, height: 512, alt: "Services CNL Sourcing" }],
+    images: [{ url: "https://cnlsourcing.com/api/og?title=Services%20de%20sourcing%20Vietnam&subtitle=Textile%20%C2%B7%20Agroalimentaire%20%C2%B7%20Artisanat%20%E2%80%94%20Groupage%20fret%20%26%20assistance%20douani%C3%A8re%20EVFTA", width: 1200, height: 630, alt: "Services sourcing Vietnam — CNL Sourcing" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["https://cnlsourcing.com/api/og?title=Services%20de%20sourcing%20Vietnam&subtitle=Textile%20%C2%B7%20Agroalimentaire%20%C2%B7%20Artisanat%20%E2%80%94%20Groupage%20fret%20%26%20assistance%20douani%C3%A8re%20EVFTA"],
   },
 };
 

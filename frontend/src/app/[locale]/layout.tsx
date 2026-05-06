@@ -50,19 +50,19 @@ export const metadata: Metadata = {
     url: "https://cnlsourcing.com/fr",
     images: [
       {
-        url: "/icons/icon-512.png",
-        width: 512,
-        height: 512,
-        alt: "CNL Sourcing — Agent sourcing Vietnam France",
+        url: "https://cnlsourcing.com/api/og",
+        width: 1200,
+        height: 630,
+        alt: "CNL Sourcing — Agent de sourcing Vietnam France",
       },
     ],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "CNL Sourcing — Agent de sourcing Vietnam France",
     description:
       "Agent de sourcing Vietnam pour PME françaises. Textile, agroalimentaire, artisanat.",
-    images: ["/icons/icon-512.png"],
+    images: ["https://cnlsourcing.com/api/og"],
   },
   icons: {
     icon: "/icons/icon-192.png",
@@ -90,7 +90,10 @@ export default async function LocaleLayout({
     name: "CNL Sourcing",
     url: "https://cnlsourcing.com",
     logo: "https://cnlsourcing.com/icons/icon-512.png",
-    image: "https://cnlsourcing.com/icons/icon-512.png",
+    image: "https://cnlsourcing.com/api/og",
+    sameAs: [
+      "https://www.linkedin.com/company/cnl-sourcing",
+    ],
     description:
       "Agent de sourcing Vietnam pour PME françaises. Textile, agroalimentaire, artisanat — fournisseurs audités, négociation en vietnamien, tarifs locaux garantis.",
     email: "cnlsourcingvn@gmail.com",

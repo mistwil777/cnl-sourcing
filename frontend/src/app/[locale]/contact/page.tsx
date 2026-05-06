@@ -28,7 +28,11 @@ export const metadata: Metadata = {
     title: "Contact — CNL Sourcing Toulouse",
     description: "Contactez Anna Nguyen, agent sourcing Vietnam basé à Toulouse. Réponse sous 48h.",
     url: "https://cnlsourcing.com/fr/contact",
-    images: [{ url: "/icons/icon-512.png", width: 512, height: 512, alt: "Contact CNL Sourcing" }],
+    images: [{ url: "https://cnlsourcing.com/api/og?title=Contactez%20CNL%20Sourcing&subtitle=Anna%20Nguyen%20r%C3%A9pond%20sous%2048h%20%E2%80%94%20Toulouse%2C%20Occitanie", width: 1200, height: 630, alt: "Contact CNL Sourcing" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["https://cnlsourcing.com/api/og?title=Contactez%20CNL%20Sourcing&subtitle=Anna%20Nguyen%20r%C3%A9pond%20sous%2048h%20%E2%80%94%20Toulouse%2C%20Occitanie"],
   },
 };
 

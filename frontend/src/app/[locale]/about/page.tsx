@@ -33,12 +33,16 @@ export const metadata: Metadata = {
     url: "https://cnlsourcing.com/fr/about",
     images: [
       {
-        url: "/images/anna.jpg",
-        width: 800,
-        height: 600,
+        url: "https://cnlsourcing.com/api/og?title=Anna%20Nguyen%2C%20fondatrice%20CNL%20Sourcing&subtitle=10%20ans%20d%E2%80%99exp%C3%A9rience%20Vietnam%20%E2%80%94%20N%C3%A9gociation%20en%20vietnamien%2C%20r%C3%A9seau%20de%20fournisseurs%20audit%C3%A9s",
+        width: 1200,
+        height: 630,
         alt: "Anna Nguyen — Fondatrice CNL Sourcing",
       },
     ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["https://cnlsourcing.com/api/og?title=Anna%20Nguyen%2C%20fondatrice%20CNL%20Sourcing&subtitle=10%20ans%20d%E2%80%99exp%C3%A9rience%20Vietnam%20%E2%80%94%20N%C3%A9gociation%20en%20vietnamien%2C%20r%C3%A9seau%20de%20fournisseurs%20audit%C3%A9s"],
   },
 };
 

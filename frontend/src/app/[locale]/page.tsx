@@ -43,12 +43,16 @@ export async function generateMetadata({
       url: `https://cnlsourcing.com/${locale}`,
       images: [
         {
-          url: "/icons/icon-512.png",
-          width: 512,
-          height: 512,
-          alt: "CNL Sourcing — Agent sourcing Vietnam France",
+          url: "https://cnlsourcing.com/api/og",
+          width: 1200,
+          height: 630,
+          alt: "CNL Sourcing — Agent de sourcing Vietnam France",
         },
       ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      images: ["https://cnlsourcing.com/api/og"],
     },
   };
 }

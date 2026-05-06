@@ -29,7 +29,11 @@ export const metadata: Metadata = {
     description:
       "Audit sourcing Vietnam à partir de 250€. Top 3 fournisseurs, estimation coûts et délais, réponse sous 48h.",
     url: "https://cnlsourcing.com/fr/devis",
-    images: [{ url: "/icons/icon-512.png", width: 512, height: 512, alt: "Devis sourcing Vietnam" }],
+    images: [{ url: "https://cnlsourcing.com/api/og?title=Demander%20un%20devis%20sourcing%20Vietnam&subtitle=Audit%20%C3%A0%20partir%20de%20250%E2%82%AC%20%E2%80%94%20Top%203%20fournisseurs%2C%20r%C3%A9ponse%20sous%2048h", width: 1200, height: 630, alt: "Devis sourcing Vietnam — CNL Sourcing" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["https://cnlsourcing.com/api/og?title=Demander%20un%20devis%20sourcing%20Vietnam&subtitle=Audit%20%C3%A0%20partir%20de%20250%E2%82%AC%20%E2%80%94%20Top%203%20fournisseurs%2C%20r%C3%A9ponse%20sous%2048h"],
   },
 };
 
