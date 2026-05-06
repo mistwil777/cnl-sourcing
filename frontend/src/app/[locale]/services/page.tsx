@@ -47,11 +47,62 @@ const serviceIcons: Record<string, string> = {
   douane: "🛃",
 };
 
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "Combien coûte un audit de sourcing au Vietnam ?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "L'audit sourcing CNL Sourcing démarre à partir de 250€. Il inclut une sélection de 3 fournisseurs audités, une estimation des coûts et délais, et un rapport complet sous 48h.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Quels produits pouvez-vous sourcer au Vietnam ?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "CNL Sourcing couvre trois secteurs : le textile (vêtements, accessoires, maison), l'agroalimentaire (café, épices, thé, produits transformés) et l'artisanat (bambou, laque, céramique, vannerie).",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Faut-il se déplacer au Vietnam pour travailler avec CNL Sourcing ?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Non. Anna Nguyen est basée entre Toulouse et le Vietnam. Elle gère les visites fournisseurs, les négociations en vietnamien et les contrôles qualité sur place en votre nom.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Gérez-vous les formalités douanières et l'accord EVFTA ?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Oui. CNL Sourcing propose une assistance douanière complète incluant la vérification de l'éligibilité à l'accord de libre-échange EVFTA (Vietnam-France), qui permet de réduire ou supprimer les droits de douane sur de nombreux produits.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Proposez-vous du groupage de fret depuis le Vietnam ?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Oui. Pour les PME qui importent de petits volumes, CNL Sourcing organise des solutions de groupage maritime ou aérien depuis les ports de Hanoï et Hô Chi Minh-Ville.",
+      },
+    },
+  ],
+};
+
 export default function ServicesPage() {
   const t = useTranslations("services_page");
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <Header />
       <main>
         <section className="bg-brand-dark text-white py-16">

@@ -43,9 +43,19 @@ const steps = [
   { n: "3", label: "Devis détaillé & Top 3 fournisseurs" },
 ];
 
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Accueil", item: "https://cnlsourcing.com/fr" },
+    { "@type": "ListItem", position: 2, name: "Demander un devis", item: "https://cnlsourcing.com/fr/devis" },
+  ],
+};
+
 export default function DevisPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <Header />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Titre */}

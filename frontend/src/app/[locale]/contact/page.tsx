@@ -36,11 +36,21 @@ export const metadata: Metadata = {
   },
 };
 
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Accueil", item: "https://cnlsourcing.com/fr" },
+    { "@type": "ListItem", position: 2, name: "Contact", item: "https://cnlsourcing.com/fr/contact" },
+  ],
+};
+
 export default function ContactPage() {
   const t = useTranslations("contact_page");
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <Header />
       <main>
         <section className="bg-brand-dark text-white py-16">

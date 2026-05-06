@@ -53,11 +53,21 @@ const valueKeys = [
   { key: "speed",  emoji: "⚡" },
 ] as const;
 
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Accueil", item: "https://cnlsourcing.com/fr" },
+    { "@type": "ListItem", position: 2, name: "À propos", item: "https://cnlsourcing.com/fr/about" },
+  ],
+};
+
 export default function AboutPage() {
   const t = useTranslations("about_page");
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <Header />
       <main>
         <section className="bg-brand-dark text-white py-16">
