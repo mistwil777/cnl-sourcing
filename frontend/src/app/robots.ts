@@ -5,9 +5,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: "/",
-        allow: ["/api/og"],
-        disallow: ["/fr/admin", "/en/admin", "/vi/admin", "/api/"],
+        allow: ["/", "/api/og"],
+        disallow: ["/fr/admin", "/en/admin", "/vi/admin", "/api/internal/"],
       },
     ],
     sitemap: "https://cnlsourcing.com/sitemap.xml",
