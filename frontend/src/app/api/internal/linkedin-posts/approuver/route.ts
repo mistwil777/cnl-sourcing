@@ -8,17 +8,17 @@ import { query } from "@/lib/db/client";
 const INTERNAL_TOKEN = process.env.N8N_INTERNAL_TOKEN ?? "cnl-internal-2026";
 
 async function publierSurLinkedIn(contenu: string): Promise<{ linkedinPostId: string } | { error: string }> {
-  const personId = process.env.LINKEDIN_PERSON_ID;
-  const liAt     = process.env.LINKEDIN_LI_AT;
+  const personId    = process.env.LINKEDIN_PERSON_ID;
+  const accessToken = process.env.LINKEDIN_ACCESS_TOKEN;
 
-  if (!personId || !liAt) {
-    return { error: "Credentials LinkedIn manquants (LINKEDIN_PERSON_ID / LINKEDIN_LI_AT)" };
+  if (!personId || !accessToken) {
+    return { error: "Credentials LinkedIn manquants (LINKEDIN_PERSON_ID / LINKEDIN_ACCESS_TOKEN)" };
   }
 
   const resp = await fetch("https://api.linkedin.com/v2/ugcPosts", {
     method: "POST",
     headers: {
-      "Authorization":               `Bearer ${liAt}`,
+      "Authorization":               `Bearer ${accessToken}`,
       "X-RestLi-Protocol-Version":   "2.0.0",
       "Content-Type":                "application/json",
     },
