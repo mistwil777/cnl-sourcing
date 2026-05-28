@@ -16,18 +16,18 @@ export async function GET(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const result = await query(
+  const rows = await query<{ value: string; updated_at: string }>(
     "SELECT value, updated_at FROM app_config WHERE key = $1",
     [params.key]
   );
 
-  if (result.rows.length === 0) {
+  if (rows.length === 0) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
   return NextResponse.json({
     key: params.key,
-    value: result.rows[0].value,
-    updated_at: result.rows[0].updated_at,
+    value: rows[0].value,
+    updated_at: rows[0].updated_at,
   });
 }
