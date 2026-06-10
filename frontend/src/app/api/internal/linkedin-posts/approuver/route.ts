@@ -8,12 +8,21 @@ import { query } from "@/lib/db/client";
 const INTERNAL_TOKEN = process.env.N8N_INTERNAL_TOKEN ?? "cnl-internal-2026";
 
 async function publierSurLinkedIn(contenu: string): Promise<{ linkedinPostId: string } | { error: string }> {
+  const orgId       = process.env.LINKEDIN_ORG_ID;
   const personId    = process.env.LINKEDIN_PERSON_ID;
   const accessToken = process.env.LINKEDIN_ACCESS_TOKEN;
 
-  if (!personId || !accessToken) {
-    return { error: "Credentials LinkedIn manquants (LINKEDIN_PERSON_ID / LINKEDIN_ACCESS_TOKEN)" };
+  if (!accessToken) {
+    return { error: "LINKEDIN_ACCESS_TOKEN manquant" };
   }
+  if (!orgId && !personId) {
+    return { error: "LINKEDIN_ORG_ID (page entreprise) ou LINKEDIN_PERSON_ID requis" };
+  }
+
+  // Priorité : page entreprise (LINKEDIN_ORG_ID) > profil perso (LINKEDIN_PERSON_ID)
+  const author = orgId
+    ? `urn:li:organization:${orgId}`
+    : `urn:li:person:${personId}`;
 
   const resp = await fetch("https://api.linkedin.com/v2/ugcPosts", {
     method: "POST",
@@ -23,7 +32,7 @@ async function publierSurLinkedIn(contenu: string): Promise<{ linkedinPostId: st
       "Content-Type":                "application/json",
     },
     body: JSON.stringify({
-      author:         `urn:li:person:${personId}`,
+      author,
       lifecycleState: "PUBLISHED",
       specificContent: {
         "com.linkedin.ugc.ShareContent": {
