@@ -96,6 +96,7 @@ services:
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
       TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID}
+      N8N_INTERNAL_TOKEN: ${N8N_INTERNAL_TOKEN}
       # Autoriser l'accès à $env dans les expressions des workflows
       N8N_BLOCK_ENV_ACCESS_IN_NODE: "false"
     volumes:
