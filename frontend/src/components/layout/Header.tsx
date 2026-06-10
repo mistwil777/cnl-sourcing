@@ -18,6 +18,7 @@ export default function Header() {
   const links = [
     { href: `${base}/`, label: t("home") },
     { href: `${base}/services`, label: t("services") },
+    { href: `${base}/blog`, label: t("blog") },
     { href: `${base}/about`, label: t("about") },
     { href: `${base}/contact`, label: t("contact") },
   ];

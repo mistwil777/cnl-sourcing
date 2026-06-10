@@ -1,4 +1,5 @@
 import { MetadataRoute } from "next";
+import { getBlogPosts } from "@/lib/blog";
 
 const baseUrl = "https://cnlsourcing.com";
 const locales = ["fr", "en", "vi"] as const;
@@ -10,6 +11,7 @@ const pages: Array<{
 }> = [
   { path: "", changeFrequency: "weekly", priority: 1.0 },
   { path: "/services", changeFrequency: "monthly", priority: 0.9 },
+  { path: "/blog", changeFrequency: "weekly", priority: 0.85 },
   { path: "/about", changeFrequency: "monthly", priority: 0.8 },
   { path: "/contact", changeFrequency: "monthly", priority: 0.8 },
   { path: "/devis", changeFrequency: "weekly", priority: 0.9 },
@@ -32,6 +34,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
         },
       });
     }
+  }
+
+  // Articles de blog (FR uniquement pour l'instant)
+  const posts = getBlogPosts("fr");
+  for (const post of posts) {
+    entries.push({
+      url: `${baseUrl}/fr/blog/${post.slug}`,
+      lastModified: new Date(post.date),
+      changeFrequency: "monthly",
+      priority: 0.8,
+      alternates: {
+        languages: { fr: `${baseUrl}/fr/blog/${post.slug}` },
+      },
+    });
   }
 
   return entries;
