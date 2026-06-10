@@ -5,15 +5,12 @@ import { ArrowLeft } from "lucide-react";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import { getBlogPost, getAllBlogSlugs } from "@/lib/blog";
+import { getBlogPost } from "@/lib/blog";
+
+export const dynamic = "force-dynamic";
 
 interface Props {
   params: { locale: string; slug: string };
-}
-
-export async function generateStaticParams() {
-  const slugs = getAllBlogSlugs("fr");
-  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
