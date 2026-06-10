@@ -5,9 +5,48 @@ import { ArrowRight, Shield, Clock, Globe, TrendingUp } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
+const homeFaqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "Qu'est-ce qu'un agent de sourcing en Asie ?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Un agent de sourcing en Asie est un intermédiaire basé localement qui identifie des fournisseurs fiables, négocie les prix dans la langue locale et contrôle la qualité avant l'expédition. CNL Sourcing est spécialisée au Vietnam et travaille pour des PME françaises.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Comment trouver un grossiste en Asie pour importer en France ?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Pour importer depuis l'Asie en France, il est recommandé de passer par un agent de sourcing local comme CNL Sourcing. Anna Nguyen sélectionne et audite des fournisseurs au Vietnam, négocie directement en vietnamien et organise le fret et les formalités douanières.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Le Vietnam est-il une bonne alternative à la Chine pour l'approvisionnement ?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Oui. Le Vietnam offre des coûts de production compétitifs, une main-d'œuvre qualifiée et bénéficie de l'accord EVFTA qui réduit les droits de douane pour les importations vers la France. C'est une alternative sérieuse à la Chine pour le textile, l'agroalimentaire et l'artisanat.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Peut-on utiliser CNL Sourcing pour du dropshipping depuis l'Asie ?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Oui. CNL Sourcing accompagne les e-commerçants et entrepreneurs en dropshipping souhaitant s'approvisionner en Asie. Nous identifions des fournisseurs vietnamiens fiables, négocions les conditions et organisons la logistique pour vos commandes.",
+      },
+    },
+  ],
+};
+
 const descriptions: Record<string, string> = {
-  fr: "Agent de sourcing Vietnam pour PME françaises. Textile, agroalimentaire, artisanat — fournisseurs audités, négociation en vietnamien, tarifs locaux garantis. Audit à partir de 250€, réponse sous 48h.",
-  en: "Vietnam sourcing agent for French SMEs. Textiles, food & beverage, crafts — audited suppliers, Vietnamese-speaking negotiator, local pricing guaranteed.",
+  fr: "Agent de sourcing Asie pour PME françaises — spécialiste Vietnam. Grossiste textile, agroalimentaire, artisanat. Fournisseurs audités, import Asie clé en main, tarifs locaux garantis. Alternative Chine, dropshipping Asie. Toulouse.",
+  en: "Asia sourcing agent for French SMEs — Vietnam specialist. Audited suppliers, Vietnamese-speaking negotiator, local pricing guaranteed. Textiles, food & beverage, crafts.",
   vi: "Đại lý tìm nguồn cung ứng Việt Nam cho doanh nghiệp Pháp. Dệt may, thực phẩm, thủ công mỹ nghệ — nhà cung cấp được kiểm toán, đàm phán bằng tiếng Việt.",
 };
 
@@ -62,6 +101,10 @@ export default function HomePage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeFaqJsonLd) }}
+      />
       <Header />
       <main>
         {/* ── Hero ─────────────────────────────────────────────────────── */}

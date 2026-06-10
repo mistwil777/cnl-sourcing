@@ -6,10 +6,11 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
-  title: "Nos services de sourcing Vietnam",
+  title: "Nos services de sourcing Asie — Vietnam, grossiste, import",
   description:
-    "Sourcing textile, agroalimentaire et artisanat Vietnam → France. Groupage fret, assistance douanière EVFTA. Audit à partir de 250€, réponse sous 48h.",
+    "Sourcing Asie clé en main pour PME françaises : textile, agroalimentaire, artisanat. Spécialiste Vietnam, alternative Chine, fournisseurs audités. Groupage fret, assistance douanière EVFTA. Audit à partir de 250€, réponse sous 48h.",
   keywords: [
+    // Vietnam
     "services sourcing Vietnam",
     "sourcing textile Vietnam France",
     "import agroalimentaire Vietnam",
@@ -17,6 +18,24 @@ export const metadata: Metadata = {
     "douane import Vietnam",
     "EVFTA import France",
     "artisanat Vietnam import",
+    "fournisseur Vietnam audité",
+    // Asie large
+    "sourcing Asie PME",
+    "grossiste Asie",
+    "grossiste textile Asie",
+    "fournisseur Asie",
+    "import Asie France",
+    "fournisseur Asie du Sud-Est",
+    "agent sourcing Asie",
+    // Dropshipping / e-commerce
+    "dropshipping Asie",
+    "fournisseur dropshipping Asie",
+    "sourcing e-commerce Asie",
+    "grossiste dropshipping France",
+    // Alternative Chine
+    "alternative fournisseur Chine",
+    "sourcing hors Chine",
+    "fournisseur pas cher Asie",
   ],
   alternates: {
     canonical: "https://cnlsourcing.com/fr/services",
@@ -28,9 +47,9 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Services de sourcing Vietnam | CNL Sourcing",
+    title: "Services de sourcing Asie & Vietnam | CNL Sourcing",
     description:
-      "Sourcing textile, agroalimentaire et artisanat Vietnam → France. Groupage fret, assistance douanière EVFTA.",
+      "Sourcing Asie clé en main pour PME françaises. Spécialiste Vietnam : textile, agroalimentaire, artisanat, groupage fret, douane EVFTA.",
     url: "https://cnlsourcing.com/fr/services",
     images: [{ url: "https://cnlsourcing.com/api/og?title=Services%20de%20sourcing%20Vietnam&subtitle=Textile%20%C2%B7%20Agroalimentaire%20%C2%B7%20Artisanat%20%E2%80%94%20Groupage%20fret%20%26%20assistance%20douani%C3%A8re%20EVFTA", width: 1200, height: 630, alt: "Services sourcing Vietnam — CNL Sourcing" }],
   },
@@ -89,6 +108,38 @@ const faqJsonLd = {
       acceptedAnswer: {
         "@type": "Answer",
         text: "Oui. Pour les PME qui importent de petits volumes, CNL Sourcing organise des solutions de groupage maritime ou aérien depuis les ports de Hanoï et Hô Chi Minh-Ville.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Pouvez-vous sourcer des produits en Asie du Sud-Est en dehors du Vietnam ?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "CNL Sourcing est spécialisée au Vietnam, mais peut orienter vers d'autres pays d'Asie du Sud-Est (Thaïlande, Cambodge, Indonésie) pour certains secteurs. Le Vietnam reste la destination privilégiée pour son rapport qualité-prix, la francophonie locale et l'accord EVFTA.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "CNL Sourcing est-elle une alternative à l'approvisionnement en Chine ?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Oui. Face à la hausse des coûts et aux risques de rupture de la supply chain chinoise, de nombreuses PME françaises diversifient vers le Vietnam. CNL Sourcing vous aide à identifier des fournisseurs vietnamiens compétitifs dans le textile, l'agroalimentaire et l'artisanat.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Travaillez-vous avec des e-commerçants et des sites de dropshipping ?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Oui. CNL Sourcing accompagne les e-commerçants et entrepreneurs en dropshipping qui souhaitent s'approvisionner directement en Asie, avec des fournisseurs audités et des conditions négociées en vietnamien — sans passer par des intermédiaires coûteux.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Travaillez-vous avec des grossistes ou uniquement des fabricants ?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "CNL Sourcing travaille directement avec des fabricants au Vietnam pour vous offrir les meilleurs prix sans marges de grossiste interposé. Pour les petits volumes, des grossistes locaux partenaires peuvent aussi être mobilisés.",
       },
     },
   ],
