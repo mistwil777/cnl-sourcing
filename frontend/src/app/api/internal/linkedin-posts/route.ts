@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
   // Marquer les articles veille comme utilisés
   if (body.veille_ids?.length > 0) {
     await query(
-      `UPDATE veille_articles SET utilise_le = NOW()
+      `UPDATE veille_articles SET "publié_linkedin" = true
        WHERE id = ANY($1::uuid[])`,
       [body.veille_ids]
     );

@@ -21,12 +21,36 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "titre et url requis" }, { status: 400 });
   }
 
+  // Résoudre le source_id depuis un nom ou UUID
+  let sourceId: string = body.source_id ?? null;
+  if (!sourceId) {
+    const sourceName = body.source ?? "autre";
+    const found = await query<{ id: string }>(
+      `SELECT id FROM veille_sources WHERE nom ILIKE '%' || $1 || '%' LIMIT 1`,
+      [sourceName]
+    );
+    if (found[0]) {
+      sourceId = found[0].id;
+    } else {
+      // Créer une source minimale avec le domaine de l'article
+      const domain = new URL(body.url).origin;
+      const created = await query<{ id: string }>(
+        `INSERT INTO veille_sources (nom, url, type_source)
+         VALUES ($1, $2, 'rss')
+         ON CONFLICT (url) DO UPDATE SET nom = EXCLUDED.nom
+         RETURNING id`,
+        [sourceName, domain]
+      );
+      sourceId = created[0].id;
+    }
+  }
+
   await query(
-    `INSERT INTO veille_articles (source, titre, url, resume, pertinence, publie_le)
+    `INSERT INTO veille_articles (source_id, titre, url, resume, pertinence_score, date_publication)
      VALUES ($1, $2, $3, $4, $5, $6)
      ON CONFLICT (url) DO NOTHING`,
     [
-      body.source ?? "autre",
+      sourceId,
       body.titre,
       body.url,
       body.resume ?? null,
@@ -46,11 +70,14 @@ export async function GET(req: NextRequest) {
   const nonUtilises = searchParams.get("non_utilises") === "true";
 
   const rows = await query<Record<string, unknown>>(
-    `SELECT id, source, titre, url, resume, pertinence, publie_le
-     FROM veille_articles
-     WHERE ($1 = false OR utilise_le IS NULL)
-       AND created_at > NOW() - INTERVAL '72 hours'
-     ORDER BY pertinence DESC, created_at DESC
+    `SELECT va.id, vs.nom AS source, va.titre, va.url, va.resume,
+            COALESCE(va.score_final, va.pertinence_score, 0) AS pertinence,
+            va.date_publication AS publie_le
+     FROM veille_articles va
+     JOIN veille_sources vs ON vs.id = va.source_id
+     WHERE ($1 = false OR va."publié_linkedin" = false)
+       AND va.created_at > NOW() - INTERVAL '72 hours'
+     ORDER BY COALESCE(va.score_final, va.pertinence_score, 0) DESC, va.created_at DESC
      LIMIT $2`,
     [nonUtilises, limit]
   );
