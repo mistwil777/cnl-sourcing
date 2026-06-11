@@ -71,12 +71,12 @@ export default async function BlogPage({
     <>
       <Header />
       <main>
-        <section className="bg-brand-dark text-white py-16">
+        <section className="bg-brand-dark text-white pt-12 pb-14 sm:py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="font-serif text-4xl md:text-5xl font-bold mb-4">
+            <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
               {t("title")}
             </h1>
-            <p className="text-gray-400 max-w-2xl mx-auto">{t("subtitle")}</p>
+            <p className="text-gray-400 max-w-2xl mx-auto text-sm sm:text-base">{t("subtitle")}</p>
           </div>
         </section>
 
@@ -105,7 +105,7 @@ export default async function BlogPage({
                 <p className="text-sm text-gray-400 mb-2">
                   {formatDate(post.date, locale)}
                 </p>
-                <h2 className="font-serif text-2xl font-bold text-brand-dark mb-3 group-hover:text-brand-red transition-colors">
+                <h2 className="font-serif text-xl sm:text-2xl font-bold text-brand-dark mb-3 group-hover:text-brand-red transition-colors leading-snug">
                   <Link href={`${base}/blog/${post.slug}`}>{post.title}</Link>
                 </h2>
                 <p className="text-gray-500 leading-relaxed mb-4">

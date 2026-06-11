@@ -105,7 +105,7 @@ export default async function BlogPostPage({ params }: Props) {
       />
       <Header />
       <main>
-        <article className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <article className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 pb-16">
           <Link
             href={`${base}/blog`}
             className="inline-flex items-center gap-2 text-gray-500 hover:text-brand-red text-sm mb-8 transition-colors"
@@ -130,7 +130,7 @@ export default async function BlogPostPage({ params }: Props) {
             <p className="text-sm text-gray-400 mb-3">
               {formatDate(post.date, params.locale)}
             </p>
-            <h1 className="font-serif text-3xl md:text-4xl font-bold text-brand-dark leading-tight mb-4">
+            <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-brand-dark leading-tight mb-4">
               {post.title}
             </h1>
             <p className="text-lg text-gray-500 leading-relaxed">
