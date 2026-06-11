@@ -137,25 +137,23 @@ export async function getTranslatedPost(
 
   // 2. Claude Haiku
   try {
-    console.log(`[blog-translate] START ${locale}/${slug} — apiKey: ${process.env.ANTHROPIC_API_KEY ? "ok" : "MISSING"}`);
     const translated = await translateWithClaude(
       locale,
       frTitle,
       frDescription,
       frContent
     );
-    console.log(`[blog-translate] SUCCESS ${locale}/${slug}`);
 
     // 3. Mise en cache 30 jours
     try {
       await redis.setex(key, TTL, JSON.stringify(translated));
-    } catch (cacheErr) {
-      console.warn(`[blog-translate] Cache write failed:`, cacheErr);
+    } catch {
+      // Cache optionnel
     }
 
     return translated;
   } catch (err) {
-    console.error(`[blog-translate] ERREUR ${locale}/${slug}:`, err);
+    console.error(`[blog-translate] ${locale}/${slug}:`, err);
     return null; // fallback FR
   }
 }

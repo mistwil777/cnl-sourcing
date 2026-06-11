@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CNL Sourcing — Rapport Marketing Digital & SEO</title>
+  <style>
+    :root {
+      --dark:   #1A1A2E;
+      --red:    #C8102E;
+      --gold:   #D4AF37;
+      --light:  #F8F5F0;
+      --gray:   #6B7280;
+      --green:  #10B981;
+      --blue:   #3B82F6;
+      --orange: #F59E0B;
+      --white:  #FFFFFF;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--light);
+      color: var(--dark);
+      line-height: 1.7;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, var(--dark) 0%, #2d1b4e 100%);
+      color: white;
+      padding: 60px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: rgba(200,16,46,0.15);
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; left: -60px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: rgba(212,175,55,0.1);
+    }
+    .hero-flags { font-size: 2.5rem; margin-bottom: 16px; }
+    .hero h1 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      position: relative;
+    }
+    .hero p {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.7);
+      max-width: 600px;
+      margin: 0 auto 24px;
+      position: relative;
+    }
+    .hero-meta {
+      display: inline-flex;
+      gap: 24px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 12px 24px;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.6);
+      position: relative;
+    }
+    .hero-meta span { color: var(--gold); font-weight: 600; }
+
+    /* ── NAV ── */
+    .toc {
+      background: white;
+      padding: 32px 40px;
+      border-bottom: 2px solid #E5E7EB;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .toc h2 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gray); margin-bottom: 12px; }
+    .toc-links { display: flex; flex-wrap: wrap; gap: 8px; }
+    .toc-links a {
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-decoration: none;
+      background: var(--light);
+      color: var(--dark);
+      border: 1px solid #E5E7EB;
+      transition: all 0.2s;
+    }
+    .toc-links a:hover { background: var(--dark); color: white; border-color: var(--dark); }
+
+    /* ── LAYOUT ── */
+    .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+    section {
+      padding: 64px 0;
+      border-bottom: 1px solid #E5E7EB;
+    }
+    section:last-child { border-bottom: none; }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .section-icon {
+      width: 56px; height: 56px;
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+    .icon-red    { background: rgba(200,16,46,0.1); }
+    .icon-blue   { background: rgba(59,130,246,0.1); }
+    .icon-green  { background: rgba(16,185,129,0.1); }
+    .icon-gold   { background: rgba(212,175,55,0.1); }
+    .icon-purple { background: rgba(139,92,246,0.1); }
+    .section-header h2 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+    .section-header p { color: var(--gray); font-size: 1rem; }
+
+    /* ── CARDS ── */
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin: 28px 0; }
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      border: 1px solid #F3F4F6;
+    }
+    .card-icon { font-size: 2rem; margin-bottom: 12px; }
+    .card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+    .card p { font-size: 0.9rem; color: var(--gray); line-height: 1.6; }
+
+    /* ── TIMELINE / PIPELINE ── */
+    .pipeline { margin: 28px 0; }
+    .pipeline-step {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+      align-items: flex-start;
+    }
+    .step-num {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--dark);
+      color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .step-num.red    { background: var(--red); }
+    .step-num.gold   { background: var(--gold); color: var(--dark); }
+    .step-num.green  { background: var(--green); }
+    .step-num.blue   { background: var(--blue); }
+    .step-content h4 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+    .step-content p  { font-size: 0.9rem; color: var(--gray); }
+    .step-connector {
+      width: 2px; height: 20px;
+      background: #E5E7EB;
+      margin-left: 17px;
+      margin-top: -4px;
+      margin-bottom: 4px;
+    }
+
+    /* ── BADGES ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .badge-green  { background: rgba(16,185,129,0.12); color: #059669; }
+    .badge-red    { background: rgba(200,16,46,0.1); color: var(--red); }
+    .badge-blue   { background: rgba(59,130,246,0.1); color: #2563EB; }
+    .badge-gold   { background: rgba(212,175,55,0.15); color: #92700d; }
+    .badge-gray   { background: #F3F4F6; color: var(--gray); }
+    .badge-orange { background: rgba(245,158,11,0.1); color: #D97706; }
+
+    /* ── TABLE ── */
+    .table-wrap { overflow-x: auto; margin: 20px 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    th {
+      background: var(--dark);
+      color: white;
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+    }
+    td { padding: 12px 16px; border-bottom: 1px solid #F3F4F6; }
+    tr:hover td { background: #FAFAFA; }
+
+    /* ── CODE BLOCK ── */
+    .code-block {
+      background: var(--dark);
+      color: #E5E7EB;
+      border-radius: 12px;
+      padding: 20px 24px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      margin: 20px 0;
+      overflow-x: auto;
+      line-height: 1.8;
+    }
+    .code-block .comment { color: #6B7280; }
+    .code-block .key     { color: var(--gold); }
+    .code-block .val     { color: #34D399; }
+    .code-block .kw      { color: #93C5FD; }
+
+    /* ── HIGHLIGHT BOX ── */
+    .highlight {
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin: 20px 0;
+      border-left: 4px solid;
+    }
+    .highlight.green  { background: rgba(16,185,129,0.06); border-color: var(--green); }
+    .highlight.red    { background: rgba(200,16,46,0.05); border-color: var(--red); }
+    .highlight.blue   { background: rgba(59,130,246,0.06); border-color: var(--blue); }
+    .highlight.gold   { background: rgba(212,175,55,0.08); border-color: var(--gold); }
+    .highlight.orange { background: rgba(245,158,11,0.06); border-color: var(--orange); }
+    .highlight h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+    .highlight p, .highlight ul { font-size: 0.9rem; color: #374151; }
+    .highlight ul { padding-left: 18px; }
+    .highlight li { margin-bottom: 4px; }
+
+    /* ── DIVIDER ── */
+    .divider { display: flex; align-items: center; gap: 16px; margin: 32px 0; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #E5E7EB; }
+    .divider span { font-size: 0.8rem; color: var(--gray); white-space: nowrap; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* ── STATUS ROW ── */
+    .status-grid { display: grid; gap: 12px; margin: 20px 0; }
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: white;
+      border-radius: 12px;
+      padding: 14px 20px;
+      border: 1px solid #F3F4F6;
+    }
+    .status-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .dot-green  { background: var(--green); box-shadow: 0 0 0 3px rgba(16,185,129,0.2); }
+    .dot-orange { background: var(--orange); box-shadow: 0 0 0 3px rgba(245,158,11,0.2); }
+    .dot-red    { background: var(--red); box-shadow: 0 0 0 3px rgba(200,16,46,0.2); }
+    .status-label { font-weight: 600; font-size: 0.9rem; flex: 1; }
+    .status-note  { font-size: 0.82rem; color: var(--gray); }
+
+    /* ── FLOW DIAGRAM ── */
+    .flow {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 24px 0;
+      padding: 20px;
+      background: white;
+      border-radius: 16px;
+      border: 1px solid #E5E7EB;
+    }
+    .flow-box {
+      background: var(--dark);
+      color: white;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-align: center;
+    }
+    .flow-box.red    { background: var(--red); }
+    .flow-box.gold   { background: var(--gold); color: var(--dark); }
+    .flow-box.green  { background: var(--green); }
+    .flow-box.blue   { background: var(--blue); }
+    .flow-box.purple { background: #7C3AED; }
+    .flow-arrow { font-size: 1.2rem; color: var(--gray); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark);
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 40px;
+      font-size: 0.85rem;
+    }
+    footer strong { color: var(--gold); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 1.6rem; }
+      .section-header { flex-direction: column; }
+      .hero-meta { flex-direction: column; gap: 8px; }
+      .toc { padding: 20px; }
+    }
+
+    /* ── PRINT ── */
+    @media print {
+      .toc { position: static; }
+      body { background: white; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ HERO -->
+<div class="hero">
+  <div class="hero-flags">🇻🇳 &nbsp; 🇫🇷</div>
+  <h1>CNL Sourcing — Marketing Digital & SEO</h1>
+  <p>Rapport complet sur tout ce qui a été mis en place : LinkedIn, SEO, Google Search Console, workflows automatisés et connexions.</p>
+  <div class="hero-meta">
+    <div>Rédigé le <span>7 mai 2026</span></div>
+    <div>Domaine : <span>cnlsourcing.com</span></div>
+    <div>VPS : <span>51.158.109.135</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ NAV -->
+<nav class="toc">
+  <div class="container">
+    <h2>Sommaire</h2>
+    <div class="toc-links">
+      <a href="#vue-ensemble">1. Vue d'ensemble</a>
+      <a href="#linkedin-compte">2. Comptes LinkedIn</a>
+      <a href="#linkedin-api">3. App LinkedIn & OAuth2</a>
+      <a href="#wf11">4. WF-11 — Générateur de posts</a>
+      <a href="#pipeline">5. Pipeline complet</a>
+      <a href="#seo">6. SEO technique</a>
+      <a href="#google-search">7. Google Search Console</a>
+      <a href="#og-image">8. Image de partage</a>
+      <a href="#json-ld">9. Données structurées</a>
+      <a href="#tokens">10. Tokens & renouvellement</a>
+      <a href="#etat">11. État du projet</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- ═══════════════════════════════════════════════════════ 1. VUE D'ENSEMBLE -->
+<section id="vue-ensemble">
+  <div class="section-header">
+    <div class="section-icon icon-gold">🗺️</div>
+    <div>
+      <h2>1. Vue d'ensemble — Ce qui a été fait</h2>
+      <p>Tout ce qui concerne la visibilité en ligne de CNL Sourcing, expliqué simplement.</p>
+    </div>
+  </div>
+
+  <div class="highlight blue">
+    <h4>Pour comprendre simplement</h4>
+    <p>CNL Sourcing a besoin de deux choses sur internet : être <strong>trouvée sur Google</strong> (SEO) et <strong>publier régulièrement sur LinkedIn</strong> pour attirer des clients. Tout ce qui a été fait sert l'un ou l'autre de ces deux objectifs — ou les deux à la fois.</p>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">🔍</div>
+      <h3>SEO — Être trouvée sur Google</h3>
+      <p>On a optimisé le site pour que Google comprenne de quoi il parle et le propose en priorité quand quelqu'un cherche "agent sourcing Vietnam" ou "import Vietnam PME".</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">💼</div>
+      <h3>LinkedIn — Publier automatiquement</h3>
+      <p>Un système automatique génère des posts LinkedIn 3 fois par semaine avec l'IA (Claude), les envoie en preview à Anna sur Telegram, et les publie dès qu'elle dit OK.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📊</div>
+      <h3>Google Search Console</h3>
+      <p>Le tableau de bord officiel de Google pour voir combien de personnes voient le site dans les résultats, quels mots-clés ils utilisent, et si des erreurs existent.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🖼️</div>
+      <h3>Image de partage (OG)</h3>
+      <p>Quand quelqu'un partage le site sur LinkedIn, WhatsApp ou Facebook, une belle image au format 1200×630 s'affiche automatiquement avec le titre de la page.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 2. COMPTES LINKEDIN -->
+<section id="linkedin-compte">
+  <div class="section-header">
+    <div class="section-icon icon-blue">👤</div>
+    <div>
+      <h2>2. Les comptes LinkedIn — Qui est qui</h2>
+      <p>Il y a deux entités LinkedIn distinctes. Comprendre la différence est essentiel.</p>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">👩</div>
+      <h3>Profil personnel d'Anna</h3>
+      <p style="margin-bottom:12px">Le compte LinkedIn d'Anna en tant que personne physique.</p>
+      <div style="margin-bottom:8px"><span class="badge badge-blue">URL</span></div>
+      <p style="font-size:0.8rem; word-break:break-all; color:#374151">linkedin.com/in/cao-phuong-anh-nguyen-3a1a92403/</p>
+      <br>
+      <div style="margin-bottom:8px"><span class="badge badge-green">✓ Publications actives</span></div>
+      <p style="font-size:0.85rem; color:var(--gray)">C'est ICI que les posts automatiques sont publiés actuellement. Les posts personnels ont en moyenne <strong>3× plus de portée</strong> que les pages entreprise sur LinkedIn.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🏢</div>
+      <h3>Page entreprise CNL Sourcing</h3>
+      <p style="margin-bottom:12px">La page officielle de l'entreprise sur LinkedIn.</p>
+      <div style="margin-bottom:8px"><span class="badge badge-blue">URL</span></div>
+      <p style="font-size:0.8rem; word-break:break-all; color:#374151">linkedin.com/company/113271173/</p>
+      <br>
+      <div style="margin-bottom:8px"><span class="badge badge-orange">⏳ En attente approbation LinkedIn</span></div>
+      <p style="font-size:0.85rem; color:var(--gray)">Pour publier automatiquement sur cette page, LinkedIn exige une autorisation spéciale ("Community Management API"). La demande d'accès a été soumise — délai de 1 à 7 jours.</p>
+    </div>
+  </div>
+
+  <div class="highlight gold">
+    <h4>Pourquoi le profil perso et pas la page entreprise pour l'instant ?</h4>
+    <p>LinkedIn a deux niveaux d'accès API. Publier sur un profil personnel est autorisé dès l'installation. Publier sur une page entreprise nécessite une approbation de LinkedIn qui peut prendre plusieurs jours. Le système est prêt — il suffit qu'Anna clique "Demander l'accès" sur la "Community Management API" dans le portail développeur LinkedIn et d'attendre la validation.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 3. APP LINKEDIN & OAUTH2 -->
+<section id="linkedin-api">
+  <div class="section-header">
+    <div class="section-icon icon-blue">🔑</div>
+    <div>
+      <h2>3. L'App LinkedIn & le système OAuth2</h2>
+      <p>Comment le site obtient le droit de publier sur LinkedIn au nom d'Anna.</p>
+    </div>
+  </div>
+
+  <div class="highlight blue">
+    <h4>C'est quoi OAuth2 ? (explication simple)</h4>
+    <p>OAuth2 c'est le système de "connexion déléguée". C'est ce que vous utilisez quand vous cliquez "Se connecter avec Google" sur un site tiers. Vous autorisez le site à agir en votre nom, sans lui donner votre mot de passe. LinkedIn utilise exactement ce système pour autoriser le site CNL Sourcing à publier des posts à la place d'Anna.</p>
+  </div>
+
+  <div class="divider"><span>L'app LinkedIn créée</span></div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Élément</th><th>Valeur</th><th>Rôle</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Nom de l'app</strong></td>
+          <td>CNL Sourcing</td>
+          <td>L'identité de l'application auprès de LinkedIn</td>
+        </tr>
+        <tr>
+          <td><strong>Client ID</strong></td>
+          <td><code>786am41jkdz6h6</code></td>
+          <td>Le "numéro de carte d'identité" de l'app (public)</td>
+        </tr>
+        <tr>
+          <td><strong>Client Secret</strong></td>
+          <td><code>WPL_AP1.SQN···</code></td>
+          <td>Le "mot de passe" de l'app (à garder secret)</td>
+        </tr>
+        <tr>
+          <td><strong>Person ID d'Anna</strong></td>
+          <td><code>x4QMGN9-qg</code></td>
+          <td>L'identifiant unique d'Anna sur LinkedIn</td>
+        </tr>
+        <tr>
+          <td><strong>Access Token</strong></td>
+          <td><code>AQVkRQ1P5Ln···</code></td>
+          <td>Le "badge temporaire" qui autorise la publication (valide 2 mois)</td>
+        </tr>
+        <tr>
+          <td><strong>Scope accordé</strong></td>
+          <td><code>w_member_social</code></td>
+          <td>Permission spécifique : publier des posts au nom d'Anna</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider"><span>Comment le token a été obtenu</span></div>
+
+  <div class="pipeline">
+    <div class="pipeline-step">
+      <div class="step-num blue">1</div>
+      <div class="step-content">
+        <h4>Anna visite une URL d'autorisation</h4>
+        <p>Une URL spéciale est générée avec le Client ID. Anna la visite sur LinkedIn et clique "Autoriser" pour donner accès à l'app.</p>
+      </div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="pipeline-step">
+      <div class="step-num blue">2</div>
+      <div class="step-content">
+        <h4>LinkedIn retourne un code temporaire</h4>
+        <p>LinkedIn redirige vers cnlsourcing.com avec un code dans l'URL (valable 10 minutes).</p>
+      </div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="pipeline-step">
+      <div class="step-num blue">3</div>
+      <div class="step-content">
+        <h4>Le code est échangé contre un Access Token</h4>
+        <p>Le serveur envoie le code + le Client Secret à LinkedIn. En retour, LinkedIn donne un Access Token valide 2 mois.</p>
+      </div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="pipeline-step">
+      <div class="step-num green">4</div>
+      <div class="step-content">
+        <h4>Le token est stocké dans le fichier .env du serveur</h4>
+        <p>Variable : <code>LINKEDIN_ACCESS_TOKEN</code>. Utilisée automatiquement à chaque publication.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight orange">
+    <h4>⚠️ À noter : le token expire dans 2 mois (début juillet 2026)</h4>
+    <p>Quand le token expire, les posts ne se publieront plus et Anna recevra un message d'erreur sur Telegram. Il faudra refaire la procédure d'autorisation (environ 5 minutes). Une alerte sera envoyée sur Telegram avant l'expiration.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 4. WF-11 -->
+<section id="wf11">
+  <div class="section-header">
+    <div class="section-icon icon-red">🤖</div>
+    <div>
+      <h2>4. WF-11 — Le générateur automatique de posts LinkedIn</h2>
+      <p>Ce workflow est le cœur de la stratégie LinkedIn. Voici exactement ce qu'il fait.</p>
+    </div>
+  </div>
+
+  <div class="highlight blue">
+    <h4>C'est quoi un "workflow" ? (explication simple)</h4>
+    <p>Un workflow c'est une séquence d'actions automatiques, comme une chaîne de montage. Chaque étape fait quelque chose et passe le résultat à l'étape suivante. Les workflows du projet sont gérés par un logiciel appelé <strong>n8n</strong>, installé sur le serveur.</p>
+  </div>
+
+  <div class="divider"><span>WF-11 en détail — étape par étape</span></div>
+
+  <div class="pipeline">
+    <div class="pipeline-step">
+      <div class="step-num red">⏰</div>
+      <div class="step-content">
+        <h4>Déclencheur automatique — Lundi, Mercredi, Vendredi à 10h30</h4>
+        <p>Le workflow se lance seul à ces horaires, sans intervention humaine. C'est une horloge programmée (cron job).</p>
+      </div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="pipeline-step">
+      <div class="step-num">📰</div>
+      <div class="step-content">
+        <h4>Récupère les 3 articles de veille les plus récents (48h)</h4>
+        <p>WF-14 (un autre workflow) collecte chaque jour des articles de presse spécialisée sur le Vietnam, le sourcing et le commerce France-Asie. WF-11 pioche dedans pour nourrir le post.</p>
+      </div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="pipeline-step">
+      <div class="step-num">💬</div>
+      <div class="step-content">
+        <h4>Récupère les insights d'Anna de la semaine</h4>
+        <p>Chaque lundi matin, Anna reçoit 3 questions sur Telegram ("Comment s'est passée ta semaine ?", "Quelle anecdote fournisseur ?", etc.). Ses réponses sont stockées et utilisées ici pour personnaliser le post.</p>
+      </div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="pipeline-step">
+      <div class="step-num gold">🧠</div>
+      <div class="step-content">
+        <h4>Envoie tout à Claude (IA Anthropic) pour générer le post</h4>
+        <p>L'IA reçoit les articles de veille, les insights d'Anna, et un "système de personnalité" qui lui dit d'écrire comme Anna : professionnelle, directe, ancrée dans le terrain, jamais du marketing creux. Elle génère un post de 180-280 mots avec accroche, corps, CTA et hashtags.</p>
+      </div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="pipeline-step">
+      <div class="step-num">💾</div>
+      <div class="step-content">
+        <h4>Sauvegarde le post en base de données</h4>
+        <p>Le post est enregistré dans la table <code>linkedin_posts</code> avec le statut "en attente d'approbation". Il est lié aux articles utilisés pour éviter les doublons.</p>
+      </div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="pipeline-step">
+      <div class="step-num green">📱</div>
+      <div class="step-content">
+        <h4>Envoie la preview sur Telegram à Anna</h4>
+        <p>Anna reçoit le post complet sur son téléphone avec le message : <em>"Pour publier, réponds OK {uuid}"</em>. Elle peut lire, corriger ou valider depuis son canapé.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight green">
+    <h4>Résultat : 3 posts LinkedIn par semaine, entièrement automatisés</h4>
+    <ul>
+      <li>Lundi → post basé sur l'actualité du week-end</li>
+      <li>Mercredi → post au milieu de semaine</li>
+      <li>Vendredi → post de clôture de semaine</li>
+    </ul>
+    <p style="margin-top:8px">Anna garde le contrôle total — elle valide ou modifie chaque post avant publication.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 5. PIPELINE COMPLET -->
+<section id="pipeline">
+  <div class="section-header">
+    <div class="section-icon icon-purple">🔄</div>
+    <div>
+      <h2>5. Le pipeline complet — De l'idée à la publication</h2>
+      <p>Tous les workflows LinkedIn et leur enchaînement, du début à la fin.</p>
+    </div>
+  </div>
+
+  <div class="flow">
+    <div class="flow-box red">WF-14<br><small>Veille RSS</small></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">WF-11<br><small>Génération post</small></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box blue">Telegram<br><small>Preview Anna</small></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">WF-15<br><small>Réception réponse</small></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box green">LinkedIn<br><small>Publication</small></div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Workflow</th><th>Nom</th><th>Quand ?</th><th>Ce qu'il fait</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge-red">WF-14</span></td>
+          <td>Veille RSS France-Vietnam</td>
+          <td>Chaque jour</td>
+          <td>Collecte des articles de presse sur le sourcing Vietnam, le commerce France-Asie, les nouvelles douanières. Score chaque article par pertinence (IA).</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-red">WF-11</span></td>
+          <td>Générateur posts LinkedIn Anna</td>
+          <td>Lun/Mer/Ven 10h30</td>
+          <td>Pioche les meilleurs articles, prend les insights d'Anna, génère un post avec Claude Sonnet, sauvegarde en base, envoie preview sur Telegram.</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-blue">WF-15</span></td>
+          <td>Récepteur Telegram (réponses Anna)</td>
+          <td>En permanence (webhook)</td>
+          <td>Écoute les messages de Telegram. Si Anna dit "OK {uuid}" → publie sur LinkedIn. Si elle envoie des corrections → Claude réécrit le post.</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-gray">WF-16</span></td>
+          <td>Check-in Telegram hebdomadaire</td>
+          <td>Lundi 9h00</td>
+          <td>Envoie 3 questions à Anna sur Telegram pour collecter ses insights de la semaine (utilisés par WF-11).</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge-gray">WF-12</span></td>
+          <td>Articles LinkedIn (Phase 3)</td>
+          <td>Non actif</td>
+          <td>Publiera des articles longs sur LinkedIn. En attente de l'approbation "Community Management API".</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider"><span>Que se passe-t-il quand Anna répond sur Telegram</span></div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">✅</div>
+      <h3>Anna répond "OK {uuid}"</h3>
+      <p>WF-15 reçoit le message → appelle l'API interne → publie sur LinkedIn → met à jour le statut en base → confirme sur Telegram "Post publié !"</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">✏️</div>
+      <h3>Anna envoie des corrections</h3>
+      <p>Anna envoie le texte modifié (ou des instructions) → Claude réécrit le post en gardant le style d'Anna → nouvelle preview envoyée sur Telegram → Anna valide ou modifie encore.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">❌</div>
+      <h3>Anna n'a répond pas</h3>
+      <p>Le post reste en base avec le statut "en attente". Il n'est pas publié. Il peut être approuvé n'importe quand plus tard.</p>
+    </div>
+  </div>
+
+  <div class="highlight green">
+    <h4>Infrastructure technique (comment tout ça fonctionne en coulisses)</h4>
+    <ul>
+      <li><strong>n8n</strong> : logiciel de workflows installé sur le VPS, orchestre toutes les automatisations</li>
+      <li><strong>Telegram Bot</strong> : reçoit et envoie des messages à Anna (token : <code>8575274866:AAG...</code>)</li>
+      <li><strong>Webhook</strong> : quand Anna répond sur Telegram, Telegram "appelle" automatiquement le serveur à l'URL <code>cnlsourcing.com/n8n/webhook/telegram-anna-incoming</code></li>
+      <li><strong>API interne</strong> : routes Next.js sécurisées (<code>/api/internal/linkedin-posts</code>) qui gèrent la base de données</li>
+      <li><strong>LinkedIn API v2</strong> : endpoint <code>ugcPosts</code> utilisé pour la publication</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 6. SEO -->
+<section id="seo">
+  <div class="section-header">
+    <div class="section-icon icon-green">🔍</div>
+    <div>
+      <h2>6. SEO Technique — Être trouvée sur Google</h2>
+      <p>Tout ce qui a été fait pour que Google comprenne et référence le site.</p>
+    </div>
+  </div>
+
+  <div class="highlight blue">
+    <h4>C'est quoi le SEO ? (explication simple)</h4>
+    <p>Quand quelqu'un tape "agent sourcing Vietnam" sur Google, le moteur de recherche décide dans quel ordre afficher les sites. Le SEO c'est l'ensemble des techniques pour apparaître en haut. Il y a deux parties : le <strong>SEO technique</strong> (la façon dont le site est construit) et le <strong>SEO contenu</strong> (les textes, mots-clés). Tout ce qui a été fait ici est du SEO technique.</p>
+  </div>
+
+  <div class="divider"><span>Mots-clés prioritaires ciblés</span></div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Mot-clé</th><th>Volume estimé</th><th>Intention</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>sourcing Vietnam France</td><td>~480/mois</td><td>Forte — cherche un agent</td></tr>
+        <tr><td>agent sourcing Vietnam</td><td>~320/mois</td><td>Forte — cherche un professionnel</td></tr>
+        <tr><td>fournisseur Vietnam textile</td><td>~210/mois</td><td>Moyenne — cherche des fournisseurs</td></tr>
+        <tr><td>import Vietnam PME</td><td>~170/mois</td><td>Moyenne — PME en phase de recherche</td></tr>
+        <tr><td>agent d'achat Vietnam France</td><td>Longue traîne</td><td>Forte — très qualifiée</td></tr>
+        <tr><td>sourcing Toulouse Vietnam</td><td>Locale</td><td>Forte — géolocalisée</td></tr>
+        <tr><td>EVFTA import France</td><td>Niche</td><td>Très forte — expertise douanière</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider"><span>Éléments SEO présents sur chaque page</span></div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Élément</th><th>Rôle</th><th>Exemple sur le site</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>&lt;title&gt;</code></td>
+          <td>Titre dans l'onglet et sur Google (50-60 caractères)</td>
+          <td>"CNL Sourcing — Agent de sourcing Vietnam France | PME"</td>
+        </tr>
+        <tr>
+          <td><code>&lt;meta description&gt;</code></td>
+          <td>Résumé sous le titre dans Google (150-160 caractères)</td>
+          <td>"Agent de sourcing Vietnam pour PME françaises. Textile, agroalimentaire, artisanat — fournisseurs audités..."</td>
+        </tr>
+        <tr>
+          <td><code>canonical</code></td>
+          <td>Dit à Google quelle est "la vraie" URL d'une page</td>
+          <td><code>https://cnlsourcing.com/fr</code></td>
+        </tr>
+        <tr>
+          <td><code>hreflang</code></td>
+          <td>Indique que le site existe en 3 langues (fr/en/vi)</td>
+          <td>fr, en, vi, x-default sur chaque page</td>
+        </tr>
+        <tr>
+          <td><code>keywords</code></td>
+          <td>Mots-clés associés à la page (meta tag)</td>
+          <td>12 mots-clés ciblés sur l'accueil</td>
+        </tr>
+        <tr>
+          <td><code>robots</code></td>
+          <td>Autorise Google à indexer les pages publiques</td>
+          <td>index: true, follow: true, max-image-preview: large</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider"><span>Pages optimisées individuellement</span></div>
+
+  <div class="status-grid">
+    <div class="status-row">
+      <div class="status-dot dot-green"></div>
+      <div class="status-label">Accueil /fr</div>
+      <div class="status-note">Title multilingue, description, alternates fr/en/vi, OG, Twitter card</div>
+      <span class="badge badge-green">✓ Complet</span>
+    </div>
+    <div class="status-row">
+      <div class="status-dot dot-green"></div>
+      <div class="status-label">Services /fr/services</div>
+      <div class="status-note">Metadata + FAQPage JSON-LD (5 questions Google)</div>
+      <span class="badge badge-green">✓ Complet</span>
+    </div>
+    <div class="status-row">
+      <div class="status-dot dot-green"></div>
+      <div class="status-label">À propos /fr/about</div>
+      <div class="status-note">Metadata + BreadcrumbList JSON-LD</div>
+      <span class="badge badge-green">✓ Complet</span>
+    </div>
+    <div class="status-row">
+      <div class="status-dot dot-green"></div>
+      <div class="status-label">Contact /fr/contact</div>
+      <div class="status-note">Metadata + signaux LocalBusiness + BreadcrumbList</div>
+      <span class="badge badge-green">✓ Complet</span>
+    </div>
+    <div class="status-row">
+      <div class="status-dot dot-green"></div>
+      <div class="status-label">Devis /fr/devis</div>
+      <div class="status-note">Metadata conversion-oriented + BreadcrumbList</div>
+      <span class="badge badge-green">✓ Complet</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 7. GOOGLE SEARCH CONSOLE -->
+<section id="google-search">
+  <div class="section-header">
+    <div class="section-icon icon-green">📊</div>
+    <div>
+      <h2>7. Google Search Console — Le tableau de bord Google</h2>
+      <p>Ce qui a été fait pour connecter le site à Google officiellement.</p>
+    </div>
+  </div>
+
+  <div class="highlight blue">
+    <h4>C'est quoi Google Search Console ? (explication simple)</h4>
+    <p>C'est le tableau de bord officiel de Google pour les propriétaires de sites. Il montre combien de personnes ont vu le site dans les résultats (impressions), combien ont cliqué, sur quels mots-clés, depuis quels pays. C'est gratuit et indispensable pour suivre le SEO.</p>
+  </div>
+
+  <div class="divider"><span>Ce qui a été fait</span></div>
+
+  <div class="pipeline">
+    <div class="pipeline-step">
+      <div class="step-num green">1</div>
+      <div class="step-content">
+        <h4>Validation de propriété via DNS</h4>
+        <p>Un enregistrement TXT a été ajouté dans le DNS de Scaleway (l'hébergeur) pour prouver à Google que le site appartient bien à CNL Sourcing. Valeur : <code>google-site-verification=CkBHOQSF8u-M_...</code></p>
+      </div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="pipeline-step">
+      <div class="step-num green">2</div>
+      <div class="step-content">
+        <h4>Soumission du sitemap</h4>
+        <p>Le sitemap XML a été soumis à Google : <code>https://cnlsourcing.com/sitemap.xml</code>. Il liste les 15 URLs du site (fr + en + vi × 5 pages) avec leurs priorités.</p>
+      </div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="pipeline-step">
+      <div class="step-num green">3</div>
+      <div class="step-content">
+        <h4>Google indexe le site progressivement</h4>
+        <p>Google va visiter les 15 pages dans les 3 à 7 jours suivants et les ajouter à son index. Les premières apparitions dans les résultats suivront dans les 2 à 4 semaines.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight gold">
+    <h4>Comment utiliser Google Search Console</h4>
+    <ul>
+      <li>URL : <strong>search.google.com/search-console</strong></li>
+      <li>Onglet "Performance" → voir les clics, impressions, mots-clés utilisés</li>
+      <li>Onglet "Couverture" → voir si des pages ne sont pas indexées</li>
+      <li>Onglet "Sitemaps" → vérifier que le sitemap est bien traité</li>
+    </ul>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">📈</div>
+      <h3>Impressions</h3>
+      <p>Nombre de fois que le site apparaît dans les résultats Google (même si personne ne clique). Augmentera progressivement sur les 3 premiers mois.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">👆</div>
+      <h3>Clics</h3>
+      <p>Nombre de personnes qui ont cliqué sur le site depuis Google. L'objectif est d'augmenter le taux de clic (CTR) en améliorant les titres et descriptions.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🎯</div>
+      <h3>Position moyenne</h3>
+      <p>Rang moyen du site sur les mots-clés ciblés. Objectif : passer sous la position 10 (première page Google) sur "agent sourcing Vietnam" dans les 3-6 mois.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 8. IMAGE OG -->
+<section id="og-image">
+  <div class="section-header">
+    <div class="section-icon icon-gold">🖼️</div>
+    <div>
+      <h2>8. L'image de partage (Open Graph) — Ce qu'on voit sur les réseaux sociaux</h2>
+      <p>Quand quelqu'un partage le site, une image s'affiche automatiquement.</p>
+    </div>
+  </div>
+
+  <div class="highlight blue">
+    <h4>C'est quoi l'image Open Graph ? (explication simple)</h4>
+    <p>Quand vous partagez un lien sur LinkedIn, Facebook, WhatsApp ou Twitter/X, une preview s'affiche avec une image, un titre et une description. Cette image s'appelle "Open Graph image" (ou OG image). Avant l'optimisation, l'image affichée était le logo carré 512×512 — trop petit et mal affiché. Maintenant c'est une belle image au bon format.</p>
+  </div>
+
+  <div class="divider"><span>Avant / Après</span></div>
+
+  <div class="cards">
+    <div class="card" style="border: 2px solid var(--red)">
+      <div class="card-icon">❌</div>
+      <h3>Avant</h3>
+      <p><strong>Image :</strong> logo carré icon-512.png<br>
+      <strong>Taille :</strong> 512×512 pixels<br>
+      <strong>Résultat :</strong> Image tronquée, mauvais rendu sur LinkedIn, pas professionnel<br>
+      <strong>Twitter card :</strong> <code>summary</code> (petite miniature)</p>
+    </div>
+    <div class="card" style="border: 2px solid var(--green)">
+      <div class="card-icon">✅</div>
+      <h3>Après</h3>
+      <p><strong>Image :</strong> générée dynamiquement à <code>/api/og</code><br>
+      <strong>Taille :</strong> 1200×630 pixels (format standard)<br>
+      <strong>Résultat :</strong> Belle image rectangulaire avec titre personnalisé<br>
+      <strong>Twitter card :</strong> <code>summary_large_image</code> (grande image)</p>
+    </div>
+  </div>
+
+  <div class="highlight gold">
+    <h4>Image personnalisée par page</h4>
+    <ul>
+      <li><strong>Accueil</strong> : "Agent de sourcing Vietnam → France"</li>
+      <li><strong>Services</strong> : "Services de sourcing Vietnam · Textile · Agroalimentaire · Artisanat"</li>
+      <li><strong>À propos</strong> : "Anna Nguyen, fondatrice CNL Sourcing · 10 ans d'expérience Vietnam"</li>
+      <li><strong>Contact</strong> : "Contactez CNL Sourcing · Anna Nguyen répond sous 48h"</li>
+      <li><strong>Devis</strong> : "Demander un devis sourcing Vietnam · Audit à partir de 250€"</li>
+    </ul>
+    <p style="margin-top:8px">L'image est générée en temps réel par le serveur (technologie Next.js ImageResponse, moteur Edge). Taille : ~43 Ko.</p>
+  </div>
+
+  <div class="code-block">
+    <span class="comment">// URL de l'image OG (accessible dans le navigateur)</span><br>
+    <span class="val">https://cnlsourcing.com/api/og</span><br><br>
+    <span class="comment">// Avec titre personnalisé</span><br>
+    <span class="val">https://cnlsourcing.com/api/og?title=Mon+Titre&subtitle=Mon+sous-titre</span>
+  </div>
+
+  <div class="highlight green">
+    <h4>Impact direct sur LinkedIn</h4>
+    <p>Quand Anna ou un visiteur partage une page du site sur LinkedIn, l'image 1200×630 s'affiche en grand. C'est ce qui donne envie de cliquer. Une bonne OG image peut augmenter le taux de clic de 40 à 60% sur les partages sociaux.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 9. JSON-LD -->
+<section id="json-ld">
+  <div class="section-header">
+    <div class="section-icon icon-green">🏷️</div>
+    <div>
+      <h2>9. Données structurées JSON-LD — Ce que Google comprend</h2>
+      <p>Un langage invisible dans la page qui explique le contenu à Google.</p>
+    </div>
+  </div>
+
+  <div class="highlight blue">
+    <h4>C'est quoi le JSON-LD ? (explication simple)</h4>
+    <p>En plus du texte visible sur la page, il existe un code invisible (que seuls les moteurs de recherche lisent) qui leur explique exactement ce qu'est le site. Exemple : "Je suis une entreprise", "Mon adresse est Toulouse", "Voici mes services". Google utilise ça pour créer des résultats enrichis dans ses pages.</p>
+  </div>
+
+  <div class="divider"><span>Les 3 types de données structurées installées</span></div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">🏢</div>
+      <h3>Organization + LocalBusiness</h3>
+      <p>Présent sur <strong>toutes les pages</strong>. Dit à Google que CNL Sourcing est une entreprise basée à Toulouse, fondée par Anna Nguyen, qui opère en France et au Vietnam. Inclut l'email, les services proposés et le lien LinkedIn.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">❓</div>
+      <h3>FAQPage (page Services)</h3>
+      <p>5 questions/réponses sur le sourcing Vietnam. Google peut afficher ces questions <strong>directement dans ses résultats</strong> sous forme de questions dépliables — très visible, prend de la place dans Google.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🗺️</div>
+      <h3>BreadcrumbList (pages internes)</h3>
+      <p>Le "fil d'Ariane" : Accueil → Services / À propos / Contact / Devis. Google affiche ce chemin sous le titre dans ses résultats, ce qui aide les utilisateurs à comprendre la structure du site.</p>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <span class="comment">// Exemple simplifié du bloc Organization (présent sur toutes les pages)</span><br>
+    {<br>
+    &nbsp;&nbsp;<span class="key">"@type"</span>: <span class="val">["Organization", "LocalBusiness"]</span>,<br>
+    &nbsp;&nbsp;<span class="key">"name"</span>: <span class="val">"CNL Sourcing"</span>,<br>
+    &nbsp;&nbsp;<span class="key">"email"</span>: <span class="val">"cnlsourcingvn@gmail.com"</span>,<br>
+    &nbsp;&nbsp;<span class="key">"address"</span>: { <span class="key">"addressLocality"</span>: <span class="val">"Toulouse"</span> },<br>
+    &nbsp;&nbsp;<span class="key">"founder"</span>: { <span class="key">"name"</span>: <span class="val">"Anna Nguyen"</span> },<br>
+    &nbsp;&nbsp;<span class="key">"areaServed"</span>: [<span class="val">"France"</span>, <span class="val">"Vietnam"</span>],<br>
+    &nbsp;&nbsp;<span class="key">"sameAs"</span>: [<span class="val">"https://www.linkedin.com/company/cnl-sourcing"</span>]<br>
+    }
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 10. TOKENS -->
+<section id="tokens">
+  <div class="section-header">
+    <div class="section-icon icon-red">⏱️</div>
+    <div>
+      <h2>10. Tokens & Renouvellements — Ce qui expire</h2>
+      <p>Certains accès ont une durée de vie limitée. Voici ce qu'il faut surveiller.</p>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Token / Accès</th><th>Expire quand ?</th><th>Conséquence si expiré</th><th>Comment renouveler</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>LinkedIn Access Token</strong></td>
+          <td>~début juillet 2026<br><small>(2 mois après le 7 mai)</small></td>
+          <td>Les posts ne se publient plus. Anna reçoit une erreur sur Telegram.</td>
+          <td>Refaire la procédure OAuth2 (5 min) : URL d'autorisation → code → échange contre token.</td>
+        </tr>
+        <tr>
+          <td><strong>DNS Google Verification</strong></td>
+          <td>Permanent</td>
+          <td>Aucune — Google garde la propriété validée</td>
+          <td>Pas de renouvellement nécessaire</td>
+        </tr>
+        <tr>
+          <td><strong>Sitemap Google</strong></td>
+          <td>Permanent</td>
+          <td>Google re-crawle régulièrement</td>
+          <td>Soumettre à nouveau si de nouvelles pages sont ajoutées</td>
+        </tr>
+        <tr>
+          <td><strong>Certificat SSL (HTTPS)</strong></td>
+          <td>Tous les 3 mois</td>
+          <td>Le cadenas HTTPS disparaît — le site paraît "non sécurisé"</td>
+          <td>Automatique via Certbot (Let's Encrypt) — renouvellement auto géré par le serveur</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="highlight orange">
+    <h4>⚠️ Action requise en juillet 2026 — Renouvellement du token LinkedIn</h4>
+    <p>Pour renouveler le token LinkedIn, il faudra refaire exactement la même procédure qu'aujourd'hui :</p>
+    <ul>
+      <li>Générer une URL d'autorisation avec le Client ID (<code>786am41jkdz6h6</code>)</li>
+      <li>Anna clique le lien et autorise l'app</li>
+      <li>Copier le <code>code</code> dans l'URL de retour</li>
+      <li>Échanger contre un nouveau token via le serveur</li>
+      <li>Mettre à jour le <code>.env</code> sur le VPS</li>
+    </ul>
+    <p style="margin-top:8px">Temps estimé : 5 minutes.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ 11. ÉTAT DU PROJET -->
+<section id="etat">
+  <div class="section-header">
+    <div class="section-icon icon-green">✅</div>
+    <div>
+      <h2>11. État complet du projet — Tout ce qui est actif</h2>
+      <p>Vision d'ensemble de tout ce qui fonctionne et ce qui reste à faire.</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>Ce qui est en production et fonctionnel</span></div>
+
+  <div class="status-grid">
+    <div class="status-row">
+      <div class="status-dot dot-green"></div>
+      <div class="status-label">Site web cnlsourcing.com</div>
+      <div class="status-note">5 pages (fr/en/vi), HTTPS, accessible partout dans le monde</div>
+      <span class="badge badge-green">✓ Actif</span>
+    </div>
+    <div class="status-row">
+      <div class="status-dot dot-green"></div>
+      <div class="status-label">SEO technique complet</div>
+      <div class="status-note">Title, description, canonical, hreflang, OG, Twitter card, JSON-LD</div>
+      <span class="badge badge-green">✓ Actif</span>
+    </div>
+    <div class="status-row">
+      <div class="status-dot dot-green"></div>
+      <div class="status-label">Google Search Console</div>
+      <div class="status-note">Propriété validée, sitemap soumis, indexation en cours</div>
+      <span class="badge badge-green">✓ Actif</span>
+    </div>
+    <div class="status-row">
+      <div class="status-dot dot-green"></div>
+      <div class="status-label">Image OG 1200×630 dynamique</div>
+      <div class="status-note">Affichage correct sur LinkedIn, Facebook, WhatsApp, Twitter</div>
+      <span class="badge badge-green">✓ Actif</span>
+    </div>
+    <div class="status-row">
+      <div class="status-dot dot-green"></div>
+      <div class="status-label">WF-11 — Génération posts LinkedIn</div>
+      <div class="status-note">Lun/Mer/Ven 10h30 — Claude Sonnet génère les posts</div>
+      <span class="badge badge-green">✓ Actif</span>
+    </div>
+    <div class="status-row">
+      <div class="status-dot dot-green"></div>
+      <div class="status-label">WF-15 — Approbation Telegram → LinkedIn</div>
+      <div class="status-note">Anna répond OK → publié automatiquement sur son profil</div>
+      <span class="badge badge-green">✓ Actif</span>
+    </div>
+    <div class="status-row">
+      <div class="status-dot dot-green"></div>
+      <div class="status-label">Publication LinkedIn profil personnel</div>
+      <div class="status-note">Token OAuth2 valide jusqu'en juillet 2026</div>
+      <span class="badge badge-green">✓ Actif</span>
+    </div>
+    <div class="status-row">
+      <div class="status-dot dot-green"></div>
+      <div class="status-label">Bot Telegram Anna</div>
+      <div class="status-note">Preview posts, approbation, modifications, check-in hebdo</div>
+      <span class="badge badge-green">✓ Actif</span>
+    </div>
+    <div class="status-row">
+      <div class="status-dot dot-green"></div>
+      <div class="status-label">FAQPage Google sur /services</div>
+      <div class="status-note">5 Q&R visibles dans les résultats Google</div>
+      <span class="badge badge-green">✓ Actif</span>
+    </div>
+  </div>
+
+  <div class="divider"><span>Ce qui est en attente</span></div>
+
+  <div class="status-grid">
+    <div class="status-row">
+      <div class="status-dot dot-orange"></div>
+      <div class="status-label">Publication page entreprise LinkedIn</div>
+      <div class="status-note">Nécessite l'approbation "Community Management API" par LinkedIn (1-7 jours)</div>
+      <span class="badge badge-orange">⏳ En attente</span>
+    </div>
+    <div class="status-row">
+      <div class="status-dot dot-orange"></div>
+      <div class="status-label">Premières apparitions sur Google</div>
+      <div class="status-note">Indexation en cours — résultats visibles dans 2-4 semaines</div>
+      <span class="badge badge-orange">⏳ En cours</span>
+    </div>
+  </div>
+
+  <div class="divider"><span>Résumé des URLs importantes</span></div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Service</th><th>URL</th><th>Usage</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Site web</td>
+          <td><code>cnlsourcing.com</code></td>
+          <td>Site principal CNL Sourcing</td>
+        </tr>
+        <tr>
+          <td>Image OG</td>
+          <td><code>cnlsourcing.com/api/og</code></td>
+          <td>Image de partage 1200×630</td>
+        </tr>
+        <tr>
+          <td>Sitemap</td>
+          <td><code>cnlsourcing.com/sitemap.xml</code></td>
+          <td>Carte du site pour Google</td>
+        </tr>
+        <tr>
+          <td>Robots.txt</td>
+          <td><code>cnlsourcing.com/robots.txt</code></td>
+          <td>Instructions aux robots Google</td>
+        </tr>
+        <tr>
+          <td>n8n (workflows)</td>
+          <td><code>cnlsourcing.com/n8n</code></td>
+          <td>Interface d'administration des automatisations</td>
+        </tr>
+        <tr>
+          <td>Google Search Console</td>
+          <td><code>search.google.com/search-console</code></td>
+          <td>Tableau de bord SEO Google</td>
+        </tr>
+        <tr>
+          <td>LinkedIn app</td>
+          <td><code>linkedin.com/developers/apps</code></td>
+          <td>Gestion des credentials API</td>
+        </tr>
+        <tr>
+          <td>Profil LinkedIn Anna</td>
+          <td><code>linkedin.com/in/cao-phuong-anh-nguyen-3a1a92403/</code></td>
+          <td>Profil perso — posts publiés ici</td>
+        </tr>
+        <tr>
+          <td>Page entreprise LinkedIn</td>
+          <td><code>linkedin.com/company/113271173/</code></td>
+          <td>Page CNL Sourcing — publication en attente d'approbation API</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<!-- ═══════════════════════════════════════════════════════ FOOTER -->
+<footer>
+  <p>
+    <strong>CNL Sourcing</strong> — Rapport Marketing Digital & SEO<br>
+    Généré le 7 mai 2026 · cnlsourcing.com · VPS Scaleway 51.158.109.135<br><br>
+    <em>Document à usage interne — contient des informations techniques sensibles</em>
+  </p>
+</footer>
+
+</body>
+</html>
