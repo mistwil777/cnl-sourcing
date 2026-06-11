@@ -62,7 +62,7 @@ export default async function BlogPage({
   params: { locale: string };
 }) {
   const [posts, t] = await Promise.all([
-    getBlogPosts("fr"),
+    getBlogPosts(locale),
     getTranslations({ locale, namespace: "blog_page" }),
   ]);
   const base = locale === "fr" ? "" : `/${locale}`;

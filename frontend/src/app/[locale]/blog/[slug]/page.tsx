@@ -16,7 +16,7 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = await getBlogPost("fr", params.slug);
+  const post = await getBlogPost(params.locale, params.slug);
   if (!post) return {};
 
   const base = params.locale === "fr" ? "" : `/${params.locale}`;
@@ -65,7 +65,7 @@ function formatDate(dateStr: string, locale: string): string {
 
 export default async function BlogPostPage({ params }: Props) {
   const [post, t] = await Promise.all([
-    getBlogPost("fr", params.slug),
+    getBlogPost(params.locale, params.slug),
     getTranslations({ locale: params.locale, namespace: "blog_page" }),
   ]);
 
