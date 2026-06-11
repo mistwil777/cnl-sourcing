@@ -1,5 +1,5 @@
 import { MetadataRoute } from "next";
-import { getBlogPosts } from "@/lib/blog";
+import { getBlogPostsMdx } from "@/lib/blog";
 
 const baseUrl = "https://cnlsourcing.com";
 const locales = ["fr", "en", "vi"] as const;
@@ -37,7 +37,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }
 
   // Articles de blog (FR uniquement pour l'instant)
-  const posts = getBlogPosts("fr");
+  const posts = getBlogPostsMdx("fr");
   for (const post of posts) {
     entries.push({
       url: `${baseUrl}/fr/blog/${post.slug}`,

@@ -152,6 +152,16 @@
     "formError": "Lỗi khi gửi. Vui lòng thử lại hoặc gửi email trực tiếp tới cnlsourcingvn@gmail.com",
     "chatHint": "Hoặc sử dụng chatbot AI ở góc dưới bên phải để nhận câu trả lời ngay lập tức."
   },
+  "blog_page": {
+    "title": "Blog — Mẹo tìm nguồn hàng ở Châu Á & Việt Nam",
+    "subtitle": "Hướng dẫn thực tế để nhập khẩu từ Việt Nam và Châu Á: nhà cung cấp, hải quan, dropshipping, EVFTA.",
+    "readArticle": "Đọc bài viết",
+    "backToBlog": "Quay lại blog",
+    "ctaTitle": "Cần đại lý tìm nguồn hàng tại Việt Nam?",
+    "ctaDesc": "CNL Sourcing giúp bạn tìm các nhà cung cấp đã được kiểm định, đàm phán bằng tiếng Việt và quản lý việc nhập khẩu trọn gói.",
+    "ctaButton": "Yêu cầu báo giá miễn phí",
+    "contentNote": "Các bài viết của chúng tôi được viết bằng tiếng Pháp."
+  },
   "devis_page": {
     "title": "Yêu cầu báo giá miễn phí",
     "subtitle": "Mô tả nhu cầu của bạn trong vài phút. Anna phân tích yêu cầu và phản hồi với danh sách nhà cung cấp đủ tiêu chuẩn.",

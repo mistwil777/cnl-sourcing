@@ -152,6 +152,16 @@
     "formError": "Erreur lors de l'envoi. Réessayez ou écrivez directement à cnlsourcingvn@gmail.com",
     "chatHint": "Ou utilisez le chatbot IA en bas à droite pour une réponse immédiate."
   },
+  "blog_page": {
+    "title": "Blog — Conseils sourcing Asie",
+    "subtitle": "Guides pratiques pour importer depuis le Vietnam et l'Asie : fournisseurs, douane, dropshipping, EVFTA.",
+    "readArticle": "Lire l'article",
+    "backToBlog": "Retour au blog",
+    "ctaTitle": "Besoin d'un agent de sourcing au Vietnam ?",
+    "ctaDesc": "CNL Sourcing vous aide à trouver des fournisseurs audités, à négocier en vietnamien et à gérer votre import clé en main.",
+    "ctaButton": "Demander un devis gratuit",
+    "contentNote": "Nos articles sont rédigés en français."
+  },
   "devis_page": {
     "title": "Demander un devis gratuit",
     "subtitle": "Décrivez votre besoin en quelques minutes. Anna analyse votre demande et revient vers vous avec une sélection de fournisseurs qualifiés.",

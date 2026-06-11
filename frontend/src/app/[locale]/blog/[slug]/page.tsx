@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import { getTranslations } from "next-intl/server";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { getBlogPost } from "@/lib/blog";
@@ -14,7 +16,7 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = getBlogPost("fr", params.slug);
+  const post = await getBlogPost("fr", params.slug);
   if (!post) return {};
 
   const base = params.locale === "fr" ? "" : `/${params.locale}`;
@@ -39,7 +41,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       authors: ["Anna Nguyen"],
       images: [
         {
-          url: `https://cnlsourcing.com/api/og?title=${encodeURIComponent(post.title)}`,
+          url: post.coverImage,
           width: 1200,
           height: 630,
           alt: post.title,
@@ -54,19 +56,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString("fr-FR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+function formatDate(dateStr: string, locale: string): string {
+  return new Date(dateStr).toLocaleDateString(
+    locale === "vi" ? "vi-VN" : locale === "en" ? "en-GB" : "fr-FR",
+    { day: "numeric", month: "long", year: "numeric" }
+  );
 }
 
-export default function BlogPostPage({ params }: Props) {
-  const post = getBlogPost("fr", params.slug);
+export default async function BlogPostPage({ params }: Props) {
+  const [post, t] = await Promise.all([
+    getBlogPost("fr", params.slug),
+    getTranslations({ locale: params.locale, namespace: "blog_page" }),
+  ]);
+
   if (!post) notFound();
 
   const base = params.locale === "fr" ? "" : `/${params.locale}`;
+  const tNav = await getTranslations({ locale: params.locale, namespace: "nav" });
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -75,6 +81,7 @@ export default function BlogPostPage({ params }: Props) {
     description: post.description,
     datePublished: post.date,
     dateModified: post.date,
+    image: post.coverImage,
     author: {
       "@type": "Person",
       name: "Anna Nguyen",
@@ -103,15 +110,32 @@ export default function BlogPostPage({ params }: Props) {
             href={`${base}/blog`}
             className="inline-flex items-center gap-2 text-gray-500 hover:text-brand-red text-sm mb-8 transition-colors"
           >
-            <ArrowLeft size={16} /> Retour au blog
+            <ArrowLeft size={16} /> {t("backToBlog")}
           </Link>
 
+          {/* Image héro */}
+          <div className="relative w-full h-56 md:h-72 rounded-2xl overflow-hidden mb-8 bg-brand-dark">
+            <Image
+              src={post.coverImage}
+              alt={post.title}
+              fill
+              sizes="(max-width: 768px) 100vw, 768px"
+              className="object-cover"
+              priority
+              unoptimized
+            />
+          </div>
+
           <header className="mb-10">
-            <p className="text-sm text-gray-400 mb-3">{formatDate(post.date)}</p>
+            <p className="text-sm text-gray-400 mb-3">
+              {formatDate(post.date, params.locale)}
+            </p>
             <h1 className="font-serif text-3xl md:text-4xl font-bold text-brand-dark leading-tight mb-4">
               {post.title}
             </h1>
-            <p className="text-lg text-gray-500 leading-relaxed">{post.description}</p>
+            <p className="text-lg text-gray-500 leading-relaxed">
+              {post.description}
+            </p>
           </header>
 
           <div className="prose prose-lg prose-headings:font-serif prose-headings:text-brand-dark prose-a:text-brand-red prose-strong:text-brand-dark prose-table:text-sm max-w-none">
@@ -121,13 +145,14 @@ export default function BlogPostPage({ params }: Props) {
           <footer className="mt-12 pt-8 border-t border-gray-100">
             <div className="bg-brand-light rounded-2xl p-6 text-center">
               <p className="font-serif text-xl font-bold text-brand-dark mb-2">
-                Besoin d'un agent de sourcing au Vietnam ?
+                {t("ctaTitle")}
               </p>
-              <p className="text-gray-500 mb-4 text-sm">
-                CNL Sourcing vous aide à trouver des fournisseurs audités, à négocier en vietnamien et à gérer votre import clé en main.
-              </p>
-              <Link href={`${base}/devis`} className="btn-primary text-sm py-2 px-6">
-                Demander un devis gratuit
+              <p className="text-gray-500 mb-4 text-sm">{t("ctaDesc")}</p>
+              <Link
+                href={`${base}/devis`}
+                className="btn-primary text-sm py-2 px-6"
+              >
+                {tNav("devis")}
               </Link>
             </div>
           </footer>

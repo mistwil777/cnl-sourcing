@@ -152,6 +152,16 @@
     "formError": "Error sending message. Please try again or write directly to cnlsourcingvn@gmail.com",
     "chatHint": "Or use the AI chatbot at the bottom right for an immediate answer."
   },
+  "blog_page": {
+    "title": "Blog — Sourcing Tips for Asia & Vietnam",
+    "subtitle": "Practical guides for importing from Vietnam and Asia: suppliers, customs, dropshipping, EVFTA.",
+    "readArticle": "Read article",
+    "backToBlog": "Back to blog",
+    "ctaTitle": "Need a sourcing agent in Vietnam?",
+    "ctaDesc": "CNL Sourcing helps you find audited suppliers, negotiate in Vietnamese and manage your import end-to-end.",
+    "ctaButton": "Request a free quote",
+    "contentNote": "Our articles are written in French."
+  },
   "devis_page": {
     "title": "Request a free quote",
     "subtitle": "Describe your need in a few minutes. Anna analyses your request and comes back with a selection of qualified suppliers.",
