@@ -9,7 +9,7 @@
   },
   "hero": {
     "title": "Votre agent de sourcing au Vietnam",
-    "subtitle": "J'ouvre les portes des meilleures usines vietnamiennes pour les PME françaises — textile, agroalimentaire, artisanat",
+    "subtitle": "J'ouvre les portes des meilleures usines vietnamiennes pour les PME françaises — textile, agroalimentaire, artisanat, équipement pour entrepreneurs",
     "cta": {
       "label": "Demander un devis gratuit",
       "subtitle": "Réponse sous 48h • Devis gratuit • Sans engagement"
@@ -24,7 +24,7 @@
   },
   "home": {
     "expertiseTitle": "Nos domaines d'expertise",
-    "expertiseSubtitle": "Textile, agroalimentaire, artisanat : les secteurs où je fais vraiment la différence.",
+    "expertiseSubtitle": "Textile, agroalimentaire, artisanat, équipement pour entrepreneurs : les secteurs où je fais vraiment la différence.",
     "whyTitle": "Pourquoi choisir CNL Sourcing ?",
     "whySubtitle": "Née au Vietnam, basée à Toulouse — je négocie en vietnamien pour obtenir les tarifs locaux, pas les tarifs touristes.",
     "whyAudited": "Fournisseurs audités de mon réseau de confiance",
@@ -47,6 +47,10 @@
     "craft": {
       "title": "Artisanat & Décoration",
       "desc": "Bois, bambou sur mesure — spécialité région Hanoï. MOQ flexibles grâce au réseau local."
+    },
+    "equip": {
+      "title": "Équipement & Solutions",
+      "desc": "Chariots street food, mobilier de marché, équipement spa, stands de vente — des produits prêts à l'emploi fabriqués au Vietnam pour lancer votre activité sans vous ruiner."
     }
   },
   "services_page": {
@@ -74,6 +78,15 @@
         "f3": "Idéal pour échantillons et petites séries",
         "f4": "Départs réguliers depuis Toulouse",
         "price": "Sur devis selon volume"
+      },
+      "equip": {
+        "title": "Équipement & Solutions pour Entrepreneurs",
+        "desc": "Au Vietnam, les entrepreneurs s'équipent avec des produits fonctionnels, bien conçus et peu coûteux. CNL Sourcing vous ouvre ce catalogue pour vos projets en France : restauration ambulante, marchés artisanaux, spa, hôtellerie.",
+        "f1": "Chariots et équipement street food & food truck",
+        "f2": "Mobilier de terrasse, café et marché artisanal",
+        "f3": "Équipement spa, massage et bien-être",
+        "f4": "Stands, présentoirs et solutions retail low-cost",
+        "price": "Sur devis — MOQ flexibles selon produit"
       },
       "douane": {
         "title": "Accompagnement douanier & EVFTA",

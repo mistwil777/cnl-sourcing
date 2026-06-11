@@ -59,9 +59,10 @@ export const metadata: Metadata = {
   },
 };
 
-const serviceKeys = ["sourcing", "groupage", "douane"] as const;
+const serviceKeys = ["sourcing", "equip", "groupage", "douane"] as const;
 const serviceIcons: Record<string, string> = {
   sourcing: "🔍",
+  equip: "🛒",
   groupage: "📦",
   douane: "🛃",
 };
@@ -83,7 +84,23 @@ const faqJsonLd = {
       name: "Quels produits pouvez-vous sourcer au Vietnam ?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "CNL Sourcing couvre trois secteurs : le textile (vêtements, accessoires, maison), l'agroalimentaire (café, épices, thé, produits transformés) et l'artisanat (bambou, laque, céramique, vannerie).",
+        text: "CNL Sourcing couvre quatre domaines : le textile (vêtements, accessoires, maison), l'agroalimentaire (café, épices, thé, produits transformés), l'artisanat (bambou, laque, céramique, vannerie) et l'équipement pour entrepreneurs (chariots street food, mobilier de terrasse, équipement spa, stands de marché).",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Pouvez-vous sourcer de l'équipement pour une activité de restauration ambulante ou un food truck ?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Oui. CNL Sourcing propose des chariots street food équipés, du mobilier de terrasse et de l'équipement de cuisine mobile fabriqués au Vietnam à des coûts très compétitifs. Ces produits sont utilisés quotidiennement par les entrepreneurs vietnamiens et s'adaptent parfaitement aux besoins des vendeurs ambulants, food trucks et restaurateurs indépendants en France.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Proposez-vous de l'équipement pour des marchés artisanaux, des pop-up stores ou des instituts de beauté ?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Oui. CNL Sourcing source des stands de marché pliables, des présentoirs en bambou, du mobilier léger pour pop-up stores, ainsi que des tables de massage, mobilier spa et accessoires bien-être fabriqués au Vietnam. Ces produits permettent de lancer ou d'équiper une activité avec un budget maîtrisé.",
       },
     },
     {

@@ -45,9 +45,9 @@ const homeFaqJsonLd = {
 };
 
 const descriptions: Record<string, string> = {
-  fr: "Agent de sourcing Asie pour PME françaises — spécialiste Vietnam. Grossiste textile, agroalimentaire, artisanat. Fournisseurs audités, import Asie clé en main, tarifs locaux garantis. Alternative Chine, dropshipping Asie. Toulouse.",
-  en: "Asia sourcing agent for French SMEs — Vietnam specialist. Audited suppliers, Vietnamese-speaking negotiator, local pricing guaranteed. Textiles, food & beverage, crafts.",
-  vi: "Đại lý tìm nguồn cung ứng Việt Nam cho doanh nghiệp Pháp. Dệt may, thực phẩm, thủ công mỹ nghệ — nhà cung cấp được kiểm toán, đàm phán bằng tiếng Việt.",
+  fr: "Agent de sourcing Asie pour PME françaises — spécialiste Vietnam. Textile, agroalimentaire, artisanat, équipement pour entrepreneurs. Chariots street food, mobilier de marché, spa. Fournisseurs audités, import clé en main. Toulouse.",
+  en: "Asia sourcing agent for French SMEs — Vietnam specialist. Audited suppliers, Vietnamese-speaking negotiator. Textiles, food, crafts, street food carts, market furniture, spa equipment.",
+  vi: "Đại lý tìm nguồn cung ứng Việt Nam cho doanh nghiệp Pháp. Dệt may, thực phẩm, thủ công mỹ nghệ, thiết bị khởi nghiệp — nhà cung cấp được kiểm toán, đàm phán bằng tiếng Việt.",
 };
 
 export async function generateMetadata({
@@ -155,10 +155,12 @@ export default function HomePage() {
             <h2 className="section-title">{t("home.expertiseTitle")}</h2>
             <p className="text-gray-500 max-w-xl mx-auto">{t("home.expertiseSubtitle")}</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {(["textile", "food", "craft"] as const).map((key) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {(["textile", "food", "craft", "equip"] as const).map((key) => (
               <div key={key} className="card text-center group hover:-translate-y-1 transition-transform duration-300">
-                <div className="text-5xl mb-4">{key === "textile" ? "👗" : key === "food" ? "🍜" : "🪴"}</div>
+                <div className="text-5xl mb-4">
+                  {key === "textile" ? "👗" : key === "food" ? "🍜" : key === "craft" ? "🪴" : "🛒"}
+                </div>
                 <h3 className="font-serif text-xl font-bold text-brand-dark mb-2">{t(`services_section.${key}.title`)}</h3>
                 <p className="text-gray-500 text-sm leading-relaxed">{t(`services_section.${key}.desc`)}</p>
               </div>

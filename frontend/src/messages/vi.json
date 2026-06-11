@@ -9,7 +9,7 @@
   },
   "hero": {
     "title": "Đại lý tìm nguồn hàng tại Việt Nam của bạn",
-    "subtitle": "Kết nối các doanh nghiệp Pháp với các nhà máy tốt nhất Việt Nam — dệt may, thực phẩm, thủ công mỹ nghệ",
+    "subtitle": "Kết nối các doanh nghiệp Pháp với các nhà máy tốt nhất Việt Nam — dệt may, thực phẩm, thủ công mỹ nghệ và thiết bị cho doanh nhân",
     "cta": {
       "label": "Yêu cầu báo giá miễn phí",
       "subtitle": "Phản hồi trong 48h • Báo giá miễn phí • Không ràng buộc"
@@ -24,7 +24,7 @@
   },
   "home": {
     "expertiseTitle": "Lĩnh vực chuyên môn của chúng tôi",
-    "expertiseSubtitle": "Dệt may, thực phẩm, thủ công mỹ nghệ: những ngành tôi thực sự tạo ra sự khác biệt.",
+    "expertiseSubtitle": "Dệt may, thực phẩm, thủ công mỹ nghệ, thiết bị cho doanh nhân: những ngành tôi thực sự tạo ra sự khác biệt.",
     "whyTitle": "Tại sao chọn CNL Sourcing?",
     "whySubtitle": "Sinh ra tại Việt Nam, làm việc tại Toulouse — tôi đàm phán bằng tiếng Việt để có mức giá địa phương, không phải giá du lịch.",
     "whyAudited": "Nhà cung cấp được kiểm toán từ mạng lưới tin cậy của tôi",
@@ -47,6 +47,10 @@
     "craft": {
       "title": "Thủ công mỹ nghệ & Trang trí",
       "desc": "Gỗ, tre theo yêu cầu — đặc sản vùng Hà Nội. MOQ linh hoạt nhờ mạng lưới địa phương."
+    },
+    "equip": {
+      "title": "Thiết bị & Giải pháp",
+      "desc": "Xe đẩy bán đồ ăn đường phố, nội thất chợ, thiết bị spa — sản phẩm hoàn chỉnh từ Việt Nam, giá tốt, sẵn sàng sử dụng để khởi nghiệp."
     }
   },
   "services_page": {
@@ -74,6 +78,15 @@
         "f3": "Lý tưởng cho mẫu hàng và lô nhỏ",
         "f4": "Xuất phát thường xuyên từ Toulouse",
         "price": "Báo giá theo khối lượng"
+      },
+      "equip": {
+        "title": "Thiết bị & Giải pháp cho Doanh nhân",
+        "desc": "Tại Việt Nam, các doanh nhân trang bị cho mình những sản phẩm tiện dụng, thiết kế tốt và giá phải chăng. CNL Sourcing mở danh mục này cho dự án của bạn tại Pháp: ẩm thực đường phố, chợ thủ công, spa, khách sạn.",
+        "f1": "Xe đẩy bán đồ ăn đường phố và thiết bị food truck",
+        "f2": "Nội thất sân thượng, cà phê và chợ thủ công",
+        "f3": "Thiết bị spa, massage và chăm sóc sức khỏe",
+        "f4": "Gian hàng, kệ trưng bày và giải pháp bán lẻ giá thấp",
+        "price": "Báo giá theo yêu cầu — MOQ linh hoạt"
       },
       "douane": {
         "title": "Hỗ trợ hải quan & EVFTA",

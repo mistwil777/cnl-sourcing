@@ -51,6 +51,16 @@ export const metadata: Metadata = {
     "alternative fournisseur Chine",
     "sourcing hors Chine",
     "fournisseur pas cher Asie",
+    // Équipement & solutions pour entrepreneurs
+    "chariot street food Vietnam",
+    "équipement street food Vietnam",
+    "mobilier terrasse café Vietnam",
+    "équipement spa massage Vietnam",
+    "stands marché Vietnam",
+    "présentoirs bambou Vietnam",
+    "équipement restauration Vietnam import",
+    "matériel food truck Vietnam",
+    "mobilier marché artisanal Vietnam",
     // Toulouse / local
     "agent sourcing Toulouse",
     "import Toulouse",

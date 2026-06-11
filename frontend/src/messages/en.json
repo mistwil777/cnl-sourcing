@@ -9,7 +9,7 @@
   },
   "hero": {
     "title": "Your sourcing agent in Vietnam",
-    "subtitle": "Opening the doors of Vietnam's best factories for French SMEs — textile, food, crafts",
+    "subtitle": "Opening the doors of Vietnam's best factories for French SMEs — textile, food, crafts, and ready-to-use equipment for entrepreneurs",
     "cta": {
       "label": "Request a free quote",
       "subtitle": "Response within 48h • Free quote • No commitment"
@@ -24,7 +24,7 @@
   },
   "home": {
     "expertiseTitle": "Our areas of expertise",
-    "expertiseSubtitle": "Textile, food, crafts: the sectors where I truly make a difference.",
+    "expertiseSubtitle": "Textile, food, crafts, entrepreneur equipment: the sectors where I truly make a difference.",
     "whyTitle": "Why choose CNL Sourcing?",
     "whySubtitle": "Born in Vietnam, based in Toulouse — I negotiate in Vietnamese to get local prices, not tourist prices.",
     "whyAudited": "Suppliers audited from my trusted network",
@@ -47,6 +47,10 @@
     "craft": {
       "title": "Handicrafts & Decoration",
       "desc": "Wood, custom bamboo — Hanoi region specialty. Flexible MOQs through local network."
+    },
+    "equip": {
+      "title": "Equipment & Solutions",
+      "desc": "Street food carts, market furniture, spa equipment, retail stands — ready-to-use products made in Vietnam to launch your business without breaking the bank."
     }
   },
   "services_page": {
@@ -74,6 +78,15 @@
         "f3": "Ideal for samples and small runs",
         "f4": "Regular departures from Toulouse",
         "price": "Quote based on volume"
+      },
+      "equip": {
+        "title": "Equipment & Solutions for Entrepreneurs",
+        "desc": "In Vietnam, entrepreneurs equip themselves with functional, well-designed and affordable products. CNL Sourcing opens this catalogue for your projects in France: street food, artisan markets, spa, hospitality.",
+        "f1": "Street food carts and food truck equipment",
+        "f2": "Terrace, café and artisan market furniture",
+        "f3": "Spa, massage and wellness equipment",
+        "f4": "Retail stands, displays and low-cost solutions",
+        "price": "Quote on request — flexible MOQs per product"
       },
       "douane": {
         "title": "Customs & EVFTA support",
