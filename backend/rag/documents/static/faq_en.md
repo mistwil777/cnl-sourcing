@@ -18,10 +18,34 @@ partners in Hanoi and Ho Chi Minh City. CNL Sourcing is the culmination
 of that experience, structured for French SMEs.
 
 ### In which sectors can you help me source from Vietnam?
-Textiles (cotton, silk, uniforms, artisan fabrics — no haute couture without
-prototypes), Agri-food certified HACCP/ISO 22000/EU Organic (coffee, spices,
-cashew nuts, dry goods), Crafts and Decoration in custom wood/bamboo
-(Hanoi region). I do not work on industrial components.
+Four main areas: Textiles (cotton, silk, uniforms, artisan fabrics),
+Agri-food certified HACCP/ISO 22000/EU Organic (coffee, spices, cashew nuts,
+dry goods), Crafts and Decoration (bamboo, lacquerware, ceramics, basketry),
+and Equipment & Solutions for Entrepreneurs (street food carts, terrace
+furniture, spa equipment, market stands).
+For industrial products not listed, I can assess feasibility on request —
+including packaging, light plastics and certain equipment where reliable
+production exists in Vietnam.
+
+### What do you mean by "Equipment & Solutions for Entrepreneurs"?
+This is my most innovative speciality: sourcing from Vietnam transformed,
+ready-to-use products that allow French entrepreneurs to launch with a small
+budget. Vietnam produces functional, well-designed and very affordable equipment
+that nobody thinks to import directly. Example: a fully equipped street food cart
+(plancha, container, parasol) costs around €400–700 in Vietnam vs €3,000+
+in France. Other examples: Hanoi café-style terrace furniture, massage tables
+for beauty institutes, foldable bamboo/metal market stands, custom professional
+uniforms for restaurateurs.
+
+### Do you source industrial products (solar panels, CNC parts, plastics)?
+Yes, on request and after evaluation. Vietnam is a genuine industrial country
+(Samsung, Intel, LG produce there). For packaging (cardboard, biodegradable
+moulded pulp) and light plastics, the opportunity is real with EVFTA at 0%.
+For solar panels, serious manufacturers exist (Boviet, Suntech Vietnam), but
+the market is competitive against China — I assess this honestly for your project.
+For precision CNC parts, it is possible but requires a complete technical file.
+I always prefer to give you an honest view on feasibility before launching a
+mission, rather than promising the impossible.
 
 ### What is your geographical coverage in France?
 Core activity in Occitanie, with nationwide support across France

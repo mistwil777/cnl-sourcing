@@ -19,11 +19,36 @@ au terrain vietnamien.
 expérience, structurée pour les PME françaises.
 
 ### Dans quels secteurs pouvez-vous m'aider à sourcer au Vietnam ?
-Textile (coton, soie, uniformes, matières artisanales — pas de haute couture
-sans prototypes), Agroalimentaire certifié HACCP/ISO 22000/BIO EU
-(café, épices, noix de cajou, produits secs), Artisanat et Décoration
-bois/bambou sur mesure (région Hanoï). Je n'interviens pas sur
-les composants industriels.
+Quatre domaines principaux : Textile (coton, soie, uniformes, matières
+artisanales), Agroalimentaire certifié HACCP/ISO 22000/BIO EU (café, épices,
+noix de cajou, produits secs), Artisanat et Décoration (bambou, laque,
+céramique, vannerie), et Équipement & Solutions pour Entrepreneurs (chariots
+street food, mobilier de terrasse, équipement spa, stands de marché).
+Pour les produits industriels non listés, je peux étudier la faisabilité
+selon la demande — notamment les emballages, la plasturgie légère et certains
+équipements si une production fiable existe au Vietnam.
+
+### Qu'est-ce que vous entendez par "Équipement & Solutions pour Entrepreneurs" ?
+C'est ma spécialité que je trouve la plus innovante : sourcer au Vietnam des
+produits transformés et prêts à l'emploi qui permettent à des entrepreneurs
+français de se lancer avec un petit budget. Le Vietnam fabrique au quotidien
+des équipements fonctionnels, bien conçus et très abordables que personne
+ne pense à importer directement. Exemple : un chariot street food équipé
+(plancha, bac, parasol) coûte environ 400-700€ au Vietnam contre 3 000€+
+en France. D'autres exemples : mobilier de terrasse style café de Hanoï,
+tables de massage pour instituts, stands de marché pliables en bambou/métal,
+uniformes professionnels sur mesure pour restaurateurs.
+
+### Sourcez-vous des produits industriels (panneaux solaires, pièces CNC, plastique) ?
+Oui, sur demande et après évaluation. Le Vietnam est un vrai pays industriel
+(Samsung, Intel, LG y produisent). Pour les emballages (carton, pulpe moulée
+biodégradable) et la plasturgie légère, l'opportunité est réelle avec l'EVFTA
+à 0%. Pour les panneaux solaires, des fabricants sérieux existent (Boviet,
+Suntech Vietnam), mais le marché est concurrentiel face à la Chine — je
+l'évalue honnêtement selon votre projet. Pour les pièces de précision CNC,
+c'est possible mais nécessite un dossier technique complet. Je préfère
+toujours vous donner un avis honnête sur la faisabilité avant de lancer
+une mission, plutôt que de vous promettre l'impossible.
 
 ### Quelle est votre zone géographique de couverture en France ?
 Cœur d'activité en Occitanie, accompagnement dans toute la France

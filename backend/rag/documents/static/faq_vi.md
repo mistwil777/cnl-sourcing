@@ -19,11 +19,33 @@ tại Hà Nội và Thành phố Hồ Chí Minh. CNL Sourcing là kết tinh c�
 được cấu trúc dành riêng cho các doanh nghiệp vừa và nhỏ của Pháp.
 
 ### Bạn có thể giúp tôi tìm nguồn hàng tại Việt Nam trong những lĩnh vực nào?
-Dệt may (bông, lụa, đồng phục, vải thủ công — không có hàng cao cấp
-khi chưa có mẫu), Nông sản thực phẩm đạt chứng nhận HACCP/ISO 22000/Hữu cơ EU
-(cà phê, gia vị, hạt điều, thực phẩm khô), Thủ công mỹ nghệ và Trang trí
-gỗ/tre theo yêu cầu (vùng Hà Nội). Tôi không hoạt động trong lĩnh vực
-linh kiện công nghiệp.
+Bốn lĩnh vực chính: Dệt may (bông, lụa, đồng phục, vải thủ công),
+Nông sản thực phẩm đạt chứng nhận HACCP/ISO 22000/Hữu cơ EU (cà phê, gia vị,
+hạt điều, thực phẩm khô), Thủ công mỹ nghệ và Trang trí (tre, sơn mài, gốm sứ,
+đồ mây tre đan), và Thiết bị & Giải pháp cho Doanh nhân (xe đẩy street food,
+nội thất sân thượng, thiết bị spa, gian hàng chợ).
+Với các sản phẩm công nghiệp chưa được liệt kê, tôi có thể đánh giá tính khả thi
+theo yêu cầu — đặc biệt là bao bì, nhựa nhẹ và một số thiết bị nếu có sản xuất
+đáng tin cậy tại Việt Nam.
+
+### "Thiết bị & Giải pháp cho Doanh nhân" có nghĩa là gì?
+Đây là chuyên môn sáng tạo nhất của tôi: tìm nguồn hàng tại Việt Nam những sản phẩm
+đã qua chế biến, sẵn sàng sử dụng, giúp các doanh nhân Pháp khởi nghiệp với ngân sách nhỏ.
+Việt Nam sản xuất hàng ngày những thiết bị tiện dụng, thiết kế tốt và rất thực tế
+mà chưa ai nghĩ đến việc nhập khẩu trực tiếp. Ví dụ: một xe đẩy street food đầy đủ
+tiện nghi (bếp nướng, thùng chứa, ô) có giá khoảng 400–700€ tại Việt Nam so với
+3.000€+ tại Pháp. Các ví dụ khác: nội thất sân thượng phong cách cà phê Hà Nội,
+bàn massage cho cơ sở làm đẹp, gian hàng chợ gấp được bằng tre/kim loại,
+đồng phục chuyên nghiệp theo yêu cầu cho nhà hàng.
+
+### Bạn có tìm nguồn các sản phẩm công nghiệp không (pin mặt trời, linh kiện CNC, nhựa)?
+Có, theo yêu cầu và sau khi đánh giá. Việt Nam là một đất nước công nghiệp thực sự
+(Samsung, Intel, LG đều sản xuất ở đây). Với bao bì (carton, bột giấy ép khuôn sinh học)
+và nhựa nhẹ, cơ hội rất thực tế với EVFTA ở mức 0%. Với pin mặt trời, có các nhà sản xuất
+uy tín (Boviet, Suntech Vietnam), nhưng thị trường cạnh tranh với Trung Quốc — tôi đánh giá
+trung thực theo dự án của bạn. Với linh kiện CNC chính xác, có thể thực hiện nhưng cần
+hồ sơ kỹ thuật đầy đủ. Tôi luôn ưu tiên cho bạn đánh giá trung thực về tính khả thi
+trước khi khởi động nhiệm vụ.
 
 ### Phạm vi địa lý hoạt động của bạn tại Pháp là gì?
 Hoạt động chính tại vùng Occitanie, hỗ trợ toàn quốc nhờ công cụ kỹ thuật số.
