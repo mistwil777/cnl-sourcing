@@ -69,11 +69,40 @@ export async function GET(req: NextRequest) {
           style={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-between",
+            justifyContent: "flex-start",
             height: "100%",
-            padding: "60px 80px 60px 88px",
+            padding: "55px 80px 50px 88px",
+            gap: "32px",
           }}
         >
+          {/* Corps : titre + sous-titre — EN PREMIER pour être visible même si l'image est rognée */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+            <div
+              style={{
+                color: "#FFFFFF",
+                fontSize: "44px",
+                fontWeight: "bold",
+                lineHeight: "1.2",
+                maxWidth: "900px",
+              }}
+            >
+              {title}
+            </div>
+            <div
+              style={{
+                color: "rgba(255,255,255,0.65)",
+                fontSize: "18px",
+                lineHeight: "1.5",
+                maxWidth: "780px",
+              }}
+            >
+              {subtitle}
+            </div>
+          </div>
+
+          {/* Spacer */}
+          <div style={{ flex: 1 }} />
+
           {/* Header : drapeaux + nom */}
           <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
             <span style={{ fontSize: "36px" }}>🇻🇳</span>
@@ -97,31 +126,6 @@ export async function GET(req: NextRequest) {
             >
               CNL Sourcing
             </span>
-          </div>
-
-          {/* Corps : titre + sous-titre */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-            <div
-              style={{
-                color: "#FFFFFF",
-                fontSize: "62px",
-                fontWeight: "bold",
-                lineHeight: "1.15",
-                maxWidth: "900px",
-              }}
-            >
-              {title}
-            </div>
-            <div
-              style={{
-                color: "rgba(255,255,255,0.65)",
-                fontSize: "26px",
-                lineHeight: "1.5",
-                maxWidth: "780px",
-              }}
-            >
-              {subtitle}
-            </div>
           </div>
 
           {/* Footer : badge PME */}

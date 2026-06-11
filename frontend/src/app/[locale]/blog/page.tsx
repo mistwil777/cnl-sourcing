@@ -71,9 +71,9 @@ export default async function BlogPage({
     <>
       <Header />
       <main>
-        <section className="bg-brand-dark text-white pt-12 pb-14 sm:py-16">
+        <section className="bg-brand-dark text-white py-16 sm:py-20 lg:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight">
+            <h1 className="font-serif text-[clamp(1.5rem,4vw,3rem)] font-bold mb-4 leading-snug">
               {t("title")}
             </h1>
             <p className="text-gray-400 max-w-2xl mx-auto text-sm sm:text-base">{t("subtitle")}</p>
@@ -89,13 +89,13 @@ export default async function BlogPage({
               >
                 {/* Image de couverture */}
                 <Link href={`${base}/blog/${post.slug}`} className="block mb-4 -mx-6 -mt-6 overflow-hidden rounded-t-2xl">
-                  <div className="relative h-48 w-full bg-brand-dark">
+                  <div className="relative w-full h-52 bg-brand-dark">
                     <Image
                       src={post.coverImage}
                       alt={post.title}
                       fill
                       sizes="(max-width: 768px) 100vw, 672px"
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
                       loading="lazy"
                       unoptimized
                     />
