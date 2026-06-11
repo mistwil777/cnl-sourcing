@@ -1,8 +1,16 @@
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   const redisHost = process.env.REDIS_HOST;
+  const redisPassword = process.env.REDIS_PASSWORD;
+
+  // Toutes les clés disponibles dans process.env
+  const envKeys = Object.keys(process.env)
+    .filter((k) => k.includes("ANTHROPIC") || k.includes("REDIS") || k.includes("N8N"))
+    .sort();
 
   // Test Claude Haiku directement
   let claudeResult: string;
@@ -18,8 +26,8 @@ export async function GET() {
       },
       body: JSON.stringify({
         model: "claude-haiku-4-5-20251001",
-        max_tokens: 100,
-        messages: [{ role: "user", content: 'Reply with exactly: {"ok": true}' }],
+        max_tokens: 50,
+        messages: [{ role: "user", content: "Reply: ok" }],
       }),
     });
     claudeStatus = resp.status;
@@ -30,10 +38,13 @@ export async function GET() {
   }
 
   return NextResponse.json({
-    apiKey: apiKey ? `${apiKey.slice(0, 20)}...` : "MISSING",
+    timestamp: new Date().toISOString(),
+    apiKey: apiKey ? `${apiKey.slice(0, 20)}... (longueur: ${apiKey.length})` : "MISSING",
     redisHost,
+    redisPassword: redisPassword ? "SET" : "MISSING",
+    envKeys,
     claudeStatus,
     claudeResult,
-    claudeBody,
+    claudeBody: claudeBody.slice(0, 200),
   });
 }
