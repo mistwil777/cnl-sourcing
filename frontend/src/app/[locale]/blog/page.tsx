@@ -71,7 +71,7 @@ export default async function BlogPage({
     <>
       <Header />
       <main>
-        <section className="bg-brand-dark text-white py-16 sm:py-20 lg:py-24">
+        <section className="bg-brand-dark text-white pt-12 pb-14 sm:py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 className="font-serif text-[clamp(1.5rem,4vw,3rem)] font-bold mb-4 leading-snug">
               {t("title")}

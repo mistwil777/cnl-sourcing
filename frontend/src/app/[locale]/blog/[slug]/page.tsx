@@ -114,7 +114,7 @@ export default async function BlogPostPage({ params }: Props) {
           </Link>
 
           {/* Image héro */}
-          <div className="relative w-full h-56 md:h-64 rounded-2xl overflow-hidden mb-8 bg-brand-dark">
+          <div className="relative w-full h-56 md:h-72 rounded-2xl overflow-hidden mb-8 bg-brand-dark">
             <Image
               src={post.coverImage}
               alt={post.title}
